@@ -8,18 +8,9 @@
 # package for the data products added to the event. 
 
 #include "services_microboone.fcl"
+#include "mcshowerreco.fcl"
 
-process_name: OpticalSimulation
-
-standard_mcshowerfinder:
-{
-  module_type:            "UBMCShowerReco"
-  #    module_type:            "AnaShower"
-  DebugMode: false
-  G4ModName: "largeant"
-  TimeCut: 1
-  Dist2Cut: 10
-}
+process_name: MCShowerFinder
 
 services:
 {
