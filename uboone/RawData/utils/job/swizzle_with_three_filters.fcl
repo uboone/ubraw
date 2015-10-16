@@ -5,6 +5,8 @@
 #include "sam_microboone.fcl"
 #include "opticaldetectormodules_microboone.fcl"
 #include "flashfilter_microboone.fcl"
+#include "subevent_module.fcl"
+#include "seedservice_microboone.fcl"
 
 process_name: Swizzler
 services:
@@ -13,6 +15,7 @@ services:
   TFileService: { fileName: "daq_hist.root" }
   Timing:       {}
   RandomNumberGenerator: {} 
+  SeedService:  @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
   user: {
           ExptGeoHelperInterface: @local::microboone_geometry_helper
@@ -61,16 +64,30 @@ outputs:
  rawfilter:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc.root"
+   fileName: "%ifb_%tc_rawfilter.root"
    dataTier: "raw"
+   streamName: "rawfilter"
+   compressionLevel: 3
+   SelectEvents: { SelectEvents: [ "filter1" ] }
+  }
+ rawprescale:
+  {
+   module_type: RootOutput
+   fileName: "%ifb_%tc_rawprescale.root"
+   dataTier: "raw"
+   streamName: "rawprescale"
+   compressionLevel: 3
+   SelectEvents: { SelectEvents: [ "filter2" ] }
+  }
+ rawnotpc:
+  {
+   module_type: RootOutput
+   fileName: "%ifb_%tc_rawnotpc.root"
+   dataTier: "raw"
+   streamName: "rawnotpc"
    compressionLevel: 3
    outputCommands: ["keep *_*_*_*",
-                    "drop raw::RawDigits_daq_*_*"]
-   FCMDPlugins: [
-     { plugin_type:   "FileCatalogMetadataRawDigit"
-       RawDigitLabel: "digitcopy"
-     }
-    ]
+                    "drop raw::RawDigits_*_*_*"]
   }
 }
 
@@ -83,17 +100,34 @@ physics:
   opflashCosmic    : @local::microboone_opflash_cosmic_highgain
   opflashCosmicLow : @local::microboone_opflash_cosmic_lowgain
 
-  digitcopy : { module_type : "RawDigitSaver" 
-                DAQRawDigitProducer : "daq" }
+  hwflash : @local::microboone_subeventbuilder
  }
  filters: {
   triggerEnforcement: { module_type : "TriggerEnforcement" }
-  flashfilter: @local::microboone_flashtrigger
+  opflashfilter: @local::microboone_flashtrigger
+  hwflashfilter: @local::microboone_flashtrigger
+  randomfilter: {
+   module_type : "RandomPrescale"
+   Probability : 0.01
+  }
  }
- reco: [ triggerEnforcement, opflash, flashfilter, digitcopy ]
+
+ common: [ triggerEnforcement, opflash, opflashLow, hwflash ] 
+ filter1: [ hwflashfilter, opflashfilter ]
+ filter2: [ randomfilter ]
  stream1:   [ rawfilter ]
- trigger_paths: [ reco ]
- end_paths: [ stream1 ]
+ stream2:   [ rawprescale ]
+ stream3:   [ rawnotpc ]
+ trigger_paths: [ common, filter1, filter2 ] 
+ end_paths: [ stream1, stream2, stream3 ]
 }
 
 services.user.TimeService.TrigModuleName: "daq"
+
+physics.filters.opflashfilter.OpFlashModule : "opflash"
+physics.filters.hwflashfilter.OpFlashModule : "hwflash"
+
+physics.filters.opflashfilter.DisableFilter: false
+physics.filters.hwflashfilter.DisableFilter: true
+
+
