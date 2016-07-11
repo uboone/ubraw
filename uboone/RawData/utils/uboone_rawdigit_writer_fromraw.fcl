@@ -6,19 +6,30 @@
 #include "opticaldetectormodules_microboone.fcl"
 #include "triggerenforcement.fcl"
 
+BEGIN_PROLOG
+
+microboone_rawdigits_writer:
+{
+  module_type:RawDigitWriter
+  WriteTPCdata: false
+  WritePMTdata: true
+}
+
+END_PROLOG
+
 process_name: Swizzler
 services:
 {
   scheduler: { fileMode: NOMERGE }
-  TFileService: { fileName: "daq_hist.root" }
+  TFileService: { fileName: "rawdigits.root" }
   Timing:       {}
   RandomNumberGenerator: {} 
   FileCatalogMetadata:    @local::art_file_catalog_data
   user: {
           ExptGeoHelperInterface: @local::microboone_geometry_helper
           Geometry:               @local::microboone_geo
-	  UBOpReadoutMap:           @local::microboone_opreadoutmap
-          DetectorClocksService:            @local::microboone_detectorclocks
+	  UBOpReadoutMap:         @local::microboone_opreadoutmap
+          DetectorClocksService:  @local::microboone_detectorclocks
           DatabaseUtil:           @local::microboone_database
           }
 }
@@ -48,7 +59,7 @@ source:
   module_type:	   LArRawInputSourceUBooNE
   maxEvents:       -1
   huffmanDecode:   true
-  swizzleTPC:      true
+  swizzleTPC:      false
   swizzlePMT:      true
   swizzleTrigger:  true
 
@@ -76,24 +87,17 @@ outputs:
 
 physics:
 {
-  producers: {
-  ### flash finders
-  ophit            : @local::microboone_ophit_beam_highgain
-  #ophitLow         : @local::microboone_ophit_beam_lowgain
-  ophitCosmic      : @local::microboone_ophit_cosmic_highgain
-  #ophitCosmicLow   : @local::microboone_ophit_cosmic_lowgain
-  opflash          : @local::microboone_opflash_beam_highgain
-  #opflashLow       : @local::microboone_opflash_beam_lowgain
-  opflashCosmic    : @local::microboone_opflash_cosmic_highgain
-  #opflashCosmicLow : @local::microboone_opflash_cosmic_lowgain
+
+ analyzers:
+ {
+   rawdigitwriter: @local::microboone_rawdigits_writer
  }
- filters: {
-  triggerEnforcement: @local::trigger_enforcement
- }
- reco: [ triggerEnforcement, ophit, opflash ]
- stream1:   [ out1 ]
- trigger_paths: [ reco ]
- end_paths: [ stream1 ]
+
+ simulate: []
+ analyzeIt: [ rawdigitwriter ]
+ stream1:   []
+ end_paths: [ analyzeIt ]
 }
 
 services.user.DetectorClocksService.TrigModuleName: "daq"
+
