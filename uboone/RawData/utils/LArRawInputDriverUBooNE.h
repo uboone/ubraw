@@ -161,14 +161,6 @@ namespace lris {
     uint32_t triggerBitEXT;
     uint32_t triggerBitPMTBeam;
     uint32_t triggerBitPMTCosmic;
-    
-    int PMTframe; // internal checking variable for PMT
-    int FEM5triggerFrame ;
-    int FEM5triggerSample;
-    int FEM6triggerFrame ;
-    int FEM6triggerSample;
-    double FEM5triggerTime;
-    double FEM6triggerTime;
 
     int RO_BNBtriggerFrame;
     int RO_NuMItriggerFrame;
@@ -182,32 +174,29 @@ namespace lris {
     double RO_NuMItriggerTime;
     double RO_EXTtriggerTime;
     double RO_RWMtriggerTime;
-    
-//    uint32_t RO_Gate1Frame;
-//    uint32_t RO_Gate1Sample;
-//    uint32_t RO_Gate2Frame;
-//    uint32_t RO_Gate2Sample;
+   
+    int RO_LEDFlashTriggerFrame;
+    int RO_LEDtriggerFrame;
+    int RO_PaddleTriggerFrame;
+    int RO_HVtriggerFrame;
+    int RO_LEDFlashTriggerSample;
+    int RO_LEDtriggerSample;
+    int RO_PaddleTriggerSample;
+    int RO_HVtriggerSample;
+    double RO_LEDFlashTriggerTime;
+    double RO_LEDtriggerTime;
+    double RO_PaddleTriggerTime;
+    double RO_HVtriggerTime;
 
-    int TPCframe; // internal checking variable for TPC
-    int TPC1triggerFrame;
-    int TPC1triggerSample;
-    int TPC2triggerFrame;
-    int TPC2triggerSample;
-    int TPC3triggerFrame;
-    int TPC3triggerSample;
-    int TPC4triggerFrame;
-    int TPC4triggerSample;
-    int TPC5triggerFrame;
-    int TPC5triggerSample;
-    int TPC6triggerFrame;
-    int TPC6triggerSample;
-    int TPC7triggerFrame;
-    int TPC7triggerSample;
-    int TPC8triggerFrame;
-    int TPC8triggerSample;
-    int TPC9triggerFrame;
-    int TPC9triggerSample;
-    
+    int RO_NuMIRWMtriggerFrame;
+    int RO_NuMIRWMtriggerSample;
+    double RO_NuMIRWMtriggerTime;
+ 
+    int TPCtriggerFrame;	// internal checking variable for tpc
+    int TPCtriggerSample;
+    int PMTtriggerFrame;	// same for the pmt
+    int PMTtriggerSample;
+
     uint32_t ADCwords_crate0;
     uint32_t ADCwords_crate1;
     uint32_t ADCwords_crate2;
@@ -228,8 +217,13 @@ namespace lris {
     uint32_t NumWords_crate8;
     uint32_t NumWords_crate9;
 
+    int N_trig_algos;
+    std::vector<std::string> algo_instance_name;
+    bool pass_algo[20];
+    bool pass_prescale[20];
+
     int event;
-    TTree *tMyTree;
+    TTree *ValidationTree;
     
   };  // LArRawInputDriverUBooNE;
 

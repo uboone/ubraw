@@ -178,94 +178,85 @@ namespace lris {
     }
 
     art::TFileDirectory tfdebugdir = tfs->mkdir( "Debug" );
-    tMyTree = tfdebugdir.make<TTree>("tMyTree", "tree");
-    tMyTree->Branch("event",&event,"event/I");
-    tMyTree->Branch("triggerFrame",&triggerFrame,"triggerFrame/I");
-    tMyTree->Branch("triggerSample",&triggerSample,"triggerSample/I");
-    tMyTree->Branch("triggerTime",&triggerTime,"triggerTime/D");
-    tMyTree->Branch("triggerActive",&triggerActive,"triggerActive/I");
-    tMyTree->Branch("triggerBitBNB",&triggerBitBNB,"triggerBitBNB/I");
-    tMyTree->Branch("triggerBitNuMI",&triggerBitNuMI,"triggerBitNuMI/I");
-    tMyTree->Branch("triggerBitEXT",&triggerBitEXT,"triggerBitEXT/I");
-    tMyTree->Branch("triggerBitPMTBeam",&triggerBitPMTBeam,"triggerBitPMTBeam/I");
-    tMyTree->Branch("triggerBitPMTCosmic",&triggerBitPMTCosmic,"triggerBitPMTCosmic/I");
-    tMyTree->Branch("FEM5triggerFrame",&FEM5triggerFrame,"FEM5triggerFrame/I");
-    tMyTree->Branch("FEM5triggerSample",&FEM5triggerSample,"FEM5triggerSample/I");
-    tMyTree->Branch("FEM6triggerFrame",&FEM6triggerFrame,"FEM6triggerFrame/I");
-    tMyTree->Branch("FEM6triggerSample",&FEM6triggerSample,"FEM6triggerSample/I");
-    tMyTree->Branch("FEM5triggerTime",&FEM5triggerTime,"FEM5triggerTime/D");
-    tMyTree->Branch("FEM6triggerTime",&FEM6triggerTime,"FEM6triggerTime/D");
+    ValidationTree = tfdebugdir.make<TTree>("ValidationTree", "tree");
+    ValidationTree->Branch("event",&event,"event/I");
+    ValidationTree->Branch("triggerFrame",&triggerFrame,"triggerFrame/I");
+    ValidationTree->Branch("triggerSample",&triggerSample,"triggerSample/I");
+    ValidationTree->Branch("triggerTime",&triggerTime,"triggerTime/D");
+    ValidationTree->Branch("triggerActive",&triggerActive,"triggerActive/I");
+    ValidationTree->Branch("triggerBitBNB",&triggerBitBNB,"triggerBitBNB/I");
+    ValidationTree->Branch("triggerBitNuMI",&triggerBitNuMI,"triggerBitNuMI/I");
+    ValidationTree->Branch("triggerBitEXT",&triggerBitEXT,"triggerBitEXT/I");
+    ValidationTree->Branch("triggerBitPMTBeam",&triggerBitPMTBeam,"triggerBitPMTBeam/I");
+    ValidationTree->Branch("triggerBitPMTCosmic",&triggerBitPMTCosmic,"triggerBitPMTCosmic/I");
+    ValidationTree->Branch("PMTtriggerFrame",&PMTtriggerFrame,"PMTtriggerFrame/I");
+    ValidationTree->Branch("PMTtriggerSample",&PMTtriggerSample,"PMTtriggerSample/I");
+    ValidationTree->Branch("TPCtriggerFrame",&TPCtriggerFrame,"TPCtriggerFrame/I");
+    ValidationTree->Branch("TPCtriggerSample",&TPCtriggerSample,"TPCtriggerSample/I");
 
-    tMyTree->Branch("RO_BNBtriggerFrame",&RO_BNBtriggerFrame,"RO_BNBtriggerFrame/I");
-    tMyTree->Branch("RO_NuMItriggerFrame",&RO_NuMItriggerFrame,"RO_NuMItriggerFrame/I");
-    tMyTree->Branch("RO_EXTtriggerFrame",&RO_EXTtriggerFrame,"RO_EXTtriggerFrame/I");
-    tMyTree->Branch("RO_RWMtriggerFrame",&RO_RWMtriggerFrame,"RO_RWMtriggerFrame/I");
-    tMyTree->Branch("RO_BNBtriggerSample",&RO_BNBtriggerSample,"RO_BNBtriggerSample/I");
-    tMyTree->Branch("RO_NuMItriggerSample",&RO_NuMItriggerSample,"RO_NuMItriggerSample/I");
-    tMyTree->Branch("RO_EXTtriggerSample",&RO_EXTtriggerSample,"RO_EXTtriggerSample/I");
-    tMyTree->Branch("RO_RWMtriggerSample",&RO_RWMtriggerSample,"RO_RWMtriggerSample/I");
-    tMyTree->Branch("RO_BNBtriggerTime",&RO_BNBtriggerTime,"RO_BNBtriggerTime/D");
-    tMyTree->Branch("RO_NuMItriggerTime",&RO_NuMItriggerTime,"RO_NuMItriggerTime/D");
-    tMyTree->Branch("RO_EXTtriggerTime",&RO_EXTtriggerTime,"RO_EXTtriggerTime/D");
-    tMyTree->Branch("RO_RWMtriggerTime",&RO_RWMtriggerTime,"RO_RWMtriggerTime/D");
+    ValidationTree->Branch("RO_BNBtriggerFrame",&RO_BNBtriggerFrame,"RO_BNBtriggerFrame/I");
+    ValidationTree->Branch("RO_NuMItriggerFrame",&RO_NuMItriggerFrame,"RO_NuMItriggerFrame/I");
+    ValidationTree->Branch("RO_EXTtriggerFrame",&RO_EXTtriggerFrame,"RO_EXTtriggerFrame/I");
+    ValidationTree->Branch("RO_RWMtriggerFrame",&RO_RWMtriggerFrame,"RO_RWMtriggerFrame/I");
+    ValidationTree->Branch("RO_BNBtriggerSample",&RO_BNBtriggerSample,"RO_BNBtriggerSample/I");
+    ValidationTree->Branch("RO_NuMItriggerSample",&RO_NuMItriggerSample,"RO_NuMItriggerSample/I");
+    ValidationTree->Branch("RO_EXTtriggerSample",&RO_EXTtriggerSample,"RO_EXTtriggerSample/I");
+    ValidationTree->Branch("RO_RWMtriggerSample",&RO_RWMtriggerSample,"RO_RWMtriggerSample/I");
+    ValidationTree->Branch("RO_BNBtriggerTime",&RO_BNBtriggerTime,"RO_BNBtriggerTime/D");
+    ValidationTree->Branch("RO_NuMItriggerTime",&RO_NuMItriggerTime,"RO_NuMItriggerTime/D");
+    ValidationTree->Branch("RO_EXTtriggerTime",&RO_EXTtriggerTime,"RO_EXTtriggerTime/D");
+    ValidationTree->Branch("RO_RWMtriggerTime",&RO_RWMtriggerTime,"RO_RWMtriggerTime/D");
 
-//    tMyTree->Branch("RO_Gate1Frame",&RO_Gate1Frame,"RO_Gate1Frame/I");
-//    tMyTree->Branch("RO_Gate1Sample",&RO_Gate1Sample,"RO_Gate1Sample/I");
-//    tMyTree->Branch("RO_Gate2Frame",&RO_Gate2Frame,"RO_Gate2Frame/I");
-//    tMyTree->Branch("RO_Gate2Sample",&RO_Gate2Sample,"RO_Gate2Sample/I");
+    ValidationTree->Branch("RO_LEDFlashTriggerFrame",&RO_LEDFlashTriggerFrame,"RO_LEDFlashTriggerFrame/I");
+    ValidationTree->Branch("RO_LEDtriggerFrame",&RO_LEDtriggerFrame,"RO_LEDtriggerFrame/I");
+    ValidationTree->Branch("RO_PaddleTriggerFrame",&RO_PaddleTriggerFrame,"RO_PaddleTriggerFrame/I");
+    ValidationTree->Branch("RO_HVtriggerFrame",&RO_HVtriggerFrame,"RO_HVtriggerFrame/I");
+    ValidationTree->Branch("RO_LEDFlashTriggerSample",&RO_LEDFlashTriggerSample,"RO_LEDFlashTriggerSample/I");
+    ValidationTree->Branch("RO_LEDtriggerSample",&RO_LEDtriggerSample,"RO_LEDtriggerSample/I");
+    ValidationTree->Branch("RO_PaddleTriggerSample",&RO_PaddleTriggerSample,"RO_PaddleTriggerSample/I");
+    ValidationTree->Branch("RO_HVtriggerSample",&RO_HVtriggerSample,"RO_HVtriggerSample/I");
+    ValidationTree->Branch("RO_LEDFlashTriggerTime",&RO_LEDFlashTriggerTime,"RO_LEDFlashTriggerTime/D");
+    ValidationTree->Branch("RO_LEDtriggerTime",&RO_LEDtriggerTime,"RO_LEDtriggerTime/D");
+    ValidationTree->Branch("RO_PaddleTriggerTime",&RO_PaddleTriggerTime,"RO_PaddleTriggerTime/D");
+    ValidationTree->Branch("RO_HVtriggerTime",&RO_HVtriggerTime,"RO_HVtriggerTime/D"); 
+  
+    ValidationTree->Branch("RO_NuMIRWMtriggerFrame",&RO_NuMIRWMtriggerFrame,"RO_NuMIRWMtriggerFrame/I");
+    ValidationTree->Branch("RO_NuMIRWMtriggerSample",&RO_NuMIRWMtriggerSample,"RO_NuMIRWMtriggerSample/I");  
+    ValidationTree->Branch("RO_NuMIRWMtriggerTime",&RO_NuMIRWMtriggerTime,"RO_NuMIRWMtriggerTime/D");
 
-    tMyTree->Branch("TPC1triggerFrame",&TPC1triggerFrame,"TPC1triggerFrame/I");
-    tMyTree->Branch("TPC1triggerSample",&TPC1triggerSample,"TPC1triggerSample/I");
-    tMyTree->Branch("TPC2triggerFrame",&TPC2triggerFrame,"TPC2triggerFrame/I");
-    tMyTree->Branch("TPC2triggerSample",&TPC2triggerSample,"TPC2triggerSample/I");
-    tMyTree->Branch("TPC3triggerFrame",&TPC3triggerFrame,"TPC3triggerFrame/I");
-    tMyTree->Branch("TPC3triggerSample",&TPC3triggerSample,"TPC3triggerSample/I");
-    tMyTree->Branch("TPC4triggerFrame",&TPC4triggerFrame,"TPC4triggerFrame/I");
-    tMyTree->Branch("TPC4triggerSample",&TPC4triggerSample,"TPC4triggerSample/I");
-    tMyTree->Branch("TPC5triggerFrame",&TPC5triggerFrame,"TPC5triggerFrame/I");
-    tMyTree->Branch("TPC5triggerSample",&TPC5triggerSample,"TPC5triggerSample/I");
-    tMyTree->Branch("TPC6triggerFrame",&TPC6triggerFrame,"TPC6triggerFrame/I");
-    tMyTree->Branch("TPC6triggerSample",&TPC6triggerSample,"TPC6triggerSample/I");
-    tMyTree->Branch("TPC7triggerFrame",&TPC7triggerFrame,"TPC7triggerFrame/I");
-    tMyTree->Branch("TPC7triggerSample",&TPC7triggerSample,"TPC7triggerSample/I");
-    tMyTree->Branch("TPC8triggerFrame",&TPC8triggerFrame,"TPC8triggerFrame/I");
-    tMyTree->Branch("TPC8triggerSample",&TPC8triggerSample,"TPC8triggerSample/I");
-    tMyTree->Branch("TPC9triggerFrame",&TPC9triggerFrame,"TPC9triggerFrame/I");
-    tMyTree->Branch("TPC9triggerSample",&TPC9triggerSample,"TPC9triggerSample/I");
+    ValidationTree->Branch("N_PMT_waveforms",&N_PMT_waveforms,"N_PMT_waveforms/I");
+    ValidationTree->Branch("PMT_waveform_times",PMT_waveform_times,"PMT_waveform_times[N_PMT_waveforms]/D");
 
-    tMyTree->Branch("N_discriminators",N_discriminators,"N_discriminators[40]/I");
-    tMyTree->Branch("discriminatorSample",discriminatorSample,"discriminatorSample[40][100]/I");
-    tMyTree->Branch("discriminatorFrame",discriminatorFrame,"discriminatorFrame[40][100]/I");
-    tMyTree->Branch("discriminatorType",discriminatorType,"discriminatorType[40][100]/I");
-    
-    tMyTree->Branch("N_PMT_waveforms",&N_PMT_waveforms,"N_PMT_waveforms/I");
-    tMyTree->Branch("PMT_waveform_times",PMT_waveform_times,"PMT_waveform_times[N_PMT_waveforms]/D");
+    ValidationTree->Branch("ADCwords_crate0",&ADCwords_crate0,"ADCwords_crate0/I");
+    ValidationTree->Branch("ADCwords_crate1",&ADCwords_crate1,"ADCwords_crate1/I");
+    ValidationTree->Branch("ADCwords_crate2",&ADCwords_crate2,"ADCwords_crate2/I");
+    ValidationTree->Branch("ADCwords_crate3",&ADCwords_crate3,"ADCwords_crate3/I");
+    ValidationTree->Branch("ADCwords_crate4",&ADCwords_crate4,"ADCwords_crate4/I");
+    ValidationTree->Branch("ADCwords_crate5",&ADCwords_crate5,"ADCwords_crate5/I");
+    ValidationTree->Branch("ADCwords_crate6",&ADCwords_crate6,"ADCwords_crate6/I");
+    ValidationTree->Branch("ADCwords_crate7",&ADCwords_crate7,"ADCwords_crate7/I");
+    ValidationTree->Branch("ADCwords_crate8",&ADCwords_crate8,"ADCwords_crate8/I");
+    ValidationTree->Branch("ADCwords_crate9",&ADCwords_crate9,"ADCwords_crate9/I");
+    ValidationTree->Branch("NumWords_crate1",&NumWords_crate1,"NumWords_crate1/I");
+    ValidationTree->Branch("NumWords_crate2",&NumWords_crate2,"NumWords_crate2/I");
+    ValidationTree->Branch("NumWords_crate3",&NumWords_crate3,"NumWords_crate3/I");
+    ValidationTree->Branch("NumWords_crate4",&NumWords_crate4,"NumWords_crate4/I");
+    ValidationTree->Branch("NumWords_crate5",&NumWords_crate5,"NumWords_crate5/I");
+    ValidationTree->Branch("NumWords_crate6",&NumWords_crate6,"NumWords_crate6/I");
+    ValidationTree->Branch("NumWords_crate7",&NumWords_crate7,"NumWords_crate7/I");
+    ValidationTree->Branch("NumWords_crate8",&NumWords_crate8,"NumWords_crate8/I");
+    ValidationTree->Branch("NumWords_crate9",&NumWords_crate9,"NumWords_crate9/I");
 
-    tMyTree->Branch("ADCwords_crate0",&ADCwords_crate0,"ADCwords_crate0/I");
-    tMyTree->Branch("ADCwords_crate1",&ADCwords_crate1,"ADCwords_crate1/I");
-    tMyTree->Branch("ADCwords_crate2",&ADCwords_crate2,"ADCwords_crate2/I");
-    tMyTree->Branch("ADCwords_crate3",&ADCwords_crate3,"ADCwords_crate3/I");
-    tMyTree->Branch("ADCwords_crate4",&ADCwords_crate4,"ADCwords_crate4/I");
-    tMyTree->Branch("ADCwords_crate5",&ADCwords_crate5,"ADCwords_crate5/I");
-    tMyTree->Branch("ADCwords_crate6",&ADCwords_crate6,"ADCwords_crate6/I");
-    tMyTree->Branch("ADCwords_crate7",&ADCwords_crate7,"ADCwords_crate7/I");
-    tMyTree->Branch("ADCwords_crate8",&ADCwords_crate8,"ADCwords_crate8/I");
-    tMyTree->Branch("ADCwords_crate9",&ADCwords_crate9,"ADCwords_crate9/I");
-    tMyTree->Branch("NumWords_crate1",&NumWords_crate1,"NumWords_crate1/I");
-    tMyTree->Branch("NumWords_crate2",&NumWords_crate2,"NumWords_crate2/I");
-    tMyTree->Branch("NumWords_crate3",&NumWords_crate3,"NumWords_crate3/I");
-    tMyTree->Branch("NumWords_crate4",&NumWords_crate4,"NumWords_crate4/I");
-    tMyTree->Branch("NumWords_crate5",&NumWords_crate5,"NumWords_crate5/I");
-    tMyTree->Branch("NumWords_crate6",&NumWords_crate6,"NumWords_crate6/I");
-    tMyTree->Branch("NumWords_crate7",&NumWords_crate7,"NumWords_crate7/I");
-    tMyTree->Branch("NumWords_crate8",&NumWords_crate8,"NumWords_crate8/I");
-    tMyTree->Branch("NumWords_crate9",&NumWords_crate9,"NumWords_crate9/I");
+    ValidationTree->Branch("N_trig_algos", &N_trig_algos, "N_trig_algos/I");
+    ValidationTree->Branch("algo_instance_name", &algo_instance_name);
+    ValidationTree->Branch("pass_algo", &pass_algo, "pass_algo[20]/O");
+    ValidationTree->Branch("pass_prescale", &pass_prescale, "pass_prescale[20]/O");
 
+    algo_instance_name.clear();
+    algo_instance_name.resize(20);
     event = 0;
-
   }
-  
-  
+
   // ======================================================================
   void LArRawInputDriverUBooNE::closeCurrentFile()  
   {    
@@ -415,7 +406,7 @@ namespace lris {
     for ( unsigned int opdetcat=0; opdetcat<(unsigned int)opdet::NumUBOpticalChannelCategories; opdetcat++ ) {
       pmt_raw_digits.insert( std::make_pair( (opdet::UBOpticalChannelCategory_t)opdetcat, std::unique_ptr< std::vector<raw::OpDetWaveform> >(  new std::vector<raw::OpDetWaveform> ) ) );
     }
-    event  = fEventCounter;
+    //event  = fEventCounter;
     NumWords_crate1 = 0;
     NumWords_crate2 = 0;
     NumWords_crate3 = 0;
@@ -511,12 +502,10 @@ namespace lris {
 						 bool skip)
   {  
      triggerFrame = -999;
-     TPCframe = -999;
-     PMTframe = -999;
-     FEM5triggerSample=-999;
-     FEM6triggerSample=-999;
-     FEM5triggerFrame=-999;
-     FEM6triggerFrame=-999;
+     TPCtriggerFrame = -999;
+     TPCtriggerSample = -999;
+     PMTtriggerFrame = -999;
+     PMTtriggerSample = -999;
      RO_BNBtriggerFrame=-999;
      RO_BNBtriggerSample=-999;
      RO_NuMItriggerFrame=-999;
@@ -524,8 +513,16 @@ namespace lris {
      RO_EXTtriggerFrame=-999;
      RO_EXTtriggerSample=-999;
      RO_RWMtriggerFrame=-999;
-     RO_RWMtriggerSample=-999;
-    
+     RO_RWMtriggerSample=-999;    
+     RO_LEDFlashTriggerFrame=-999;
+     RO_LEDFlashTriggerSample=-999;
+     RO_LEDtriggerFrame=-999;
+     RO_LEDtriggerSample=-999;
+     RO_PaddleTriggerFrame=-999;
+     RO_PaddleTriggerSample=-999;
+     RO_HVtriggerFrame=-999;
+     RO_HVtriggerSample=-999;
+
      skipEvent = false;
 
 //     RO_Gate1Frame=-999;
@@ -554,10 +551,11 @@ namespace lris {
     fillSWTriggerData(event_record, sw_trigInfo);
       
     event_number = event_record.getGlobalHeader().getEventNumber()+1;
+    event = event_number;
 
     checkTimeStampConsistency();
       
-    tMyTree->Fill();
+    ValidationTree->Fill();
       
     //Note that the fSwizzlePMT value needs to be reset every event, since it can be set to false if there is no PMT data
     //Setting it to false makes sure that the checkTimeStampConsistency() doesn't try to compare nonexistent data
@@ -688,11 +686,18 @@ namespace lris {
 	auto const& tpc_card_header = card.header();   
         
         unsigned int frame = RollOver(tpc_card_header.getFrame(), tpc_card_header.getTrigFrameMod16(), 3);
-        
-        if (TPCframe == -999){TPCframe = frame;} // internal frame consistency checking
-        if (abs(frame - TPCframe) > 1){ // if the frame doesn't match the other TPC frames here then we have a problem
+	unsigned int sample = tpc_card_header.getTrigSample();        
+
+        if (TPCtriggerFrame == -999){TPCtriggerFrame = frame;} // internal frame consistency checking
+        if (abs(frame - TPCtriggerFrame) > 1){ // if the frame doesn't match the other TPC frames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "TPC card header trigger frames not within one frame of each other!!" << std::endl;
+          throw std::exception();
+        }
+	if (TPCtriggerSample == -999){TPCtriggerSample = sample;} // internal sample consistency checking
+        if ((abs(sample - TPCtriggerSample) > 1) and (abs(sample - TPCtriggerSample) != 3199)){ // if the sample doesn't match the other TPC samples here then we have a problem
+          std::cerr << "ERROR!" << std::endl;
+          std::cerr << "TPC card header trigger samples not within one sample of each other!!" << std::endl;
           throw std::exception();
         }
 
@@ -712,48 +717,30 @@ namespace lris {
         // Output tree variables - for calculating compression
         if (crate_number == 1){
           NumWords_crate1 += tpc_card_header.getWordCount();
-          TPC1triggerFrame = frame;
-          TPC1triggerSample = tpc_card_header.getTrigSample();
         }
         if (crate_number == 2){
           NumWords_crate2 += tpc_card_header.getWordCount();
-          TPC2triggerFrame = frame;
-          TPC2triggerSample = tpc_card_header.getTrigSample();
         }
         if (crate_number == 3){
           NumWords_crate3 += tpc_card_header.getWordCount();
-          TPC3triggerFrame = frame;
-          TPC3triggerSample = tpc_card_header.getTrigSample();
         }
         if (crate_number == 4){
           NumWords_crate4 += tpc_card_header.getWordCount();
-          TPC4triggerFrame = frame;
-          TPC4triggerSample = tpc_card_header.getTrigSample();
         }
         if (crate_number == 5){
           NumWords_crate5 += tpc_card_header.getWordCount();
-          TPC5triggerFrame = frame;
-          TPC5triggerSample = tpc_card_header.getTrigSample();
         }
         if (crate_number == 6){
           NumWords_crate6 += tpc_card_header.getWordCount();
-          TPC6triggerFrame = frame;
-          TPC6triggerSample = tpc_card_header.getTrigSample();
         }
         if (crate_number == 7){
           NumWords_crate7 += tpc_card_header.getWordCount();
-          TPC7triggerFrame = frame;
-          TPC7triggerSample = tpc_card_header.getTrigSample();
         }
         if (crate_number == 8){
           NumWords_crate8 += tpc_card_header.getWordCount();
-          TPC8triggerFrame = frame;
-          TPC8triggerSample = tpc_card_header.getTrigSample();
         }
         if (crate_number == 9){
           NumWords_crate9 += tpc_card_header.getWordCount();
-          TPC9triggerFrame = frame;
-          TPC9triggerSample = tpc_card_header.getTrigSample();
         }
          
 
@@ -994,13 +981,18 @@ namespace lris {
         uint32_t frame = RollOver(card_data.getFrame(), card_data.getTrigFrameMod16(), 4);
         uint32_t sample = card_data.getTrigSample();
 
-        if (PMTframe == -999){PMTframe = frame;} // internal frame consistency checking
-        if (abs(frame - PMTframe) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
+        if (PMTtriggerFrame == -999){PMTtriggerFrame = frame;} // internal frame consistency checking
+        if (abs(frame - PMTtriggerFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "PMT card header trigger frames not within one frame of each other!!" << std::endl;
           throw std::exception();
         }
-
+	if (PMTtriggerSample == -999){PMTtriggerSample = sample;} // internal frame consistency checking
+        if ((abs(sample - PMTtriggerSample) > 1) and (abs(sample - PMTtriggerSample) != 3199)){ // if the sample doesn't match the other PMT sample here then we have a problem
+          std::cerr << "ERROR!" << std::endl;
+          std::cerr << "PMT card header trigger frames not within one sample of each other!!" << std::endl;
+          throw std::exception();
+	}
 
 //        // check if we have swizzled the trigger data
 //        if (fSwizzleTrigger){
@@ -1017,16 +1009,16 @@ namespace lris {
 //          }
 //        }
 //         Filling output tree variables
-        if (card_data.getModule() == 5){
-          FEM5triggerFrame = frame;
-          FEM5triggerSample = sample;
-          FEM5triggerTime = timeService->OpticalClock().Time( sample, frame );
-        }
-        if (card_data.getModule() == 6){
-          FEM6triggerFrame = frame;
-          FEM6triggerSample = sample;
-          FEM6triggerTime = timeService->OpticalClock().Time( sample, frame );
-        }
+//        if (card_data.getModule() == 5){
+//          FEM5triggerFrame = frame;
+//          FEM5triggerSample = sample;
+//          FEM5triggerTime = timeService->OpticalClock().Time( sample, frame );
+//        }
+//        if (card_data.getModule() == 6){
+//          FEM6triggerFrame = frame;
+//          FEM6triggerSample = sample;
+//          FEM6triggerTime = timeService->OpticalClock().Time( sample, frame );
+//        }
 	//        int card_number = card_data.getModule();
         
         // nathaniel's version of datatypes:
@@ -1038,7 +1030,8 @@ namespace lris {
 	  // }
 
           int channel_number = channel_data.getChannelNumber();
-          
+  	  int card_number = card_data.getModule();
+        
           //now get the windows
           auto const& windows = channel_data.getWindows();  // auto here is std::vector<ub_PMT_WindowData_v6>
           for(const auto& window: windows ) {               // auto here is ub_PMT_WindowData_v6
@@ -1072,15 +1065,22 @@ namespace lris {
             rd.reserve(win_data_size); // Don't know if this compiles, but it is more efficient. push_back is terrible without it.
 
 	    //std::cout << " into ReadoutCH=" << data_product_ch_num << " category=" << opdet::UBOpChannelEnumName( ch_category ) << std::endl;
-	    short adc_max=0;
-	    short adc_max_sample=0;
-            for(ub_RawData::const_iterator it = window_data.begin(); it!= window_data.end(); it++){ 
-              rd.push_back(*it & 0xfff);                
-              if(adc_max < rd.back()){
-                adc_max_sample = rd.size();
-                adc_max = rd.back();
-              }
-
+            
+	    short adc_edge=-1;
+	    short adc_dif = 0;
+	    short adc_edge_sample=0;
+            for(ub_RawData::const_iterator it = window_data.begin(); it!= window_data.end(); it++){
+              rd.push_back(*it & 0xfff);
+	      if(adc_edge == -1){
+		adc_edge_sample = rd.size();
+		adc_edge = rd.back();
+		adc_dif = adc_edge;
+	      }
+              else if(rd.back() - adc_edge > adc_dif){
+	        adc_edge_sample = rd.size();
+                adc_edge = rd.back();
+	        adc_dif = adc_edge - adc_dif;
+	      }
             }
             // fill OpDetWaveform time
             double OpDetWaveForm_time = rd.TimeStamp();
@@ -1089,40 +1089,53 @@ namespace lris {
               N_PMT_waveforms += 1;
             }
             // Saving trigger readout stream variables to output file
-            if(adc_max>2150) { // logic pulses have high ADC values
+            if(adc_edge>2150) { // logic pulses have high ADC values
 
-              if (channel_number == 39){
-//                std::cout << "Found RWM signal!" << std::endl;
-//                std::cout << "RWM signal at frame, sample " << RollOver(card_data.getFrame(),window_header.getFrame(),3) << ", " <<  window_header.getSample() + adc_max_sample << std::endl;
-                RO_RWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
-                RO_RWMtriggerSample = window_header.getSample() + adc_max_sample;
+	      if (channel_number == 39 && card_number == 4){
+		RO_RWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_RWMtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_RWMtriggerTime = timeService->OpticalClock().Time( RO_RWMtriggerSample, RO_RWMtriggerFrame);
-//                std::cout << "window size = " << win_data_size << std::endl;
-              }
-              else if (channel_number == 38){
-//                std::cout << "Found STROBE signal!" << std::endl;
-//                std::cout << "STROBE signal at frame, sample " << RollOver(card_data.getFrame(),window_header.getFrame(),3) <<  ", " << window_header.getSample() + adc_max_sample << std::endl;
-                RO_EXTtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
-                RO_EXTtriggerSample = window_header.getSample() + adc_max_sample;
+	      }
+              else if (channel_number == 38 && card_number == 4){
+		RO_EXTtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_EXTtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_EXTtriggerTime = timeService->OpticalClock().Time( RO_EXTtriggerSample, RO_EXTtriggerFrame);
-//                std::cout << "window size = " << win_data_size << std::endl;
-              }
-              else if (channel_number == 37){
-//                std::cout << "Found NuMI signal!" << std::endl;
-//                std::cout << "NuMI signal at frame, sample " << RollOver(card_data.getFrame(),window_header.getFrame(),3) <<  ", " << window_header.getSample() << std::endl;
-                RO_NuMItriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
-                RO_NuMItriggerSample = window_header.getSample() + adc_max_sample;
+	      }
+	      else if (channel_number == 37 && card_number == 4){
+		RO_NuMItriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_NuMItriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_NuMItriggerTime = timeService->OpticalClock().Time( RO_NuMItriggerSample, RO_NuMItriggerFrame);
-//                std::cout << "window size = " << win_data_size << std::endl;
-              }
-              else if (channel_number == 36){
-//                std::cout << "Found BNB signal!" << std::endl;
-//                std::cout << "BNB signal at frame, sample " << RollOver(card_data.getFrame(),window_header.getFrame(),3) <<  ", " << window_header.getSample() + adc_max_sample << std::endl;
-                RO_BNBtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
-                RO_BNBtriggerSample = window_header.getSample() + adc_max_sample;
+ 	      }
+              else if (channel_number == 36 && card_number == 4){
+		RO_BNBtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_BNBtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_BNBtriggerTime = timeService->OpticalClock().Time( RO_BNBtriggerSample, RO_BNBtriggerFrame);
-//                std::cout << "window size = " << win_data_size << std::endl;
-              }
+	      }
+	      if (channel_number == 39 && card_number == 5){
+		RO_LEDFlashTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_LEDFlashTriggerSample = window_header.getSample() + adc_edge_sample;
+                RO_LEDFlashTriggerTime = timeService->OpticalClock().Time( RO_LEDFlashTriggerSample, RO_LEDFlashTriggerFrame);
+  	      }
+              else if (channel_number == 38 && card_number == 5){
+		RO_HVtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_HVtriggerSample = window_header.getSample() + adc_edge_sample;
+                RO_HVtriggerTime = timeService->OpticalClock().Time( RO_HVtriggerSample, RO_HVtriggerFrame);
+	      }
+              else if (channel_number == 37 && card_number == 5){
+		RO_PaddleTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_PaddleTriggerSample = window_header.getSample() + adc_edge_sample;
+                RO_PaddleTriggerTime = timeService->OpticalClock().Time( RO_PaddleTriggerSample, RO_PaddleTriggerFrame);
+	      }
+              else if (channel_number == 36 && card_number == 5){
+		RO_LEDtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_LEDtriggerSample = window_header.getSample() + adc_edge_sample;
+                RO_LEDtriggerTime = timeService->OpticalClock().Time( RO_LEDtriggerSample, RO_LEDtriggerFrame);
+ 	      }
+	      else if (channel_number == -999 && card_number == -999){
+		RO_NuMIRWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
+                RO_NuMIRWMtriggerSample = window_header.getSample() + adc_edge_sample;
+                RO_NuMIRWMtriggerTime = timeService->OpticalClock().Time( RO_NuMIRWMtriggerSample, RO_NuMIRWMtriggerFrame);
+	      }
 //              else if (channel_number == 46){
 //                std::cout << "Found GATE2 (NuMI) signal!" << std::endl;
 //                std::cout << "NuMI gate at frame, sample " << RollOver(card_data.getFrame(),window_header.getFrame(),3) <<  ", " << window_header.getSample() << std::endl;
@@ -1331,8 +1344,13 @@ namespace lris {
         return;
     }
     
+    N_trig_algos = 0;
     for (unsigned int i(0); i < swTrig_vect.size(); ++i){ // loop through swtrigger algos filling info
       ub_FEMBeamTriggerOutput swTrig = swTrig_vect.at(i); // fetch algorithm
+      
+      algo_instance_name[N_trig_algos] = swTrig.algo_instance_name;
+      pass_algo[N_trig_algos] = swTrig.pass_algo;
+      pass_prescale[N_trig_algos] = swTrig.pass_prescale;
       
       trigInfo.addAlgorithm(swTrig.algo_instance_name, // add algorithm to art data product
                             swTrig.pass_algo, 
@@ -1342,6 +1360,7 @@ namespace lris {
                             swTrig.time, 
                             _trigger_beam_window_time + swTrig.time * opt_clock.TickPeriod(), 
                             swTrig.prescale_weight);
+      N_trig_algos++;
     } // end loop over swtrigger algos
   }
     
@@ -1423,26 +1442,26 @@ namespace lris {
     //at the end of the event, it is reset to the initial value from the fhicl parameters.
     //but this means that the trig-TPC comparison will continue, but not the TPC-PMT or Trig-PMT
     if (fSwizzleTrigger && fSwizzlePMT ){ // trig-PMT comparison
-      if (abs(PMTframe - triggerFrame)>1){
+      if (abs(PMTtriggerFrame - triggerFrame)>1){
         std::cout << "ERROR!" << std::endl;
         std::cout << "trigger data and PMT data both read out, but frames disagree (by more than 1)!" << std::endl;
-        std::cout << "trigger data frame = " << triggerFrame << ", PMT data frame = " << PMTframe << std::endl;
+        std::cout << "trigger data frame = " << triggerFrame << ", PMT data frame = " << PMTtriggerFrame << std::endl;
         throw std::exception();
       } // Done trig-PMT comparison
     }
     if (fSwizzleTrigger && fSwizzleTPC ){ // trig-TPC comparison
-      if (abs(TPCframe - triggerFrame)>1){
+      if (abs(TPCtriggerFrame - triggerFrame)>1){
         std::cout << "ERROR!" << std::endl;
         std::cout << "trigger data and TPC data both read out, but frames disagree (by more than 1)!" << std::endl;
-        std::cout << "trigger data frame = " << triggerFrame << ", TPC data frame = " << TPCframe << std::endl;
+        std::cout << "trigger data frame = " << triggerFrame << ", TPC data frame = " << TPCtriggerFrame << std::endl;
         throw std::exception();
       } // Done trig-TPC comparison
     }
     if (fSwizzleTPC && fSwizzlePMT ){ // TPC-PMT comparison
-      if (abs(PMTframe - TPCframe)>1){
+      if (abs(PMTtriggerFrame - TPCtriggerFrame)>1){
         std::cout << "ERROR!" << std::endl;
         std::cout << "TPC data and PMT data both read out, but frames disagree (by more than 1)!" << std::endl;
-        std::cout << "TPC data frame = " << TPCframe << ", PMT data frame = " << PMTframe << std::endl;
+        std::cout << "TPC data frame = " << TPCtriggerFrame << ", PMT data frame = " << PMTtriggerFrame << std::endl;
         throw std::exception();
       }
     } // Done TPC-PMT comparison
