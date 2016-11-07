@@ -191,11 +191,22 @@ namespace lris {
     ValidationTree->Branch("triggerBitPMTCosmic",&triggerBitPMTCosmic,"triggerBitPMTCosmic/I");
     ValidationTree->Branch("triggerBitPaddles",&triggerBitPaddles,"triggerBitPaddles/I");
     ValidationTree->Branch("PMTtriggerFrame",&PMTtriggerFrame,"PMTtriggerFrame/I");
+    ValidationTree->Branch("PMTeventFrame",&PMTeventFrame,"PMTeventFrame/I");
     ValidationTree->Branch("PMTtriggerSample",&PMTtriggerSample,"PMTtriggerSample/I");
     ValidationTree->Branch("TPCtriggerFrame",&TPCtriggerFrame,"TPCtriggerFrame/I");
     ValidationTree->Branch("TPCeventFrame",&TPCeventFrame,"TPCeventFrame/I");
     ValidationTree->Branch("TPCtriggerSample",&TPCtriggerSample,"TPCtriggerSample/I");
     
+    // PMT FEM event and trigger frame/sample
+    ValidationTree->Branch("PMTFEM4triggerFrame",&PMTFEM4triggerFrame,"PMTFEM4triggerFrame/I");
+    ValidationTree->Branch("PMTFEM4eventFrame",&PMTFEM4eventFrame,"PMTFEM4eventFrame/I");
+    ValidationTree->Branch("PMTFEM4triggerSample",&PMTFEM4triggerSample,"PMTFEM4triggerSample/I");
+    ValidationTree->Branch("PMTFEM5triggerFrame",&PMTFEM5triggerFrame,"PMTFEM5triggerFrame/I");
+    ValidationTree->Branch("PMTFEM5eventFrame",&PMTFEM5eventFrame,"PMTFEM5eventFrame/I");
+    ValidationTree->Branch("PMTFEM5triggerSample",&PMTFEM5triggerSample,"PMTFEM5triggerSample/I");
+    ValidationTree->Branch("PMTFEM6triggerFrame",&PMTFEM6triggerFrame,"PMTFEM6triggerFrame/I");
+    ValidationTree->Branch("PMTFEM6eventFrame",&PMTFEM6eventFrame,"PMTFEM6eventFrame/I");
+    ValidationTree->Branch("PMTFEM6triggerSample",&PMTFEM6triggerSample,"PMTFEM6triggerSample/I");
     // TPC crate event and trigger frames
     ValidationTree->Branch("TPC1triggerFrame",&TPC1triggerFrame,"TPC1triggerFrame/I");
     ValidationTree->Branch("TPC1eventFrame",&TPC1eventFrame,"TPC1eventFrame/I");
@@ -566,9 +577,20 @@ namespace lris {
      TPC9eventFrame = -999;
      TPC9triggerSample = -999;
      
-     
      PMTtriggerFrame = -999;
+     PMTeventFrame = -999;
      PMTtriggerSample = -999;
+     
+     PMTFEM4triggerFrame = -999;
+     PMTFEM4eventFrame = -999;
+     PMTFEM4triggerSample = -999;
+     PMTFEM5triggerFrame = -999;
+     PMTFEM5eventFrame = -999;
+     PMTFEM5triggerSample = -999;
+     PMTFEM6triggerFrame = -999;
+     PMTFEM6eventFrame = -999;
+     PMTFEM6triggerSample = -999;
+     
      RO_BNBtriggerFrame=-999;
      RO_BNBtriggerSample=-999;
      RO_NuMItriggerFrame=-999;
@@ -787,57 +809,75 @@ namespace lris {
         // Output tree variables - for calculating compression
         if (crate_number == 1){
           NumWords_crate1 += tpc_card_header.getWordCount();
-          TPC1triggerFrame = trigFrame;
-          TPC1eventFrame = eventFrame;
-          TPC1triggerSample = trigSample;
+          if (TPC1triggerFrame == -999){
+            TPC1triggerFrame = trigFrame;
+            TPC1eventFrame = eventFrame;
+            TPC1triggerSample = trigSample;
+          }
         }
         if (crate_number == 2){
           NumWords_crate2 += tpc_card_header.getWordCount();
-          TPC2triggerFrame = trigFrame;
-          TPC2eventFrame = eventFrame;
-          TPC2triggerSample = trigSample;
+          if (TPC2triggerFrame == -999){
+            TPC2triggerFrame = trigFrame;
+            TPC2eventFrame = eventFrame;
+            TPC2triggerSample = trigSample;
+          }
         }
         if (crate_number == 3){
           NumWords_crate3 += tpc_card_header.getWordCount();
-          TPC3triggerFrame = trigFrame;
-          TPC3eventFrame = eventFrame;
-          TPC3triggerSample = trigSample;
+          if (TPC3triggerFrame == -999){
+            TPC3triggerFrame = trigFrame;
+            TPC3eventFrame = eventFrame;
+            TPC3triggerSample = trigSample;
+          }
         }
         if (crate_number == 4){
           NumWords_crate4 += tpc_card_header.getWordCount();
-          TPC4triggerFrame = trigFrame;
-          TPC4eventFrame = eventFrame;
-          TPC4triggerSample = trigSample;
+          if (TPC4triggerFrame == -999){
+            TPC4triggerFrame = trigFrame;
+            TPC4eventFrame = eventFrame;
+            TPC4triggerSample = trigSample;
+          }
         }
         if (crate_number == 5){
           NumWords_crate5 += tpc_card_header.getWordCount();
-          TPC5triggerFrame = trigFrame;
-          TPC5eventFrame = eventFrame;
-          TPC5triggerSample = trigSample;
+          if (TPC5triggerFrame == -999){
+            TPC5triggerFrame = trigFrame;
+            TPC5eventFrame = eventFrame;
+            TPC5triggerSample = trigSample;
+          }
         }
         if (crate_number == 6){
           NumWords_crate6 += tpc_card_header.getWordCount();
-          TPC6triggerFrame = trigFrame;
-          TPC6eventFrame = eventFrame;
-          TPC6triggerSample = trigSample;
+          if (TPC6triggerFrame == -999){
+            TPC6triggerFrame = trigFrame;
+            TPC6eventFrame = eventFrame;
+            TPC6triggerSample = trigSample;
+          }
         }
         if (crate_number == 7){
+          if (TPC7triggerFrame == -999){
           NumWords_crate7 += tpc_card_header.getWordCount();
-          TPC7triggerFrame = trigFrame;
-          TPC7eventFrame = eventFrame;
-          TPC7triggerSample = trigSample;
+            TPC7triggerFrame = trigFrame;
+            TPC7eventFrame = eventFrame;
+            TPC7triggerSample = trigSample;
+          }
         }
         if (crate_number == 8){
           NumWords_crate8 += tpc_card_header.getWordCount();
-          TPC8triggerFrame = trigFrame;
-          TPC8eventFrame = eventFrame;
-          TPC8triggerSample = trigSample;
+          if (TPC8triggerFrame == -999){
+            TPC8triggerFrame = trigFrame;
+            TPC8eventFrame = eventFrame;
+            TPC8triggerSample = trigSample;
+          }
         }
         if (crate_number == 9){
           NumWords_crate9 += tpc_card_header.getWordCount();
-          TPC9triggerFrame = trigFrame;
-          TPC9eventFrame = eventFrame;
-          TPC9triggerSample = trigSample;
+          if (TPC9triggerFrame == -999){
+            TPC9triggerFrame = trigFrame;
+            TPC9eventFrame = eventFrame;
+            TPC9triggerSample = trigSample;
+          }
         }
          
 
@@ -1075,17 +1115,24 @@ namespace lris {
 	}
             
 // Frame and sample for trigger
-        uint32_t frame = RollOver(card_data.getFrame(), card_data.getTrigFrameMod16(), 4);
-        uint32_t sample = card_data.getTrigSample();
+        uint32_t eventFrame = card_data.getFrame();
+        uint32_t trigFrame = RollOver(eventFrame, card_data.getTrigFrameMod16(), 4);
+        uint32_t trigSample = card_data.getTrigSample();
 
-        if (PMTtriggerFrame == -999){PMTtriggerFrame = frame;} // internal frame consistency checking
-        if (abs(frame - PMTtriggerFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
+        if (PMTeventFrame == -999){PMTeventFrame = eventFrame;} // internal frame consistency checking
+        if (abs(eventFrame - PMTeventFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
+          std::cerr << "ERROR!" << std::endl;
+          std::cerr << "PMT card header event frames not within one frame of each other!!" << std::endl;
+          throw std::exception();
+        }
+        if (PMTtriggerFrame == -999){PMTtriggerFrame = trigFrame;} // internal frame consistency checking
+        if (abs(trigFrame - PMTtriggerFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "PMT card header trigger frames not within one frame of each other!!" << std::endl;
           throw std::exception();
         }
-	if (PMTtriggerSample == -999){PMTtriggerSample = sample;} // internal frame consistency checking
-        if ((abs(sample - PMTtriggerSample) > 1) and (abs(sample - PMTtriggerSample) != 3199)){ // if the sample doesn't match the other PMT sample here then we have a problem
+	if (PMTtriggerSample == -999){PMTtriggerSample = trigSample;} // internal frame consistency checking
+        if ((abs(trigSample - PMTtriggerSample) > 1) and (abs(trigSample - PMTtriggerSample) != 3199)){ // if the sample doesn't match the other PMT sample here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "PMT card header trigger frames not within one sample of each other!!" << std::endl;
           throw std::exception();
@@ -1106,16 +1153,24 @@ namespace lris {
 //          }
 //        }
 //         Filling output tree variables
-//        if (card_data.getModule() == 5){
-//          FEM5triggerFrame = frame;
-//          FEM5triggerSample = sample;
-//          FEM5triggerTime = timeService->OpticalClock().Time( sample, frame );
-//        }
-//        if (card_data.getModule() == 6){
-//          FEM6triggerFrame = frame;
-//          FEM6triggerSample = sample;
-//          FEM6triggerTime = timeService->OpticalClock().Time( sample, frame );
-//        }
+        if (card_data.getModule() == 4){
+          PMTFEM4triggerFrame = trigFrame;
+          PMTFEM4eventFrame = eventFrame;
+          PMTFEM4triggerSample = trigSample;
+//          PMTFEM4triggerTime = timeService->OpticalClock().Time( trigSample, trigFrame );
+        }
+        if (card_data.getModule() == 5){
+          PMTFEM5triggerFrame = trigFrame;
+          PMTFEM4eventFrame = eventFrame;
+          PMTFEM5triggerSample = trigSample;
+//          PMTFEM5triggerTime = timeService->OpticalClock().Time( trigSample, trigFrame );
+        }
+        if (card_data.getModule() == 6){
+          PMTFEM6triggerFrame = trigFrame;
+          PMTFEM4eventFrame = eventFrame;
+          PMTFEM6triggerSample = trigSample;
+//          PMTFEM6triggerTime = timeService->OpticalClock().Time( trigSample, trigFrame );
+        }
 	//        int card_number = card_data.getModule();
         
         // nathaniel's version of datatypes:

@@ -194,9 +194,10 @@ namespace lris {
     double RO_NuMIRWMtriggerTime;
 
     // internal checking variable for tpc
+    // We check each card matches - the first card in each is saved as the "crate" value
     int TPCtriggerFrame;  // tpc trigger frame number - each crate is also saved individually for cross-checking
     int TPCeventFrame;	// tpc "event packet" frame number - each crate is also saved individually for cross-checking
-    int TPCtriggerSample;
+    int TPCtriggerSample; // tpc trigger sample number - each crate is also saved individually for cross checking
     
     int TPC1triggerFrame;	// internal checking variable for tpc crate 1
     int TPC1eventFrame;
@@ -226,8 +227,22 @@ namespace lris {
     int TPC9eventFrame;
     int TPC9triggerSample;
     
-    int PMTtriggerFrame;	// same for the pmt
+    // same for the pmt FEMs.
+    // This time, we keep the information for each PMT FEM separately (FEMs are in slots 4,5,6)
+    int PMTtriggerFrame;	
+    int PMTeventFrame;	
     int PMTtriggerSample;
+
+    int PMTFEM4triggerFrame;	
+    int PMTFEM4eventFrame;	
+    int PMTFEM4triggerSample;
+    int PMTFEM5triggerFrame;	
+    int PMTFEM5eventFrame;	
+    int PMTFEM5triggerSample;
+    int PMTFEM6triggerFrame;	
+    int PMTFEM6eventFrame;	
+    int PMTFEM6triggerSample;
+
 
     uint32_t ADCwords_crate0;
     uint32_t ADCwords_crate1;
