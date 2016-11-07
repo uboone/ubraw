@@ -189,6 +189,7 @@ namespace lris {
     ValidationTree->Branch("triggerBitEXT",&triggerBitEXT,"triggerBitEXT/I");
     ValidationTree->Branch("triggerBitPMTBeam",&triggerBitPMTBeam,"triggerBitPMTBeam/I");
     ValidationTree->Branch("triggerBitPMTCosmic",&triggerBitPMTCosmic,"triggerBitPMTCosmic/I");
+    ValidationTree->Branch("triggerBitPaddles",&triggerBitPaddles,"triggerBitPaddles/I");
     ValidationTree->Branch("PMTtriggerFrame",&PMTtriggerFrame,"PMTtriggerFrame/I");
     ValidationTree->Branch("PMTtriggerSample",&PMTtriggerSample,"PMTtriggerSample/I");
     ValidationTree->Branch("TPCtriggerFrame",&TPCtriggerFrame,"TPCtriggerFrame/I");
@@ -908,7 +909,7 @@ namespace lris {
       //throw std::runtime_error( warn );
     }
 
-    mf::LogInfo("")<< "Got to end of fillTPCData().";
+//    mf::LogInfo("")<< "Got to end of fillTPCData().";
   }
 
   // =====================================================================
@@ -1066,22 +1067,25 @@ namespace lris {
 
 	    //std::cout << " into ReadoutCH=" << data_product_ch_num << " category=" << opdet::UBOpChannelEnumName( ch_category ) << std::endl;
             
-	    short adc_edge=-1;
-	    short adc_dif = 0;
+	    //short adc_edge=-1;
+	    //short adc_dif = 0;
+	    short adc_last = -1;
+	    short adc_last_but_one = -1;
 	    short adc_edge_sample=0;
+        bool found_pulse = false;
             for(ub_RawData::const_iterator it = window_data.begin(); it!= window_data.end(); it++){
               rd.push_back(*it & 0xfff);
-	      if(adc_edge == -1){
-		adc_edge_sample = rd.size();
-		adc_edge = rd.back();
-		adc_dif = adc_edge;
-	      }
-              else if(rd.back() - adc_edge > adc_dif){
-	        adc_edge_sample = rd.size();
-                adc_edge = rd.back();
-	        adc_dif = adc_edge - adc_dif;
-	      }
+              if (adc_last < 0){adc_last = rd.back(); adc_last_but_one = rd.back();} // set last two adcs to value of first adc to start
+              
+              // Find first adc jump of more than 100adc, and save found_pulse=true (should be leading edge)
+              if (rd.back() - adc_last_but_one > 100 and not found_pulse){ 
+                adc_edge_sample = rd.size();
+                found_pulse = true;
+              }
+              adc_last_but_one = adc_last;
+              adc_last = rd.back();
             }
+            
             // fill OpDetWaveform time
             double OpDetWaveForm_time = rd.TimeStamp();
             if (N_PMT_waveforms < 400 and channel_number < 36){
@@ -1089,44 +1093,51 @@ namespace lris {
               N_PMT_waveforms += 1;
             }
             // Saving trigger readout stream variables to output file
-            if(adc_edge>2150) { // logic pulses have high ADC values
-
+            if (found_pulse){
 	      if (channel_number == 39 && card_number == 4){
+//              std::cout << "RWM signal card 4" << std::endl;
 		RO_RWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_RWMtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_RWMtriggerTime = timeService->OpticalClock().Time( RO_RWMtriggerSample, RO_RWMtriggerFrame);
 	      }
-              else if (channel_number == 38 && card_number == 4){
+            else if (channel_number == 38 && card_number == 4){
+//              std::cout << "EXT signal card 4" << std::endl;
 		RO_EXTtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_EXTtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_EXTtriggerTime = timeService->OpticalClock().Time( RO_EXTtriggerSample, RO_EXTtriggerFrame);
 	      }
 	      else if (channel_number == 37 && card_number == 4){
+//              std::cout << "NuMI signal card 4" << std::endl;
 		RO_NuMItriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_NuMItriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_NuMItriggerTime = timeService->OpticalClock().Time( RO_NuMItriggerSample, RO_NuMItriggerFrame);
  	      }
-              else if (channel_number == 36 && card_number == 4){
+          else if (channel_number == 36 && card_number == 4){
+//              std::cout << "BNB signal card 4" << std::endl;
 		RO_BNBtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_BNBtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_BNBtriggerTime = timeService->OpticalClock().Time( RO_BNBtriggerSample, RO_BNBtriggerFrame);
 	      }
-	      if (channel_number == 39 && card_number == 5){
+	      else if (channel_number == 39 && card_number == 5){
+//              std::cout << "LED flash signal card 5" << std::endl;
 		RO_LEDFlashTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_LEDFlashTriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_LEDFlashTriggerTime = timeService->OpticalClock().Time( RO_LEDFlashTriggerSample, RO_LEDFlashTriggerFrame);
   	      }
-              else if (channel_number == 38 && card_number == 5){
+          else if (channel_number == 38 && card_number == 5){
+//              std::cout << "HV signal card 5" << std::endl;
 		RO_HVtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_HVtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_HVtriggerTime = timeService->OpticalClock().Time( RO_HVtriggerSample, RO_HVtriggerFrame);
 	      }
-              else if (channel_number == 37 && card_number == 5){
+          else if (channel_number == 37 && card_number == 5){
+//              std::cout << "Paddle signal card 5" << std::endl;
 		RO_PaddleTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_PaddleTriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_PaddleTriggerTime = timeService->OpticalClock().Time( RO_PaddleTriggerSample, RO_PaddleTriggerFrame);
 	      }
-              else if (channel_number == 36 && card_number == 5){
+          else if (channel_number == 36 && card_number == 5){
+//              std::cout << "LED signal card 5" << std::endl;
 		RO_LEDtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_LEDtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_LEDtriggerTime = timeService->OpticalClock().Time( RO_LEDtriggerSample, RO_LEDtriggerFrame);
@@ -1153,7 +1164,8 @@ namespace lris {
 //              else {
 //                std::cout << "channel " << channel_number << ",regular PMT window size = " << win_data_size << std::endl;
 //              }
-            }
+              }
+            
             if (fSwizzlePMT){
               pmtDigitList[ch_category]->emplace_back(rd);
             }
@@ -1306,7 +1318,13 @@ namespace lris {
       triggerBitEXT = trig_data.Trig_EXT(); 
       triggerBitPMTBeam = trig_bits & 0x1;
       triggerBitPMTCosmic = trig_bits & 0x2;
+      triggerBitPaddles = trig_data.Trig_Spare1();
       triggerTime = trigger_time;
+
+      if (triggerBitBNB){std::cout << "BNB" << std::endl;}
+      else if (triggerBitEXT){std::cout << "EXT" << std::endl;}
+      else if(triggerBitNuMI) {std::cout << "NuMI" << std::endl; }
+      else if(triggerBitPMTBeam) {std::cout << "NuMI" << std::endl; }
 
     }
   }
@@ -1469,4 +1487,8 @@ namespace lris {
   }
   // =====================================================================  
 
+
 }//<---Endlris
+
+
+

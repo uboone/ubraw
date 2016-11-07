@@ -101,7 +101,7 @@ namespace lris {
                         raw::ubdaqSoftwareTriggerData& trigInfo);
 
     void checkTimeStampConsistency(void);
-
+    
     double _trigger_beam_window_time;
 
     art::SourceHelper            fSourceHelper;
@@ -161,6 +161,7 @@ namespace lris {
     uint32_t triggerBitEXT;
     uint32_t triggerBitPMTBeam;
     uint32_t triggerBitPMTCosmic;
+    uint32_t triggerBitPaddles;
 
     int RO_BNBtriggerFrame;
     int RO_NuMItriggerFrame;
