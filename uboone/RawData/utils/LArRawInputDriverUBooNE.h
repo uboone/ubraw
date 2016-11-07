@@ -192,9 +192,40 @@ namespace lris {
     int RO_NuMIRWMtriggerFrame;
     int RO_NuMIRWMtriggerSample;
     double RO_NuMIRWMtriggerTime;
- 
-    int TPCtriggerFrame;	// internal checking variable for tpc
+
+    // internal checking variable for tpc
+    int TPCtriggerFrame;  // tpc trigger frame number - each crate is also saved individually for cross-checking
+    int TPCeventFrame;	// tpc "event packet" frame number - each crate is also saved individually for cross-checking
     int TPCtriggerSample;
+    
+    int TPC1triggerFrame;	// internal checking variable for tpc crate 1
+    int TPC1eventFrame;
+    int TPC1triggerSample;
+    int TPC2triggerFrame;	// internal checking variable for tpc crate 2
+    int TPC2eventFrame;
+    int TPC2triggerSample;
+    int TPC3triggerFrame;	// internal checking variable for tpc crate 3
+    int TPC3eventFrame;
+    int TPC3triggerSample;
+    int TPC4triggerFrame;	// internal checking variable for tpc crate 4
+    int TPC4eventFrame;
+    int TPC4triggerSample;
+    int TPC5triggerFrame;	// internal checking variable for tpc crate 5
+    int TPC5eventFrame;
+    int TPC5triggerSample;
+    int TPC6triggerFrame;	// internal checking variable for tpc crate 6
+    int TPC6eventFrame;
+    int TPC6triggerSample;
+    int TPC7triggerFrame;	// internal checking variable for tpc crate 7
+    int TPC7eventFrame;
+    int TPC7triggerSample;
+    int TPC8triggerFrame;	// internal checking variable for tpc crate 8
+    int TPC8eventFrame;
+    int TPC8triggerSample;
+    int TPC9triggerFrame;	// internal checking variable for tpc crate 9
+    int TPC9eventFrame;
+    int TPC9triggerSample;
+    
     int PMTtriggerFrame;	// same for the pmt
     int PMTtriggerSample;
 

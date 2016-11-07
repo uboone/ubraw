@@ -193,7 +193,37 @@ namespace lris {
     ValidationTree->Branch("PMTtriggerFrame",&PMTtriggerFrame,"PMTtriggerFrame/I");
     ValidationTree->Branch("PMTtriggerSample",&PMTtriggerSample,"PMTtriggerSample/I");
     ValidationTree->Branch("TPCtriggerFrame",&TPCtriggerFrame,"TPCtriggerFrame/I");
+    ValidationTree->Branch("TPCeventFrame",&TPCeventFrame,"TPCeventFrame/I");
     ValidationTree->Branch("TPCtriggerSample",&TPCtriggerSample,"TPCtriggerSample/I");
+    
+    // TPC crate event and trigger frames
+    ValidationTree->Branch("TPC1triggerFrame",&TPC1triggerFrame,"TPC1triggerFrame/I");
+    ValidationTree->Branch("TPC1eventFrame",&TPC1eventFrame,"TPC1eventFrame/I");
+    ValidationTree->Branch("TPC1triggerSample",&TPC1triggerSample,"TPC1triggerSample/I");
+    ValidationTree->Branch("TPC2triggerFrame",&TPC2triggerFrame,"TPC2triggerFrame/I");
+    ValidationTree->Branch("TPC2eventFrame",&TPC2eventFrame,"TPC2eventFrame/I");
+    ValidationTree->Branch("TPC2triggerSample",&TPC2triggerSample,"TPC2triggerSample/I");
+    ValidationTree->Branch("TPC3triggerFrame",&TPC3triggerFrame,"TPC3triggerFrame/I");
+    ValidationTree->Branch("TPC3eventFrame",&TPC3eventFrame,"TPC3eventFrame/I");
+    ValidationTree->Branch("TPC3triggerSample",&TPC3triggerSample,"TPC3triggerSample/I");
+    ValidationTree->Branch("TPC4triggerFrame",&TPC4triggerFrame,"TPC4triggerFrame/I");
+    ValidationTree->Branch("TPC4eventFrame",&TPC4eventFrame,"TPC4eventFrame/I");
+    ValidationTree->Branch("TPC4triggerSample",&TPC4triggerSample,"TPC4triggerSample/I");
+    ValidationTree->Branch("TPC5triggerFrame",&TPC5triggerFrame,"TPC5triggerFrame/I");
+    ValidationTree->Branch("TPC5eventFrame",&TPC5eventFrame,"TPC5eventFrame/I");
+    ValidationTree->Branch("TPC5triggerSample",&TPC5triggerSample,"TPC5triggerSample/I");
+    ValidationTree->Branch("TPC6triggerFrame",&TPC6triggerFrame,"TPC6triggerFrame/I");
+    ValidationTree->Branch("TPC6eventFrame",&TPC6eventFrame,"TPC6eventFrame/I");
+    ValidationTree->Branch("TPC6triggerSample",&TPC6triggerSample,"TPC6triggerSample/I");
+    ValidationTree->Branch("TPC7triggerFrame",&TPC7triggerFrame,"TPC7triggerFrame/I");
+    ValidationTree->Branch("TPC7eventFrame",&TPC7eventFrame,"TPC7eventFrame/I");
+    ValidationTree->Branch("TPC7triggerSample",&TPC7triggerSample,"TPC7triggerSample/I");
+    ValidationTree->Branch("TPC8triggerFrame",&TPC8triggerFrame,"TPC8triggerFrame/I");
+    ValidationTree->Branch("TPC8eventFrame",&TPC8eventFrame,"TPC8eventFrame/I");
+    ValidationTree->Branch("TPC8triggerSample",&TPC8triggerSample,"TPC8triggerSample/I");
+    ValidationTree->Branch("TPC9triggerFrame",&TPC9triggerFrame,"TPC9triggerFrame/I");
+    ValidationTree->Branch("TPC9eventFrame",&TPC9eventFrame,"TPC9eventFrame/I");
+    ValidationTree->Branch("TPC9triggerSample",&TPC9triggerSample,"TPC9triggerSample/I");
 
     ValidationTree->Branch("RO_BNBtriggerFrame",&RO_BNBtriggerFrame,"RO_BNBtriggerFrame/I");
     ValidationTree->Branch("RO_NuMItriggerFrame",&RO_NuMItriggerFrame,"RO_NuMItriggerFrame/I");
@@ -503,8 +533,40 @@ namespace lris {
 						 bool skip)
   {  
      triggerFrame = -999;
+     
      TPCtriggerFrame = -999;
+     TPCeventFrame = -999;
      TPCtriggerSample = -999;
+     
+     TPC1triggerFrame = -999;
+     TPC1eventFrame = -999;
+     TPC1triggerSample = -999;
+     TPC2triggerFrame = -999;
+     TPC2eventFrame = -999;
+     TPC2triggerSample = -999;
+     TPC3triggerFrame = -999;
+     TPC3eventFrame = -999;
+     TPC3triggerSample = -999;
+     TPC4triggerFrame = -999;
+     TPC4eventFrame = -999;
+     TPC4triggerSample = -999;
+     TPC5triggerFrame = -999;
+     TPC5eventFrame = -999;
+     TPC5triggerSample = -999;
+     TPC6triggerFrame = -999;
+     TPC6eventFrame = -999;
+     TPC6triggerSample = -999;
+     TPC7triggerFrame = -999;
+     TPC7eventFrame = -999;
+     TPC7triggerSample = -999;
+     TPC8triggerFrame = -999;
+     TPC8eventFrame = -999;
+     TPC8triggerSample = -999;
+     TPC9triggerFrame = -999;
+     TPC9eventFrame = -999;
+     TPC9triggerSample = -999;
+     
+     
      PMTtriggerFrame = -999;
      PMTtriggerSample = -999;
      RO_BNBtriggerFrame=-999;
@@ -684,21 +746,28 @@ namespace lris {
 
         //The format here is similar to the crate! There's a header (which is a ub_TPC_CardHeader_v*
         //object), and technically a trailer (though here it's empty!).
-	auto const& tpc_card_header = card.header();   
+    auto const& tpc_card_header = card.header();   
         
-        unsigned int frame = RollOver(tpc_card_header.getFrame(), tpc_card_header.getTrigFrameMod16(), 3);
-	unsigned int sample = tpc_card_header.getTrigSample();        
+        unsigned int eventFrame = tpc_card_header.getFrame();
+        unsigned int trigFrame = RollOver(eventFrame, tpc_card_header.getTrigFrameMod16(), 3);
+        unsigned int trigSample = tpc_card_header.getTrigSample();        
 
-        if (TPCtriggerFrame == -999){TPCtriggerFrame = frame;} // internal frame consistency checking
-        if (abs(frame - TPCtriggerFrame) > 1){ // if the frame doesn't match the other TPC frames here then we have a problem
+        if (TPCtriggerFrame == -999){TPCtriggerFrame = trigFrame;} // internal trigFrame consistency checking
+        if (abs(trigFrame - TPCtriggerFrame) > 1){ // if the trigFrame doesn't match the other TPC trigFrames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
-          std::cerr << "TPC card header trigger frames not within one frame of each other!!" << std::endl;
+          std::cerr << "TPC card header trigger trigFrames not within one frame of each other!!" << std::endl;
           throw std::exception();
         }
-	if (TPCtriggerSample == -999){TPCtriggerSample = sample;} // internal sample consistency checking
-        if ((abs(sample - TPCtriggerSample) > 1) and (abs(sample - TPCtriggerSample) != 3199)){ // if the sample doesn't match the other TPC samples here then we have a problem
+        if (TPCeventFrame == -999){TPCeventFrame = eventFrame;} // internal eventFrame consistency checking
+        if (abs(trigFrame - TPCeventFrame) > 1){ // if the eventFrame doesn't match the other TPC eventFrames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
-          std::cerr << "TPC card header trigger samples not within one sample of each other!!" << std::endl;
+          std::cerr << "TPC card header trigger eventFrames not within one frame of each other!!" << std::endl;
+          throw std::exception();
+        }
+	if (TPCtriggerSample == -999){TPCtriggerSample = trigSample;} // internal trigSample consistency checking
+        if ((abs(trigSample - TPCtriggerSample) > 1) and (abs(trigSample - TPCtriggerSample) != 3199)){ // if the trigSample doesn't match the other TPC trigSamples here then we have a problem
+          std::cerr << "ERROR!" << std::endl;
+          std::cerr << "TPC card header trigger trigSamples not within one sample of each other!!" << std::endl;
           throw std::exception();
         }
 
@@ -718,30 +787,57 @@ namespace lris {
         // Output tree variables - for calculating compression
         if (crate_number == 1){
           NumWords_crate1 += tpc_card_header.getWordCount();
+          TPC1triggerFrame = trigFrame;
+          TPC1eventFrame = eventFrame;
+          TPC1triggerSample = trigSample;
         }
         if (crate_number == 2){
           NumWords_crate2 += tpc_card_header.getWordCount();
+          TPC2triggerFrame = trigFrame;
+          TPC2eventFrame = eventFrame;
+          TPC2triggerSample = trigSample;
         }
         if (crate_number == 3){
           NumWords_crate3 += tpc_card_header.getWordCount();
+          TPC3triggerFrame = trigFrame;
+          TPC3eventFrame = eventFrame;
+          TPC3triggerSample = trigSample;
         }
         if (crate_number == 4){
           NumWords_crate4 += tpc_card_header.getWordCount();
+          TPC4triggerFrame = trigFrame;
+          TPC4eventFrame = eventFrame;
+          TPC4triggerSample = trigSample;
         }
         if (crate_number == 5){
           NumWords_crate5 += tpc_card_header.getWordCount();
+          TPC5triggerFrame = trigFrame;
+          TPC5eventFrame = eventFrame;
+          TPC5triggerSample = trigSample;
         }
         if (crate_number == 6){
           NumWords_crate6 += tpc_card_header.getWordCount();
+          TPC6triggerFrame = trigFrame;
+          TPC6eventFrame = eventFrame;
+          TPC6triggerSample = trigSample;
         }
         if (crate_number == 7){
           NumWords_crate7 += tpc_card_header.getWordCount();
+          TPC7triggerFrame = trigFrame;
+          TPC7eventFrame = eventFrame;
+          TPC7triggerSample = trigSample;
         }
         if (crate_number == 8){
           NumWords_crate8 += tpc_card_header.getWordCount();
+          TPC8triggerFrame = trigFrame;
+          TPC8eventFrame = eventFrame;
+          TPC8triggerSample = trigSample;
         }
         if (crate_number == 9){
           NumWords_crate9 += tpc_card_header.getWordCount();
+          TPC9triggerFrame = trigFrame;
+          TPC9eventFrame = eventFrame;
+          TPC9triggerSample = trigSample;
         }
          
 
@@ -1320,12 +1416,6 @@ namespace lris {
       triggerBitPMTCosmic = trig_bits & 0x2;
       triggerBitPaddles = trig_data.Trig_Spare1();
       triggerTime = trigger_time;
-
-      if (triggerBitBNB){std::cout << "BNB" << std::endl;}
-      else if (triggerBitEXT){std::cout << "EXT" << std::endl;}
-      else if(triggerBitNuMI) {std::cout << "NuMI" << std::endl; }
-      else if(triggerBitPMTBeam) {std::cout << "NuMI" << std::endl; }
-
     }
   }
 
