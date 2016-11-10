@@ -151,6 +151,7 @@ namespace lris {
     fSwizzlePMT_init = ps.get<bool>("swizzlePMT",true);
     fSwizzleTrigger = ps.get<bool>("swizzleTrigger",true);
     fSwizzleTriggerType = ps.get<std::string>("swizzleTriggerType"); // Only use ALL for this option, other options will not work
+    fEnforceFrameMatching = ps.get<bool>("enforceFrameMatching"); // should be set to TRUE usually - false for debugging only
     fMaxEvents = ps.get<int>("maxEvents", -1);
     fSkipEvents = ps.get<int>("skipEvents", 0);
 
@@ -607,6 +608,9 @@ namespace lris {
      RO_PaddleTriggerSample=-999;
      RO_HVtriggerFrame=-999;
      RO_HVtriggerSample=-999;
+     
+     RO_NuMIRWMtriggerFrame=-999;
+     RO_NuMIRWMtriggerSample=-999;    
 
      skipEvent = false;
 
@@ -637,8 +641,10 @@ namespace lris {
       
     event_number = event_record.getGlobalHeader().getEventNumber()+1;
     event = event_number;
-
-    checkTimeStampConsistency();
+    
+    if (fEnforceFrameMatching){
+      checkTimeStampConsistency();
+    }
       
     ValidationTree->Fill();
       
@@ -778,19 +784,25 @@ namespace lris {
         if (abs(trigFrame - TPCtriggerFrame) > 1){ // if the trigFrame doesn't match the other TPC trigFrames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "TPC card header trigger trigFrames not within one frame of each other!!" << std::endl;
-          throw std::exception();
+          if (fEnforceFrameMatching){
+            throw std::exception();
+          }
         }
         if (TPCeventFrame == -999){TPCeventFrame = eventFrame;} // internal eventFrame consistency checking
         if (abs(trigFrame - TPCeventFrame) > 1){ // if the eventFrame doesn't match the other TPC eventFrames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "TPC card header trigger eventFrames not within one frame of each other!!" << std::endl;
-          throw std::exception();
+          if (fEnforceFrameMatching){
+           throw std::exception();
+         }
         }
 	if (TPCtriggerSample == -999){TPCtriggerSample = trigSample;} // internal trigSample consistency checking
         if ((abs(trigSample - TPCtriggerSample) > 1) and (abs(trigSample - TPCtriggerSample) != 3199)){ // if the trigSample doesn't match the other TPC trigSamples here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "TPC card header trigger trigSamples not within one sample of each other!!" << std::endl;
-          throw std::exception();
+          if (fEnforceFrameMatching){
+            throw std::exception();
+          }
         }
 
 //        if (fSwizzleTrigger){
@@ -1123,19 +1135,25 @@ namespace lris {
         if (abs(eventFrame - PMTeventFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "PMT card header event frames not within one frame of each other!!" << std::endl;
-          throw std::exception();
+          if (fEnforceFrameMatching){
+            throw std::exception();
+          }
         }
         if (PMTtriggerFrame == -999){PMTtriggerFrame = trigFrame;} // internal frame consistency checking
         if (abs(trigFrame - PMTtriggerFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "PMT card header trigger frames not within one frame of each other!!" << std::endl;
-          throw std::exception();
+          if (fEnforceFrameMatching){
+            throw std::exception();
+          }
         }
 	if (PMTtriggerSample == -999){PMTtriggerSample = trigSample;} // internal frame consistency checking
         if ((abs(trigSample - PMTtriggerSample) > 1) and (abs(trigSample - PMTtriggerSample) != 3199)){ // if the sample doesn't match the other PMT sample here then we have a problem
           std::cerr << "ERROR!" << std::endl;
           std::cerr << "PMT card header trigger frames not within one sample of each other!!" << std::endl;
-          throw std::exception();
+          if (fEnforceFrameMatching){
+            throw std::exception();
+          }
 	}
 
 //        // check if we have swizzled the trigger data
@@ -1183,6 +1201,7 @@ namespace lris {
 
           int channel_number = channel_data.getChannelNumber();
   	  int card_number = card_data.getModule();
+              
         
           //now get the windows
           auto const& windows = channel_data.getWindows();  // auto here is std::vector<ub_PMT_WindowData_v6>
@@ -1245,55 +1264,55 @@ namespace lris {
             }
             // Saving trigger readout stream variables to output file
             if (found_pulse){
-	      if (channel_number == 39 && card_number == 4){
+	      if (channel_number == 39 && card_number == 4 and RO_RWMtriggerSample != -999){
 //              std::cout << "RWM signal card 4" << std::endl;
 		RO_RWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_RWMtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_RWMtriggerTime = timeService->OpticalClock().Time( RO_RWMtriggerSample, RO_RWMtriggerFrame);
 	      }
-            else if (channel_number == 38 && card_number == 4){
+            else if (channel_number == 38 && card_number == 4 and RO_EXTtriggerSample != -999){
 //              std::cout << "EXT signal card 4" << std::endl;
 		RO_EXTtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_EXTtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_EXTtriggerTime = timeService->OpticalClock().Time( RO_EXTtriggerSample, RO_EXTtriggerFrame);
 	      }
-	      else if (channel_number == 37 && card_number == 4){
+	      else if (channel_number == 37 && card_number == 4 and RO_NuMItriggerSample != -999){
 //              std::cout << "NuMI signal card 4" << std::endl;
 		RO_NuMItriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_NuMItriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_NuMItriggerTime = timeService->OpticalClock().Time( RO_NuMItriggerSample, RO_NuMItriggerFrame);
  	      }
-          else if (channel_number == 36 && card_number == 4){
+          else if (channel_number == 36 && card_number == 4 and RO_BNBtriggerSample != -999){
 //              std::cout << "BNB signal card 4" << std::endl;
 		RO_BNBtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_BNBtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_BNBtriggerTime = timeService->OpticalClock().Time( RO_BNBtriggerSample, RO_BNBtriggerFrame);
 	      }
-	      else if (channel_number == 39 && card_number == 5){
+	      else if (channel_number == 39 && card_number == 5 and RO_LEDFlashTriggerSample != -999){
 //              std::cout << "LED flash signal card 5" << std::endl;
 		RO_LEDFlashTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_LEDFlashTriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_LEDFlashTriggerTime = timeService->OpticalClock().Time( RO_LEDFlashTriggerSample, RO_LEDFlashTriggerFrame);
   	      }
-          else if (channel_number == 38 && card_number == 5){
+          else if (channel_number == 38 && card_number == 5 and RO_HVtriggerSample != -999){
 //              std::cout << "HV signal card 5" << std::endl;
 		RO_HVtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_HVtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_HVtriggerTime = timeService->OpticalClock().Time( RO_HVtriggerSample, RO_HVtriggerFrame);
 	      }
-          else if (channel_number == 37 && card_number == 5){
+          else if (channel_number == 37 && card_number == 5 and RO_PaddleTriggerSample != -999){
 //              std::cout << "Paddle signal card 5" << std::endl;
 		RO_PaddleTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_PaddleTriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_PaddleTriggerTime = timeService->OpticalClock().Time( RO_PaddleTriggerSample, RO_PaddleTriggerFrame);
 	      }
-          else if (channel_number == 36 && card_number == 5){
+          else if (channel_number == 36 && card_number == 5 and RO_LEDtriggerSample != -999){
 //              std::cout << "LED signal card 5" << std::endl;
 		RO_LEDtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_LEDtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_LEDtriggerTime = timeService->OpticalClock().Time( RO_LEDtriggerSample, RO_LEDtriggerFrame);
  	      }
-	      else if (channel_number == -999 && card_number == -999){
+	      else if (channel_number == 38 && card_number == 6){
 		RO_NuMIRWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_NuMIRWMtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_NuMIRWMtriggerTime = timeService->OpticalClock().Time( RO_NuMIRWMtriggerSample, RO_NuMIRWMtriggerFrame);

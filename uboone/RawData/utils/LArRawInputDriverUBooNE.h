@@ -128,6 +128,7 @@ namespace lris {
                                                     // with the fSwizzlePMT fhicl parameter set to true
                                                     // (fix crash in checkTimeStampConsistency)
     bool                           fSwizzleTrigger; //fhicl parameter.  Tells us whether to swizzle the trigger data. (desired if we don't care about frame slippage)
+    bool                           fEnforceFrameMatching; //fhicl parameter. Should be set to true unless using for debugging.  False allows the swizzler to complete swizzling without the event or trigger frames matching across different headers in an event.
     std::string                    fSwizzleTriggerType; //fhicl parameter.  Tells us whether to swizzle a specific trigger type only. Options are ALL, BNB, NuMI, CALIB
     bool skipEvent; // tag to skip event if trigger is not the type we want.
 
@@ -189,9 +190,9 @@ namespace lris {
     double RO_PaddleTriggerTime;
     double RO_HVtriggerTime;
 
-    int RO_NuMIRWMtriggerFrame;
-    int RO_NuMIRWMtriggerSample;
-    double RO_NuMIRWMtriggerTime;
+    int RO_NuMIRWMtriggerFrame; // NuMI RWM signal
+    int RO_NuMIRWMtriggerSample;// NuMI RWM signal
+    double RO_NuMIRWMtriggerTime;// NuMI RWM signal
 
     // internal checking variable for tpc
     // We check each card matches - the first card in each is saved as the "crate" value
