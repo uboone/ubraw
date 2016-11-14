@@ -1264,55 +1264,51 @@ namespace lris {
             }
             // Saving trigger readout stream variables to output file
             if (found_pulse){
-	      if (channel_number == 39 && card_number == 4 and RO_RWMtriggerSample != -999){
+	      if (channel_number == 39 && card_number == 4 and RO_RWMtriggerSample == -999){
 //              std::cout << "RWM signal card 4" << std::endl;
 		RO_RWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_RWMtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_RWMtriggerTime = timeService->OpticalClock().Time( RO_RWMtriggerSample, RO_RWMtriggerFrame);
 	      }
-            else if (channel_number == 38 && card_number == 4 and RO_EXTtriggerSample != -999){
+            else if (channel_number == 38 && card_number == 4 and RO_EXTtriggerSample == -999){
 //              std::cout << "EXT signal card 4" << std::endl;
 		RO_EXTtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_EXTtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_EXTtriggerTime = timeService->OpticalClock().Time( RO_EXTtriggerSample, RO_EXTtriggerFrame);
 	      }
-	      else if (channel_number == 37 && card_number == 4 and RO_NuMItriggerSample != -999){
+	      else if (channel_number == 37 && card_number == 4 and RO_NuMItriggerSample == -999){
 //              std::cout << "NuMI signal card 4" << std::endl;
 		RO_NuMItriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_NuMItriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_NuMItriggerTime = timeService->OpticalClock().Time( RO_NuMItriggerSample, RO_NuMItriggerFrame);
  	      }
-          else if (channel_number == 36 && card_number == 4 and RO_BNBtriggerSample != -999){
+          else if (channel_number == 36 && card_number == 4 and RO_BNBtriggerSample == -999){
 //              std::cout << "BNB signal card 4" << std::endl;
 		RO_BNBtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_BNBtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_BNBtriggerTime = timeService->OpticalClock().Time( RO_BNBtriggerSample, RO_BNBtriggerFrame);
 	      }
-	      else if (channel_number == 39 && card_number == 5 and RO_LEDFlashTriggerSample != -999){
+	      else if (channel_number == 39 && card_number == 5 and RO_LEDFlashTriggerSample == -999){
 //              std::cout << "LED flash signal card 5" << std::endl;
 		RO_LEDFlashTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_LEDFlashTriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_LEDFlashTriggerTime = timeService->OpticalClock().Time( RO_LEDFlashTriggerSample, RO_LEDFlashTriggerFrame);
   	      }
-          else if (channel_number == 38 && card_number == 5 and RO_HVtriggerSample != -999){
-//              std::cout << "HV signal card 5" << std::endl;
-		RO_HVtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
-                RO_HVtriggerSample = window_header.getSample() + adc_edge_sample;
-                RO_HVtriggerTime = timeService->OpticalClock().Time( RO_HVtriggerSample, RO_HVtriggerFrame);
-	      }
-          else if (channel_number == 37 && card_number == 5 and RO_PaddleTriggerSample != -999){
+          else if (channel_number == 37 && card_number == 5 and RO_PaddleTriggerSample == -999){
 //              std::cout << "Paddle signal card 5" << std::endl;
 		RO_PaddleTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_PaddleTriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_PaddleTriggerTime = timeService->OpticalClock().Time( RO_PaddleTriggerSample, RO_PaddleTriggerFrame);
 	      }
-          else if (channel_number == 36 && card_number == 5 and RO_LEDtriggerSample != -999){
+          else if (channel_number == 36 && card_number == 5 and RO_LEDtriggerSample == -999){
 //              std::cout << "LED signal card 5" << std::endl;
 		RO_LEDtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_LEDtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_LEDtriggerTime = timeService->OpticalClock().Time( RO_LEDtriggerSample, RO_LEDtriggerFrame);
  	      }
-	      else if (channel_number == 38 && card_number == 6){
+	      else if (channel_number == 38 && card_number == 5 and RO_NuMIRWMtriggerSample == -999){ 
+            // In Run 1 this channel was the "HV trigger" copy
+            // From the start of Run 2 (Nov 2016), this has been the NuMI RWM
 		RO_NuMIRWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 RO_NuMIRWMtriggerSample = window_header.getSample() + adc_edge_sample;
                 RO_NuMIRWMtriggerTime = timeService->OpticalClock().Time( RO_NuMIRWMtriggerSample, RO_NuMIRWMtriggerFrame);
