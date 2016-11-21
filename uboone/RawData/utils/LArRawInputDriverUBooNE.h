@@ -101,7 +101,7 @@ namespace lris {
                         raw::ubdaqSoftwareTriggerData& trigInfo);
 
     void checkTimeStampConsistency(void);
-
+    
     double _trigger_beam_window_time;
 
     art::SourceHelper            fSourceHelper;
@@ -128,6 +128,7 @@ namespace lris {
                                                     // with the fSwizzlePMT fhicl parameter set to true
                                                     // (fix crash in checkTimeStampConsistency)
     bool                           fSwizzleTrigger; //fhicl parameter.  Tells us whether to swizzle the trigger data. (desired if we don't care about frame slippage)
+    bool                           fEnforceFrameMatching; //fhicl parameter. Should be set to true unless using for debugging.  False allows the swizzler to complete swizzling without the event or trigger frames matching across different headers in an event.
     std::string                    fSwizzleTriggerType; //fhicl parameter.  Tells us whether to swizzle a specific trigger type only. Options are ALL, BNB, NuMI, CALIB
     bool skipEvent; // tag to skip event if trigger is not the type we want.
 
@@ -161,6 +162,7 @@ namespace lris {
     uint32_t triggerBitEXT;
     uint32_t triggerBitPMTBeam;
     uint32_t triggerBitPMTCosmic;
+    uint32_t triggerBitPaddles;
 
     int RO_BNBtriggerFrame;
     int RO_NuMItriggerFrame;
@@ -188,14 +190,60 @@ namespace lris {
     double RO_PaddleTriggerTime;
     double RO_HVtriggerTime;
 
-    int RO_NuMIRWMtriggerFrame;
-    int RO_NuMIRWMtriggerSample;
-    double RO_NuMIRWMtriggerTime;
- 
-    int TPCtriggerFrame;	// internal checking variable for tpc
-    int TPCtriggerSample;
-    int PMTtriggerFrame;	// same for the pmt
+    int RO_NuMIRWMtriggerFrame; // NuMI RWM signal
+    int RO_NuMIRWMtriggerSample;// NuMI RWM signal
+    double RO_NuMIRWMtriggerTime;// NuMI RWM signal
+
+    // internal checking variable for tpc
+    // We check each card matches - the first card in each is saved as the "crate" value
+    int TPCtriggerFrame;  // tpc trigger frame number - each crate is also saved individually for cross-checking
+    int TPCeventFrame;	// tpc "event packet" frame number - each crate is also saved individually for cross-checking
+    int TPCtriggerSample; // tpc trigger sample number - each crate is also saved individually for cross checking
+    
+    int TPC1triggerFrame;	// internal checking variable for tpc crate 1
+    int TPC1eventFrame;
+    int TPC1triggerSample;
+    int TPC2triggerFrame;	// internal checking variable for tpc crate 2
+    int TPC2eventFrame;
+    int TPC2triggerSample;
+    int TPC3triggerFrame;	// internal checking variable for tpc crate 3
+    int TPC3eventFrame;
+    int TPC3triggerSample;
+    int TPC4triggerFrame;	// internal checking variable for tpc crate 4
+    int TPC4eventFrame;
+    int TPC4triggerSample;
+    int TPC5triggerFrame;	// internal checking variable for tpc crate 5
+    int TPC5eventFrame;
+    int TPC5triggerSample;
+    int TPC6triggerFrame;	// internal checking variable for tpc crate 6
+    int TPC6eventFrame;
+    int TPC6triggerSample;
+    int TPC7triggerFrame;	// internal checking variable for tpc crate 7
+    int TPC7eventFrame;
+    int TPC7triggerSample;
+    int TPC8triggerFrame;	// internal checking variable for tpc crate 8
+    int TPC8eventFrame;
+    int TPC8triggerSample;
+    int TPC9triggerFrame;	// internal checking variable for tpc crate 9
+    int TPC9eventFrame;
+    int TPC9triggerSample;
+    
+    // same for the pmt FEMs.
+    // This time, we keep the information for each PMT FEM separately (FEMs are in slots 4,5,6)
+    int PMTtriggerFrame;	
+    int PMTeventFrame;	
     int PMTtriggerSample;
+
+    int PMTFEM4triggerFrame;	
+    int PMTFEM4eventFrame;	
+    int PMTFEM4triggerSample;
+    int PMTFEM5triggerFrame;	
+    int PMTFEM5eventFrame;	
+    int PMTFEM5triggerSample;
+    int PMTFEM6triggerFrame;	
+    int PMTFEM6eventFrame;	
+    int PMTFEM6triggerSample;
+
 
     uint32_t ADCwords_crate0;
     uint32_t ADCwords_crate1;
