@@ -33,14 +33,14 @@ table_fragment_end
 # Add the dependent product and version
 
 product          version
-swtrigger       v02_02_03
+swtrigger       v02_02_03a
 genie_xsec      v2_12_0
 larsoft         v06_27_00
 ubutil          v06_27_00
 uboone_data     v01_12_00
-uboonedaq_datatypes v6_19_01_e10
+uboonedaq_datatypes v6_19_02_e10
 
-cetbuildtools	v5_06_06	-	only_for_build
+cetbuildtools	v5_06_07	-	only_for_build
 end_product_list
 
 
