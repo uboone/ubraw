@@ -61,6 +61,7 @@ find_ups_product( postgresql v9_1_5 )
 find_ups_boost( v1_53_0 )
 find_ups_product( uboonedaq_datatypes )
 find_ups_product( ifdh_art )
+find_ups_product( bernfebdaq_core v00_04_00 )
 
 cet_find_library( PQ NAMES pq PATHS ENV POSTGRESQL_LIBRARIES NO_DEFAULT_PATH )
 cet_find_library( UBDut NAMES ubdata_types PATHS $ENV{UBOONEDAQ_DATATYPES_LIB} )
