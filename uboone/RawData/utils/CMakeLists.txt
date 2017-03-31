@@ -18,9 +18,9 @@ simple_plugin( RawDigitWriter "module"
                ${ART_FRAMEWORK_SERVICES_REGISTRY}
                ${ART_FRAMEWORK_SERVICES_OPTIONAL}
                ${ART_FRAMEWORK_SERVICES_OPTIONAL_TFILESERVICE_SERVICE}
-               art_Persistency_Common canvas_Persistency_Common
-               art_Persistency_Provenance canvas_Persistency_Provenance
-               art_Utilities canvas_Utilities
+               art_Persistency_Common canvas
+               art_Persistency_Provenance canvas
+               art_Utilities canvas
 	       ${ROOT_BASIC_LIB_LIST}	       
                BASENAME_ONLY
              )
@@ -34,13 +34,13 @@ simple_plugin( TriggerEnforcement "module"
                    ${ART_FRAMEWORK_PRINCIPAL}
                    ${ART_FRAMEWORK_SERVICES_REGISTRY}
                    ${ART_FRAMEWORK_SERVICES_OPTIONAL}
-                   art_Persistency_Common canvas_Persistency_Common
-                   art_Persistency_Provenance canvas_Persistency_Provenance
-                   art_Utilities canvas_Utilities
+                   art_Persistency_Common canvas
+                   art_Persistency_Provenance canvas
+                   art_Utilities canvas
                    ${MF_MESSAGELOGGER}
                    ${MF_UTILITIES}
                    ${FHICLCPP}
-                   ${CETLIB}
+                   cetlib cetlib_except
                    ${ROOT_BASIC_LIB_LIST}
                    BASENAME_ONLY
              )
@@ -67,13 +67,13 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         ${ART_FRAMEWORK_SERVICES_REGISTRY}
                         ${ART_FRAMEWORK_SERVICES_OPTIONAL}
                         ${ART_FRAMEWORK_SERVICES_OPTIONAL_TFILESERVICE_SERVICE}
-                        art_Persistency_Common canvas_Persistency_Common
-                        art_Persistency_Provenance canvas_Persistency_Provenance
-                        art_Utilities canvas_Utilities
+                        art_Persistency_Common canvas
+                        art_Persistency_Provenance canvas
+                        art_Utilities canvas
                         ${MF_MESSAGELOGGER}
                         ${MF_UTILITIES}
                         ${FHICLCPP}
-                        ${CETLIB}
+                        cetlib cetlib_except
                         ${ROOT_GEOM}
                         ${ROOT_XMLIO}
                         ${ROOT_GDML}
@@ -99,13 +99,13 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         ${ART_FRAMEWORK_SERVICES_REGISTRY}
                         ${ART_FRAMEWORK_SERVICES_OPTIONAL}
                         ${ART_FRAMEWORK_SERVICES_OPTIONAL_TFILESERVICE_SERVICE}
-                        art_Persistency_Common canvas_Persistency_Common
-                        art_Persistency_Provenance canvas_Persistency_Provenance
-                        art_Utilities canvas_Utilities
+                        art_Persistency_Common canvas
+                        art_Persistency_Provenance canvas
+                        art_Utilities canvas
                         ${MF_MESSAGELOGGER}
                         ${MF_UTILITIES}
                         ${FHICLCPP}
-                        ${CETLIB}
+                        cetlib cetlib_except
                         ${ROOT_GEOM}
                         ${ROOT_XMLIO}
                         ${ROOT_GDML}
