@@ -35,7 +35,7 @@ swtrigger       v02_02_03
 larsoft         v06_16_00
 ubutil          v06_16_00
 uboone_data     v01_09_00
-uboonedaq_datatypes v6_19_01_e10
+uboonedaq_datatypes v6_19_00b
 
 cetbuildtools	v5_06_01	-	only_for_build
 end_product_list

@@ -52,6 +52,56 @@ class TH1D;
 
 ///Conversion of binary data to root files
 namespace lris {
+  
+  // ----------------------------------------------------------------------
+  // Functions to build event, with associated tracking-data:
+  
+  struct PMT_tracking_data_t {
+    int PMTframe; // internal checking variable for PMT
+    int FEM5triggerFrame ;
+    int FEM5triggerSample;
+    int FEM6triggerFrame ;
+    int FEM6triggerSample;
+    double FEM5triggerTime;
+    double FEM6triggerTime;
+
+    int RO_BNBtriggerFrame;
+    int RO_NuMItriggerFrame;
+    int RO_EXTtriggerFrame;
+    int RO_RWMtriggerFrame;
+    int RO_BNBtriggerSample;
+    int RO_NuMItriggerSample;
+    int RO_EXTtriggerSample;
+    int RO_RWMtriggerSample;
+    double RO_BNBtriggerTime;
+    double RO_NuMItriggerTime;
+    double RO_EXTtriggerTime;
+    double RO_RWMtriggerTime;
+    
+    
+    int N_discriminators [40];
+    int discriminatorFrame [40][100];
+    int discriminatorSample [40][100];
+    int discriminatorType [40][100];
+    double PMT_waveform_times[400];
+    int N_PMT_waveforms;     
+  };
+  
+  
+  unsigned int RollOver(unsigned int ref,unsigned int subject,unsigned int nbits);
+  
+  void registerOpticalData( art::ProductRegistryHelper &helper, std::map< opdet::UBOpticalChannelCategory_t, std::string >& pmtDataProductNames );
+  void putPMTDigitsIntoEvent( std::map< opdet::UBOpticalChannelCategory_t, std::unique_ptr< std::vector<raw::OpDetWaveform> > >& pmtdigitlist, art::EventPrincipal* &outE, std::map< opdet::UBOpticalChannelCategory_t, std::string >& pmtDataProductNames );
+  
+  bool fillPMTData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record, 
+	     std::map< opdet::UBOpticalChannelCategory_t, std::unique_ptr< std::vector<raw::OpDetWaveform> > > & pmtDigitList,
+       bool useGPS, bool useNTP, PMT_tracking_data_t& tracking);
+  
+  bool fillDAQHeaderData(gov::fnal::uboone::datatypes::ub_EventRecord& event_record,
+   			   raw::DAQHeader& daqHeader,
+           bool useGPS, bool useNTP);
+  
+  
 
   class LArRawInputDriverUBooNE {
     /// Class to fill the constraints on a template argument to the class,
@@ -72,9 +122,6 @@ namespace lris {
 		  art::SubRunPrincipal* &outSR,
 		  art::EventPrincipal* &outE);
 
-  unsigned int RollOver(unsigned int ref,
-			unsigned int subject,
-			unsigned int nbits);
   private:
     //Other functions
 
@@ -87,12 +134,9 @@ namespace lris {
 			  raw::ubdaqSoftwareTriggerData& sw_trigInfo,
 			  uint32_t& event_number,
 			  bool skip);
-    void fillDAQHeaderData(gov::fnal::uboone::datatypes::ub_EventRecord& event_record,
-			   raw::DAQHeader& daqHeader);
+
     void fillTPCData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record, 
 		     std::vector<raw::RawDigit>& digitList);
-    void fillPMTData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record, 
-		     std::map< opdet::UBOpticalChannelCategory_t, std::unique_ptr< std::vector<raw::OpDetWaveform> > > & pmtDigitList );
     void fillBeamData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record, 
 		      raw::BeamInfo& beamInfo);
     void fillTriggerData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record,
@@ -138,19 +182,11 @@ namespace lris {
 
     // PMT Helper Methods
     std::map< opdet::UBOpticalChannelCategory_t, std::string > fPMTdataProductNames;
-    void registerOpticalData( art::ProductRegistryHelper &helper );
-    void putPMTDigitsIntoEvent( std::map< opdet::UBOpticalChannelCategory_t, std::unique_ptr< std::vector<raw::OpDetWaveform> > >& pmtdigitlist, art::EventPrincipal* &outE );
 
     // TPC Helper Methods
     std::vector<short> decodeChannelTrailer(unsigned short last_adc, unsigned short data);
     
    //Stuf that Andy added to make fun trigger plots! :)
-   int N_discriminators [40];
-    int discriminatorFrame [40][100];
-    int discriminatorSample [40][100];
-    int discriminatorType [40][100];
-    double PMT_waveform_times[400];
-    int N_PMT_waveforms; 
 
     int triggerFrame;
     int triggerSample;
@@ -162,26 +198,7 @@ namespace lris {
     uint32_t triggerBitPMTBeam;
     uint32_t triggerBitPMTCosmic;
     
-    int PMTframe; // internal checking variable for PMT
-    int FEM5triggerFrame ;
-    int FEM5triggerSample;
-    int FEM6triggerFrame ;
-    int FEM6triggerSample;
-    double FEM5triggerTime;
-    double FEM6triggerTime;
-
-    int RO_BNBtriggerFrame;
-    int RO_NuMItriggerFrame;
-    int RO_EXTtriggerFrame;
-    int RO_RWMtriggerFrame;
-    int RO_BNBtriggerSample;
-    int RO_NuMItriggerSample;
-    int RO_EXTtriggerSample;
-    int RO_RWMtriggerSample;
-    double RO_BNBtriggerTime;
-    double RO_NuMItriggerTime;
-    double RO_EXTtriggerTime;
-    double RO_RWMtriggerTime;
+    PMT_tracking_data_t fPmtTrackingData;
     
 //    uint32_t RO_Gate1Frame;
 //    uint32_t RO_Gate1Sample;
@@ -233,4 +250,10 @@ namespace lris {
     
   };  // LArRawInputDriverUBooNE;
 
+
+
+ 
+
 }
+
+
