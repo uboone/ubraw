@@ -36,7 +36,7 @@ add_subdirectory(LLApp)
 add_subdirectory(CosmicTagging)
 #add_subdirectory(SNStreamSim)
 
-add_subdirectory(DataOverlay)
+#add_subdirectory(DataOverlay)
 add_subdirectory(PatternFilter)
 add_subdirectory(MicroBooNEPandora)
 
