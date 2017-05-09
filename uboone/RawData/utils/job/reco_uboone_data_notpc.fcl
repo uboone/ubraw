@@ -53,6 +53,7 @@ microboone_reco_notpc_filters: {
 
   swtrigbnb:          @local::trigger_enforcement
   swtrigbnbunbiased:  @local::trigger_enforcement
+  swtrigbnbhsnc0:     @local::trigger_enforcement
   swtrignumi:         @local::trigger_enforcement
   swtrignumiunbiased: @local::trigger_enforcement
   swtrigextbnb:       @local::trigger_enforcement
@@ -105,6 +106,11 @@ microboone_reco_notpc_filters.swtrigbnbunbiased.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnbunbiased.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnbunbiased.IncludeBits: [ "TriggerBNB" ]
 microboone_reco_notpc_filters.swtrigbnbunbiased.includeSoftwareTriggers: [ "BNB_unbiased_PrescaleAlgo" ]
+
+microboone_reco_notpc_filters.swtrigbnbhsnc0.HardwareTriggerProducer: "daq"
+microboone_reco_notpc_filters.swtrigbnbhsnc0.SoftwareTriggerProducer: "daq"
+microboone_reco_notpc_filters.swtrigbnbhsnc0.IncludeBits: [ "TriggerBNB" ]
+microboone_reco_notpc_filters.swtrigbnbhsnc0.includeSoftwareTriggers: [ "BNB_HSN_c0_FEMBeamTriggerAlgo" ]
 
 microboone_reco_notpc_filters.swtrignumi.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrignumi.SoftwareTriggerProducer: "daq"

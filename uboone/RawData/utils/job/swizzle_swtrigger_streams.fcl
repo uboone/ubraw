@@ -88,6 +88,16 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: { SelectEvents: [ path_bnb_unbiased ] }
   }
+ outbnbhsnc0:
+  {
+   module_type: RootOutput
+   fileName: "%ifb_%tc_bnb_hsnc0.root"
+   dataTier: "raw"
+   streamName: "outbnbhsnc0"
+   compressionLevel: 3
+   saveMemoryObjectThreshold: 0
+   SelectEvents: { SelectEvents: [ path_bnb_hsnc0 ] }
+  }
  outnumi:
   {
    module_type: RootOutput
@@ -215,6 +225,7 @@ physics:
 
     swtrigbnb:          @local::trigger_enforcement
     swtrigbnbunbiased:  @local::trigger_enforcement
+    swtrigbnbhsnc0:     @local::trigger_enforcement
     swtrignumi:         @local::trigger_enforcement
     swtrignumiunbiased: @local::trigger_enforcement
     swtrigextbnb:       @local::trigger_enforcement
@@ -225,6 +236,7 @@ physics:
   path_notpc:         [ @sequence::reco ]
   path_bnb:           [ @sequence::reco, swtrigbnb ]
   path_bnb_unbiased:  [ @sequence::reco, swtrigbnbunbiased ]
+  path_bnb_hsnc0:     [ @sequence::reco, swtrigbnbhsnc0 ]
   path_numi:          [ @sequence::reco, swtrignumi ]
   path_numi_unbiased: [ @sequence::reco, swtrignumiunbiased ]
   path_ext_bnb:       [ @sequence::reco, swtrigextbnb ]
@@ -235,6 +247,7 @@ physics:
   trigger_paths: [ path_notpc,
                    path_bnb,
                    path_bnb_unbiased,
+                   path_bnb_hsnc0,
                    path_numi,
                    path_numi_unbiased,
                    path_ext_bnb,
@@ -245,6 +258,7 @@ physics:
   stream_notpc:         [ outnotpc ]
   stream_bnb:           [ outbnb ]
   stream_bnb_unbiased:  [ outbnbunbiased ]
+  stream_bnb_hsnc0:     [ outbnbhsnc0 ]
   stream_numi:          [ outnumi ]
   stream_numi_unbiased: [ outnumiunbiased ]
   stream_ext_bnb:       [ outextbnb ]
@@ -255,6 +269,7 @@ physics:
   end_paths:     [ stream_notpc,
                    stream_bnb,
                    stream_bnb_unbiased,
+                   stream_bnb_hsnc0,
                    stream_numi,
                    stream_numi_unbiased,
                    stream_ext_bnb,
@@ -290,6 +305,11 @@ physics.filters.swtrigbnbunbiased.HardwareTriggerProducer: "daq"
 physics.filters.swtrigbnbunbiased.SoftwareTriggerProducer: "swtrigger"
 physics.filters.swtrigbnbunbiased.IncludeBits: [ "TriggerBNB" ]
 physics.filters.swtrigbnbunbiased.includeSoftwareTriggers: [ "BNB_unbiased_PrescaleAlgo" ]
+
+physics.filters.swtrigbnbhsnc0.HardwareTriggerProducer: "daq"
+physics.filters.swtrigbnbhsnc0.SoftwareTriggerProducer: "swtrigger"
+physics.filters.swtrigbnbhsnc0.IncludeBits: [ "TriggerBNB" ]
+physics.filters.swtrigbnbhsnc0.includeSoftwareTriggers: [ "BNB_HSN_c0_FEMBeamTriggerAlgo" ]
 
 physics.filters.swtrignumi.HardwareTriggerProducer: "daq"
 physics.filters.swtrignumi.SoftwareTriggerProducer: "swtrigger"
