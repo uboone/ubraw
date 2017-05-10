@@ -1,0 +1,10 @@
+<lcgdict>
+
+ <class name="sn::tuple_hit"      ClassVersion="7" >
+  <version ClassVersion="7" checksum="3902132085"/>
+  <version ClassVersion="6" checksum="1599215157"/>
+  </class>
+ <class name="sn::tuple_entry"    ClassVersion="6" >
+  <version ClassVersion="6" checksum="1997922252"/>
+  </class>
+</lcgdict>
