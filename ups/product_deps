@@ -37,7 +37,7 @@ swtrigger       v02_02_05a
 genie_xsec      v2_12_0
 larsoft         v06_36_00
 ubutil          v06_36_00
-uboone_data     v01_16_00
+uboonedata   	v01_16_00
 uboonedaq_datatypes v6_19_01_e14
 
 cetbuildtools	v5_06_07	-	only_for_build
@@ -47,7 +47,7 @@ end_product_list
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
 # Make a table by adding columns before "notes". 
 # e14  - with gcc 6.3.0 and -std=c++1y
-qualifier	swtrigger	genie_xsec	larsoft		ubutil		uboone_data	uboonedaq_datatypes	notes
+qualifier	swtrigger	genie_xsec	larsoft		ubutil		uboonedata	uboonedaq_datatypes	notes
 e14:debug	e14:debug	DefaultPlusMECWithNC	e14:debug	e14:debug	-nq-		e14:debug
 e14:opt		e14:opt		DefaultPlusMECWithNC	e14:opt		e14:opt		-nq-        	e14:opt
 e14:prof	e14:prof	DefaultPlusMECWithNC	e14:prof	e14:prof	-nq-        	e14:prof
