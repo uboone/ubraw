@@ -2,17 +2,8 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 	
 find_ups_product( uboonedaq_datatypes )
   
-# find_ups_product( boost v1_61_0 )
-# cet_find_library( BOOSER NAMES boost_serialization PATHS ENV BOOST_LIB NO_DEFAULT_PATH )
-#
-# find_ups_product( uboonedaq_datatypes v6_20_00_sn )
-# cet_find_library( DATATYPES NAMES libubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
-# include_directories( ${UBOONEDAQ_DATATYPES_DIR}/include )
-
-
 
 art_make( NO_PLUGINS 
-          # BASENAME_ONLY
           LIBRARY_NAME uboone_RawData_supernova
           LIB_LIBRARIES lardata_Utilities_DatabaseUtil_service
                         larcore_Geometry
@@ -84,29 +75,12 @@ art_make( NO_PLUGINS
                         ${ROOT_BASIC_LIB_LIST}
         )		
 
-# Gonna kill this anyway
-# simple_plugin( SnAssemblerSource
-#                "source"
-#                uboone_RawData_supernova
-#                BASENAME_ONLY
-#              )
 
 simple_plugin( SnFileSource
                "source"
                uboone_RawData_supernova
-               BASENAME_ONLY
-             )
-
-
-simple_plugin( SnHitFinder
-               "module"
-               uboone_RawData_supernova
-               BASENAME_ONLY
-             )
-
-simple_plugin( SnHitCompare
-              "module"
-               uboone_RawData_supernova
+               UBOpReadoutMap_service
+               ${ART_FRAMEWORK_PERSISTENCY_COMMON}
                BASENAME_ONLY
              )
 

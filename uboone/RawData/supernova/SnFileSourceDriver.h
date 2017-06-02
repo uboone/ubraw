@@ -19,7 +19,6 @@
 #include <map>
 
 #include "DaqFile.h"
-#include "SnDataLoader.h"
 
 namespace snassembler {
 

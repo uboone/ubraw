@@ -1,7 +1,9 @@
 #include "SnFileSourceDriver.h"
+#include "SnRecordHolder.h"
 #include "messagefacility/MessageLogger/MessageLogger.h"
 
 #include <vector>
+#include "lardataobj/RawData/TriggerData.h"
 #include "lardataobj/RawData/RawDigit.h"
 #include "lardataobj/RawData/DAQHeader.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
@@ -18,6 +20,8 @@
 #include "lardata/ArtDataHelper/WireCreator.h"
 #include "larcore/Geometry/Geometry.h"
 #include "larcore/Geometry/GeometryCore.h"
+#include "lardata/DetectorInfoServices/DetectorClocksService.h"
+
 
 #include "canvas/Utilities/Exception.h"
 
@@ -35,7 +39,9 @@ SnFileSourceDriver::SnFileSourceDriver(fhicl::ParameterSet const &pset,
   
   helper.reconstitutes< raw::DAQHeader, art::InEvent>("sndaq");
   helper.reconstitutes< std::vector<raw::DAQHeader>, art::InEvent>("sndaq");
-  helper.reconstitutes< std::vector<recob::Wire> , art::InEvent>("sndaq");  
+  helper.reconstitutes< std::vector<recob::Wire> ,   art::InEvent>("sndaq");  
+  helper.reconstitutes<std::vector<raw::Trigger>,    art::InEvent>("sndaq");
+  
   lris::registerOpticalData( helper, fPMTdataProductNames ); 
 }
 
@@ -136,103 +142,27 @@ bool SnFileSourceDriver::readNext(
                                 
                                 
   mf::LogInfo("SnFileSourceDriver") << "Getting Hoot Gibson lookup... please wait..."; 
+   
+ 
+  SnRecordHolder holder(event);
+  holder.getSupernovaTpcData(*outE,"sndaq");
   
-  util::UBChannelMap_t  fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(event->LocalHostTime().seb_time_sec); // Fixme: database rollback
-  
-  std::unique_ptr< std::vector<recob::Wire> > wires(new std::vector<recob::Wire>);
-  
-  size_t nrois = 0;
-  
-  // SN hits.
-  const ub_EventRecord::tpc_sn_map_t& sn_map = event->getTpcSnSEBMap();
-  for( auto seb_it: sn_map ) {
-    int crate = seb_it.first;
-    const tpc_sn_crate_data_t& crate_data = (seb_it.second);
-    std::vector<tpc_sn_crate_data_t::card_t> const& cards = crate_data.getCards();
-    for(auto const& card_data: cards )
-    {
-      int card = card_data.getModule();
-      std::vector<tpc_sn_crate_data_t::card_t::card_channel_type> const& channels = card_data.getChannels();
-      for(auto const& channel_data : channels ) {
+  // Fake up a trigger.
+  std::unique_ptr<std::vector<raw::Trigger>> trig_info( new std::vector<raw::Trigger> );
 
-        // Channel number is
-        int channel = channel_data.getChannelNumber();
+  auto const* timeService = lar::providerFrom<detinfo::DetectorClocksService>();
+  double trigger_time = timeService->OpticalClock(0,holder.fTpcFrame).Time();
+  raw::Trigger trigger( 0,  // trigger number
+                          trigger_time, // Trigger time
+                          trigger_time, // Beam time. Not sure if this should be blank or not...
+                        0 // Trigger bits
+                         );
 
-     	  util::UBDaqID daqId( crate, card, channel);
-    	  int ch=0;
-    	  auto it_chsearch = fChannelMap.find(daqId);
-    	  if ( it_chsearch!=fChannelMap.end() ){
-    	    ch=(*it_chsearch).second;
-    	  }
-    	  else {
-    	    if ( ( crate==1 && card==8 && (channel>=32 && channel<64) ) ||
-           		 ( crate==9 && card==5 && (channel>=32 && channel<64) ) ) {
-    	      // As of 6/22/2016: We expect these FEM channels to have no database entry.
-    	      continue; // do not write to data product
-    	    }
-    	    else {
-    	      // unexpected channels are missing. throw.
-    	      char warn[256];
-    	      sprintf( warn, "Warning DAQ ID not found ( %d, %d, %d )!", crate, card, channel );
-    	      std::cout << warn << std::endl;
-            // throw std::runtime_error( warn );
-            continue;
-    	    }
-    	  }        
-
-        recob::Wire::RegionsOfInterest_t rois;
-        
-        // size_t packets = channel_data.packets_.size();
-        std::vector<float> packet;
-        packet.reserve(3200);
-        for(auto const& p: channel_data.packets_) {
-          size_t tdc = p.header().getSampleNumber();          
-          if(p.data().size()==0) {
-            // zero-sized packet. 
-            if( ((tdc+1)%3200) ==0) {
-              continue;  // This is a known 'feature' of the hardware: sometimes ROI packets start on the second-to-last tick and no data gets saved.
-            } else {
-               mf::LogError("SnFileSourceDriver") << "Zero sized packet at TDC " << tdc;
-               mf::LogError("SnFileSourceDriver") << "Channel data dump:";
-               mf::LogError("SnFileSourceDriver") << channel_data.debugInfo();
-              // throw std::runtime_error("Unexpected zero-sized packet in raw data.");
-               continue;
-            }
-          } else {
-            packet.resize(0);
-            try {
-              p.decompress_into(packet,false); // False flag indicates unpacker shouldn't offset to tdc address in array when unpacking.
-            } catch (const datatypes_exception& e) {
-              mf::LogError("SnFileSourceDriver") << "Decompression failure channel " << ch << " " << e.what();
-              std::cout << channel_data.debugInfo() << std::endl;
-              
-              mf::LogError("SnFileSourceDriver") << "Continuing anyway .... ";
-              throw e;
-            }
-            // std::cout << Form("wire %4d  tdc %5lu  compressed %4lu uncompressed %4lu\n",ch,tdc,p.data().size(),packet.size());
-            rois.add_range(tdc,packet.begin(),packet.end());            
-            nrois ++;
-          }
-         }
-         // std::cout << "Channel " << channel << " rois:" << rois.size() << std::endl;
-         
-         
-         recob::WireCreator created_wire(rois, 
-                                         ch, 
-                                         art::ServiceHandle<geo::Geometry>()->View(ch)
-                                         );
-         wires->push_back(created_wire.move());
-      }
-    } // loop cards
-  } // loop seb/crate
-
-  std::cout << "Built wires with total " << nrois << " ROIs" << std::endl;
-
-  art::put_product_in_principal(std::move(wires),
+  trig_info->emplace_back( trigger );
+  art::put_product_in_principal(std::move(trig_info),
                                 *outE,
                                 "sndaq"); // Module label
-
-
+ 
   return true;
 }
 

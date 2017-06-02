@@ -1098,6 +1098,11 @@ namespace lris {
               }
 
             }
+            std::cout << " opwaveform " << opdet::UBOpChannelEnumName( (opdet::UBOpticalChannelCategory_t)ch_category ) 
+                      << " frame,sample (" << frame << "," << sample << ") time " << window_timestamp 
+                      << "Card frame: " << card_data.getFrame() << "  Window frame: " << window_header.getFrame()
+                        << std::hex << "  0x" << frame <<  "  0x"<< card_data.getFrame() <<   "  0x"<< window_header.getFrame() << std::dec
+                      << std::endl;
             // fill OpDetWaveform time
             double OpDetWaveForm_time = rd.TimeStamp();
             if (tracking.N_PMT_waveforms < 400 and channel_number < 36){
