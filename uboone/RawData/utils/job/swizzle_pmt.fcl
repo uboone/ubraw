@@ -61,6 +61,7 @@ source:
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
                      "E:TOR875, 100, 0, 5" ]
+  enforceFrameMatching: false ## quit if TPC, PMT, and TRIG stream frames don't match - should be true by default
 }
 
 outputs:
