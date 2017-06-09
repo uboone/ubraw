@@ -111,6 +111,7 @@ microboone_reco_notpc_filters.swtrigbnbhsnc0.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnbhsnc0.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnbhsnc0.IncludeBits: [ "TriggerBNB" ]
 microboone_reco_notpc_filters.swtrigbnbhsnc0.includeSoftwareTriggers: [ "BNB_HSN_c0_FEMBeamTriggerAlgo" ]
+microboone_reco_notpc_filters.swtrigbnbhsnc0.excludeSoftwareTriggers: [ "BNB_FEMBeamTriggerAlgo" ]
 
 microboone_reco_notpc_filters.swtrignumi.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrignumi.SoftwareTriggerProducer: "daq"
