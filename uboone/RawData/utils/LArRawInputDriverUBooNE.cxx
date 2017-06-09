@@ -1174,7 +1174,7 @@ namespace lris {
 	  				// }
 
 	          		int channel_number = channel_data.getChannelNumber();
-                    std::cout << "channel_number = " << channel_number << std::endl;
+				//std::cout << "channel_number = " << channel_number << std::endl;
 
 					//now get the windows
           			auto const& windows = channel_data.getWindows();  // auto here is std::vector<ub_PMT_WindowData_v6>
@@ -1231,7 +1231,7 @@ namespace lris {
                         double tmp;
                         double wfSampleAndy = modf(wfFrameAndy,&tmp);
                         wfSampleAndy *= 64e6 * 1.6e-3;
-                        if (rd.size() > 1000){std::cout<< std::setprecision(20) << "rd.ChannelNumber = " << rd.ChannelNumber() << ", TimeStamp =  " << rd.TimeStamp() << " wfSampleAndy = " << wfSampleAndy << std::endl;}
+                        //if (rd.size() > 1000){std::cout<< std::setprecision(20) << "rd.ChannelNumber = " << rd.ChannelNumber() << ", TimeStamp =  " << rd.TimeStamp() << " wfSampleAndy = " << wfSampleAndy << std::endl;}
 
             			// fill OpDetWaveform time
 						// Here, we save the times for the OpDetWaveforms, but since there are so many and space became an issue, we only save the first 400 (an arbitrary choice (I think))
@@ -1247,8 +1247,8 @@ namespace lris {
 								RO_RWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_RWMtriggerSample = window_header.getSample() + adc_edge_sample;
                 				RO_RWMtriggerTime = timeService->OpticalClock().Time( RO_RWMtriggerSample, RO_RWMtriggerFrame);
-								std::cout << "RWM signal channel 39 card 4" << std::endl;
-                                std::cout << "window sample, frame = " << window_header.getSample() << ", " << RO_RWMtriggerFrame << std::endl;
+						//std::cout << "RWM signal channel 39 card 4" << std::endl;
+						//std::cout << "window sample, frame = " << window_header.getSample() << ", " << RO_RWMtriggerFrame << std::endl;
 	      					}
             				else if (channel_number == 38 && card_number == 4 && RO_EXTtriggerSample == -999){
 								//	std::cout << "EXT signal card 4" << std::endl;
@@ -1279,8 +1279,8 @@ namespace lris {
 								RO_NuMIRWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_NuMIRWMtriggerSample = window_header.getSample() + adc_edge_sample;
                 				RO_NuMIRWMtriggerTime = timeService->OpticalClock().Time( RO_NuMIRWMtriggerSample, RO_NuMIRWMtriggerFrame);
-								std::cout << "NuMI RWM signal channel 38 card 5" << std::endl;
-                                std::cout << "window sample, frame = " << window_header.getSample() << ", " << RO_NuMIRWMtriggerFrame << std::endl;
+						//std::cout << "NuMI RWM signal channel 38 card 5" << std::endl;
+						//std::cout << "window sample, frame = " << window_header.getSample() << ", " << RO_NuMIRWMtriggerFrame << std::endl;
 	      					}
           					else if (channel_number == 37 && card_number == 5 && RO_PaddleTriggerSample == -999){
 								//	std::cout << "Paddle signal card 5" << std::endl;
@@ -1415,7 +1415,7 @@ namespace lris {
 
           			uint64_t window_time = RollOver(card_data.getFrame(), window.header().getFrame(), 3) * 102400;
           			window_time += window.header().getSample();
-                    std::cout << "beamgate window sample = " << window.header().getSample() << std::endl;
+				//std::cout << "beamgate window sample = " << window.header().getSample() << std::endl;
           			uint64_t window_trigger_dt =
             				( window_time < trig_tick ? trig_tick - window_time : window_time - trig_tick );
 
@@ -1432,7 +1432,7 @@ namespace lris {
         		_trigger_beam_window_time = trig_tick - beam_ro_tick;
         		_trigger_beam_window_time *= -1.;
       		}
-            std::cout << "kazu's _trigger_beam_window_time = " << _trigger_beam_window_time << std::endl;
+		//std::cout << "kazu's _trigger_beam_window_time = " << _trigger_beam_window_time << std::endl;
 			//AF
 
       		raw::Trigger swiz_trig( trig_card.getTrigNumber(),
@@ -1443,14 +1443,14 @@ namespace lris {
       		trigInfo.emplace_back( swiz_trig );
 
             double triggerFrameAndy = swiz_trig.TriggerTime() / 1.6e3;
-            std::cout << std::setprecision(20) << "triggerFrame as I calculate = " << triggerFrameAndy << std::endl;
+            //std::cout << std::setprecision(20) << "triggerFrame as I calculate = " << triggerFrameAndy << std::endl;
             double tmp;
             double triggerSampleAndy = modf(triggerFrameAndy,&tmp);
             triggerSampleAndy *= 64e6 * 1.6e-3;
 
-            std::cout << "triggerTime in raw::Trigger = " << std::setprecision(20) << swiz_trig.TriggerTime() << std::endl;
-            std::cout << "trigger_time filled with = " <<std::setprecision(20) << trigger_time << std::endl;
-            std::cout << "triggerSample as I calculate = " << triggerSampleAndy << std::endl;
+            //std::cout << "triggerTime in raw::Trigger = " << std::setprecision(20) << swiz_trig.TriggerTime() << std::endl;
+            //std::cout << "trigger_time filled with = " <<std::setprecision(20) << trigger_time << std::endl;
+            //std::cout << "triggerSample as I calculate = " << triggerSampleAndy << std::endl;
 
       		if (not fSwizzleTrigger){return;} // if we don't want to swizzle the trigger data, then stop here.
 			// variables saving to output tree
@@ -1465,11 +1465,11 @@ namespace lris {
       		triggerBitPaddles = trig_data.Trig_Spare1();
       		triggerTime = trigger_time;
 
-            if (triggerBitBNB){std::cout << "BNB" << std::endl;}
-            if (triggerBitNuMI){std::cout << "NuMI" << std::endl;}
-            if (triggerBitEXT){std::cout << "EXT" << std::endl;}
+		//if (triggerBitBNB){std::cout << "BNB" << std::endl;}
+		//if (triggerBitNuMI){std::cout << "NuMI" << std::endl;}
+		//if (triggerBitEXT){std::cout << "EXT" << std::endl;}
 
-            std::cout << "trigger board frame, sample = " << frame << ", " << sample_64MHz << std::endl;
+		//std::cout << "trigger board frame, sample = " << frame << ", " << sample_64MHz << std::endl;
     	}
   	}
 
