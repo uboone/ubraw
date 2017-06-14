@@ -311,6 +311,7 @@ physics.filters.swtrigbnbhsnc0.HardwareTriggerProducer: "daq"
 physics.filters.swtrigbnbhsnc0.SoftwareTriggerProducer: "swtrigger"
 physics.filters.swtrigbnbhsnc0.IncludeBits: [ "TriggerBNB" ]
 physics.filters.swtrigbnbhsnc0.includeSoftwareTriggers: [ "BNB_HSN_c0_FEMBeamTriggerAlgo" ]
+physics.filters.swtrigbnbhsnc0.excludeSoftwareTriggers: [ "BNB_FEMBeamTriggerAlgo" ]
 
 physics.filters.swtrignumi.HardwareTriggerProducer: "daq"
 physics.filters.swtrignumi.SoftwareTriggerProducer: "swtrigger"
