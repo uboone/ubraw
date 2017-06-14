@@ -33,7 +33,7 @@ table_fragment_end
 # Add the dependent product and version
 
 product          version
-swtrigger       v02_02_06
+swtrigger       v02_02_05b
 genie_xsec      v2_12_0
 larsoft         v06_39_00_01
 ubutil          v06_39_00_01
