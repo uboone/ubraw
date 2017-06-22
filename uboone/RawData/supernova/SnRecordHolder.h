@@ -25,7 +25,7 @@ struct SnRecordHolder {
   bool evaluateSupernovaTpcData();
   
   bool getSupernovaTpcData( art::EventPrincipal &outArtEvent,
-                            const std::string& inName = "sndaq" );
+                            const std::string& inName = "sndaq", bool remove_pedestal=false );
 };
   
 } // namespace

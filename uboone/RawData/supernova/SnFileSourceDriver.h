@@ -48,7 +48,8 @@ namespace snassembler {
     art::SubRunID                  fCurrentSubRunID;
     std::unique_ptr<DaqFile>       fDaqFile;
     std::map< opdet::UBOpticalChannelCategory_t, std::string > fPMTdataProductNames;
-  
-  };  // LArRawInputDriverUBooNE
+
+    bool                           fRemovePedestal;
+  }; 
 
 }

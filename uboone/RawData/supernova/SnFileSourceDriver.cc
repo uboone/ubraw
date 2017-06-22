@@ -37,6 +37,8 @@ SnFileSourceDriver::SnFileSourceDriver(fhicl::ParameterSet const &pset,
   mf::LogError("SnFileSourceDriver") << "SnFileSourceDriver constructor"; 
   mf::LogInfo("SnFileSourceDriver") << pset.to_string();
   
+  fRemovePedestal = pset.get< bool        >("remove_pedestal"      , false);
+  
   helper.reconstitutes< raw::DAQHeader, art::InEvent>("sndaq");
   helper.reconstitutes< std::vector<raw::DAQHeader>, art::InEvent>("sndaq");
   helper.reconstitutes< std::vector<recob::Wire> ,   art::InEvent>("sndaq");  
@@ -145,7 +147,7 @@ bool SnFileSourceDriver::readNext(
    
  
   SnRecordHolder holder(event);
-  holder.getSupernovaTpcData(*outE,"sndaq");
+  holder.getSupernovaTpcData(*outE,"sndaq",fRemovePedestal);
   
   // Fake up a trigger.
   std::unique_ptr<std::vector<raw::Trigger>> trig_info( new std::vector<raw::Trigger> );

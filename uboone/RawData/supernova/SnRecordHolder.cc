@@ -19,6 +19,7 @@ namespace snassembler {
   {
     ///
     /// Quickly scan through this data file and determine basic statistics. 
+    /// In particular, how many frames long is this event?
     ///
     
     fNumWires = 0;
@@ -48,11 +49,15 @@ namespace snassembler {
           fMinTdc = std::min(fMinTdc,tdc_start);
 
           const auto& last_packet = channel_data.packets_.back();
-          packet_data_buffer.resize(0);
-          last_packet.decompress_into(packet_data_buffer,false);
-          size_t tdc_last = last_packet.header().getSampleNumber() + packet_data_buffer.size();
+          try { // Try block catches possible decompression errors.
+            
+            packet_data_buffer.resize(0);
+            last_packet.decompress_into(packet_data_buffer,false);
+            size_t tdc_last = last_packet.header().getSampleNumber() + packet_data_buffer.size();
+            fMaxTdc = std::max(fMaxTdc,tdc_last);
+            
+          } catch (const datatypes_exception& e) {  continue;  } // We will deal with these later; this is just a peek.
           
-          fMaxTdc = std::max(fMaxTdc,tdc_last);
           
           
         }
@@ -70,7 +75,8 @@ namespace snassembler {
 
   bool SnRecordHolder::getSupernovaTpcData(
       art::EventPrincipal &outArtEvent,
-      const std::string& inName)
+      const std::string& inName,
+      bool remove_pedestal)
         
   {
     // Quick scan.
@@ -150,7 +156,7 @@ namespace snassembler {
               packet.resize(0);
               try {
                 p.decompress_into(packet,false); // False flag indicates unpacker shouldn't offset to tdc address in array when unpacking.
-              } catch (const datatypes_exception& e) {
+              } catch (const datatypes_exception& e) { 
                 mf::LogError("SnRecordHolder") << "Decompression failure channel " << ch << " " << e.what();
                 std::cout << channel_data.debugInfo() << std::endl;
               
@@ -158,6 +164,10 @@ namespace snassembler {
                 throw e;
               }
               // std::cout << Form("wire %4d  tdc %5lu  compressed %4lu uncompressed %4lu\n",ch,tdc,p.data().size(),packet.size());
+              if(remove_pedestal) {
+                float ped = *packet.begin();
+                for(auto it = packet.begin(); it!= packet.end(); it++) *it -= ped;
+              }
               rois.add_range(tdc,packet.begin(),packet.end());            
               nrois ++;
             }
