@@ -34,6 +34,8 @@ table_fragment_end
 
 product          version
 swtrigger       v02_02_03
+larlite         v06_26_01_02
+larcv           v06_26_01_02
 genie_xsec      v2_12_0
 larsoft         v06_26_01_04
 ubutil          v06_26_01_06
@@ -47,11 +49,11 @@ end_product_list
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
 # Make a table by adding columns before "notes". 
 # e10  - with gcc 4.9.3 and -std=c++1y
-qualifier	swtrigger	genie_xsec	larsoft		ubutil		uboonedata	uboonedaq_datatypes	notes
-e10:debug	e10:debug	DefaultPlusMECWithNC	e10:debug	e10:debug	-nq-		e10:debug	
-e10:opt		e10:opt		DefaultPlusMECWithNC	e10:opt		e10:opt		-nq-        	e10:opt		
-e10:prof	e10:prof	DefaultPlusMECWithNC	e10:prof	e10:prof	-nq-        	e10:prof	
-e10:prof:fg	e10:prof	LocalFGNievesQEAndMEC	e10:prof	e10:prof	-nq-        	e10:prof	
+qualifier	larlite	    larcv	swtrigger	genie_xsec	larsoft		ubutil		uboonedata	uboonedaq_datatypes	notes
+e10:debug	e10:prof    e10:prof	e10:debug	DefaultPlusMECWithNC	e10:debug	e10:debug	-nq-		e10:debug	
+e10:opt		e10:prof    e10:prof	e10:opt		DefaultPlusMECWithNC	e10:opt		e10:opt		-nq-        	e10:opt		
+e10:prof	e10:prof    e10:prof	e10:prof	DefaultPlusMECWithNC	e10:prof	e10:prof	-nq-        	e10:prof	
+e10:prof:fg	e10:prof    e10:prof	e10:prof	LocalFGNievesQEAndMEC	e10:prof	e10:prof	-nq-        	e10:prof	
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
