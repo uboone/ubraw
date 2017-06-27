@@ -160,7 +160,7 @@ namespace snassembler {
                 mf::LogError("SnRecordHolder") << "Decompression failure channel " << ch << " " << e.what();
                 std::cout << channel_data.debugInfo() << std::endl;
               
-                mf::LogError("SnRecordHolder") << "Continuing anyway .... ";
+                // mf::LogError("SnRecordHolder") << "Continuing anyway .... ";
                 throw e;
               }
               // std::cout << Form("wire %4d  tdc %5lu  compressed %4lu uncompressed %4lu\n",ch,tdc,p.data().size(),packet.size());
