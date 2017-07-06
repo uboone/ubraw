@@ -1,0 +1,10 @@
+This set of scripts is intended to read in a MiniBooNE-style weighted-ntuple and produce a GSimple files for use with GENIE
+
+Steps:
+
+1) > source setup.sh
+2) > make 
+   This then will build all the scripts and specifically ConvertNtuple.cxx
+
+then we can use submitJobs.py to submit to the grid the conversion jobs using these files:
+
