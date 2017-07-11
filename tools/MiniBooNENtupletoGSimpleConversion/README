@@ -7,4 +7,5 @@ Steps:
    This then will build all the scripts and specifically ConvertNtuple.cxx
 
 then we can use submitJobs.py to submit to the grid the conversion jobs using these files:
+     /pnfs/uboone/persistent/uboonebeam/bnb_redecay/bnb_redecay_fluxes_07.11.2017_470
 
