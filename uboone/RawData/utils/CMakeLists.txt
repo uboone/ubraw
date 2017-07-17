@@ -50,7 +50,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
 	  BASENAME_ONLY
 	  LIBRARY_NAME uboone_RawData
 	  LIB_LIBRARIES lardata_Utilities_DatabaseUtil_service
-                        larcore_Geometry
+                        larcorealg_Geometry
 	  	        larcore_Geometry_Geometry_service
 		        lardata_Utilities
 	                uboone_Geometry
@@ -81,7 +81,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         ${ROOT_BASIC_LIB_LIST}
 
 	  MODULE_LIBRARIES lardata_Utilities_DatabaseUtil_service
-                        larcore_Geometry
+                        larcorealg_Geometry
 	  	        larcore_Geometry_Geometry_service
 		        lardata_Utilities
 	                uboone_Geometry
