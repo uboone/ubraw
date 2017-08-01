@@ -104,7 +104,8 @@ namespace lris {
   };
   
   
-  unsigned int RollOver(unsigned int ref,unsigned int subject,unsigned int nbits);
+  // unsigned int RollOver(unsigned int ref,unsigned int subject,unsigned int nbits);
+  uint32_t resolveFrame(uint32_t frameCourse,uint32_t frameFine, uint32_t bitmask);
   
   void registerOpticalData( art::ProductRegistryHelper &helper, std::map< opdet::UBOpticalChannelCategory_t, std::string >& pmtDataProductNames );
   void putPMTDigitsIntoEvent( std::map< opdet::UBOpticalChannelCategory_t, std::unique_ptr< std::vector<raw::OpDetWaveform> > >& pmtdigitlist, art::EventPrincipal* &outE, std::map< opdet::UBOpticalChannelCategory_t, std::string >& pmtDataProductNames );

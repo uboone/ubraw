@@ -1,3 +1,9 @@
+///
+/// Nathaniel Tagg, Otterbein University
+/// ntagg@otterbein.edu
+/// July 2017
+///
+/// 
 
 // Prevents ASSERT on boolean values not being 1 or zero
 #define BOOST_DISABLE_ASSERTS 1

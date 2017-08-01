@@ -1,3 +1,9 @@
+///
+/// Nathaniel Tagg, Otterbein University
+/// ntagg@otterbein.edu
+/// July 2017
+///
+/// 
 #ifndef DAQFILE_H
 #define DAQFILE_H
 

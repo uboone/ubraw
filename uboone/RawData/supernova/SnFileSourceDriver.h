@@ -20,7 +20,9 @@
 
 #include "DaqFile.h"
 
+
 namespace snassembler {
+  class SnRecordHolder; // Forward declaration
 
   class SnFileSourceDriver {
     /// Class to fill the constraints on a template argument to the class,
@@ -40,7 +42,7 @@ namespace snassembler {
                   art::RunPrincipal* &outR,
                   art::SubRunPrincipal* &outSR,
                   art::EventPrincipal* &outE);
-                  
+    bool advance();
 
   private:
 
@@ -49,7 +51,20 @@ namespace snassembler {
     std::unique_ptr<DaqFile>       fDaqFile;
     std::map< opdet::UBOpticalChannelCategory_t, std::string > fPMTdataProductNames;
 
-    bool                           fRemovePedestal;
+    std::shared_ptr<SnRecordHolder> fPrevRecord;
+    std::shared_ptr<SnRecordHolder> fCurrRecord;
+    std::shared_ptr<SnRecordHolder> fNextRecord;
+    
+    size_t fCurrentFrame;
+    
+
+    //Configuration:
+    bool   fRemovePedestal;
+    bool   fTriggerRecordsOnly;
+    bool   fSplitTriggerRecords;
+    int    fSamplesOverlapPre;
+    int    fSamplesOverlapPost;
+    int    fTotalSamplesPerRecord;
   }; 
 
 }

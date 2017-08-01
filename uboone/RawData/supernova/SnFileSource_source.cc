@@ -1,3 +1,9 @@
+///
+/// Nathaniel Tagg, Otterbein University
+/// ntagg@otterbein.edu
+/// July 2017
+///
+/// 
 
 // Wrapper file that ties my real implimentation to the name.
 

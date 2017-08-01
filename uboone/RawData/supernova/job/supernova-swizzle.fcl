@@ -1,0 +1,119 @@
+#include "messageservice.fcl"
+#include "databaseutil_microboone.fcl"
+#include "geometry_microboone.fcl"
+#include "detectorclocks_microboone.fcl"
+#include "opticaldetectormodules_microboone.fcl"
+
+process_name: SupernovaAssembler
+
+services:
+{
+  TFileService:           { fileName: "SN_Statistics.root" }
+  TimeTracker:            {}
+
+  DatabaseUtil:           @local::microboone_database
+  message:                @local::standard_info
+  
+  ExptGeoHelperInterface: @local::microboone_geometry_helper
+  Geometry:               @local::microboone_geo
+  UBOpReadoutMap:         @local::microboone_opreadoutmap
+  DetectorClocksService:  @local::microboone_detectorclocks
+} # services
+
+
+source:
+{
+  # fileNames:   [ ]
+  module_type: SnFileSource
+  maxEvents:  -1 
+  
+  RemovePedestal: true  # Subtracts the first sample from the waveform. Crude.
+
+  # # Option 1: Simply get each frame from the file. Some frames will be 3200 samples, some will be 12800 samples.
+  # # Note that recob::Wires will all be labelled as 12800 samples, even if there are only 3200 worth of data.
+  # TriggerRecordsOnly:  false
+  # SplitTriggerRecords: false
+  # SamplesOverlapPre:   0
+  # SamplesOverlapPost:  0
+  # TotalSamplesPerRecord: 12800
+
+  # # Option 2: Simply get each frame from the file. Split triggered records into several events, each 3200 samples
+  # TriggerRecordsOnly:  false
+  # SplitTriggerRecords: true
+  # SamplesOverlapPre:   0
+  # SamplesOverlapPost:  0
+  # TotalSamplesPerRecord: 3200
+
+  # Option 3: Get 3200 samples plus a 1600 sample pre window and a 1600 sample post window, overlapped from prev/next frames.
+  # This should probably be our default analysis mode when working on supernova files.
+  # Analysis should look for signal in samples 1600-4800, and use other samples for cosmic reco
+  TriggerRecordsOnly:  false
+  SplitTriggerRecords: true
+  SamplesOverlapPre:   2400
+  SamplesOverlapPost:  800
+  TotalSamplesPerRecord: 6400
+
+  # # Option 4: Just get 4-frame trigger records; ignore all else. Useful for some detector studies.
+  # TriggerRecordsOnly:  true
+  # SplitTriggerRecords: false
+  # SamplesOverlapPre:   0
+  # SamplesOverlapPost:  0
+  # TotalSamplesPerRecord: 12800
+}
+
+
+outputs:
+{
+ snswizzle:
+  {
+   module_type: RootOutput
+   # fileName: "%ifb-%tc-sn-%#.root"
+   fileName: "%ifb-%l-%#.root"
+   dataTier: "raw"
+   compressionLevel: 3
+   saveMemoryObjectThreshold: 0
+   fileProperties: {
+     maxInputFiles: 1
+     granularity: "InputFile"
+    }
+  }
+}
+
+physics:
+{
+  analyzers:
+  {
+  }
+
+  path1: [ snswizzle ]
+  end_paths: [  path1 ]
+}
+
+
+services.DetectorClocksService.InheritClockConfig: false
+services.DetectorClocksService.TrigModuleName: "sndaq"
+
+# services.DetectorPropertiesService.NumberTimeSamples:                  6400
+# services.DetectorPropertiesService.ReadOutWindowSize:                  6400
+# services.DetectorClocksService.InheritClockConfig:                     false
+# services.DetectorClocksService.TriggerOffsetTPC:                       -0.400e3
+
+# for running at fnal:
+# services.DatabaseUtil.DBHostName:    "ifdbprod2.fnal.gov"
+# services.DatabaseUtil.DBName:        "hootgibson_prod"
+# services.DatabaseUtil.DBUser:        "uboonedaq_web"
+# services.DatabaseUtil.Port:          5444
+# services.DatabaseUtil.PassFileName:  "uboonedb_passwd"  # name of password file. searched for using env var FW_SEARCH_PATH
+# services.DatabaseUtil.ToughErrorTreatment: true
+# services.DatabaseUtil.ShouldConnect: true
+# services.DatabaseUtil.TableName: "main_run"
+
+#laptop:
+services.DatabaseUtil.DBHostName:    "localhost"
+services.DatabaseUtil.DBName:        "hootgibson_prod"
+services.DatabaseUtil.DBUser:        "tagg"
+services.DatabaseUtil.Port:          5432
+services.DatabaseUtil.PassFileName:  "psql_password_empty"  # name of password file. searched for using env var FW_SEARCH_PATH
+services.DatabaseUtil.ToughErrorTreatment: true
+services.DatabaseUtil.ShouldConnect: true
+services.DatabaseUtil.TableName: "main_run"

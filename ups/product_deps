@@ -35,7 +35,7 @@ table_fragment_end
 product          version
 swtrigger       v02_02_05b
 genie_xsec      v2_12_0
-uboonedaq_datatypes v6_22_00
+uboonedaq_datatypes v6_22_01
 larsoft         v06_41_00
 ubutil          v06_41_00
 uboonedata   	   v01_18_00
