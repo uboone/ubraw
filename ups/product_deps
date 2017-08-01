@@ -37,7 +37,7 @@ swtrigger       v02_02_03
 genie_xsec      v2_12_0
 larsoft         v06_26_01_03
 ubutil          v06_26_01_05
-uboonedata 	v01_17_00
+uboonedata 	v01_18_00
 uboonedaq_datatypes v6_19_01_e10
 
 cetbuildtools	v5_06_07	-	only_for_build
