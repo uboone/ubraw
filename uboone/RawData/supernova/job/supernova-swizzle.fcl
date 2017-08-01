@@ -29,6 +29,8 @@ source:
   
   RemovePedestal: true  # Subtracts the first sample from the waveform. Crude.
 
+  # LogFile: "logfile.txt"  # some light debugging info
+
   # # Option 1: Simply get each frame from the file. Some frames will be 3200 samples, some will be 12800 samples.
   # # Note that recob::Wires will all be labelled as 12800 samples, even if there are only 3200 worth of data.
   # TriggerRecordsOnly:  false

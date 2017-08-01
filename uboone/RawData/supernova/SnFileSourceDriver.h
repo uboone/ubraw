@@ -65,6 +65,8 @@ namespace snassembler {
     int    fSamplesOverlapPre;
     int    fSamplesOverlapPost;
     int    fTotalSamplesPerRecord;
+    
+    std::shared_ptr<std::ofstream> fLogfile;
   }; 
 
 }

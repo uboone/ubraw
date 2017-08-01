@@ -35,7 +35,6 @@
 
 namespace snassembler {
 
-  std::ofstream logfile("mylog.txt");
 
 SnFileSourceDriver::SnFileSourceDriver(fhicl::ParameterSet const &pset,
                       art::ProductRegistryHelper &helper,
@@ -53,6 +52,11 @@ SnFileSourceDriver::SnFileSourceDriver(fhicl::ParameterSet const &pset,
   fSamplesOverlapPre   = pset.get< int   >("SamplesOverlapPre"  ,1600);
   fSamplesOverlapPost  = pset.get< int   >("SamplesOverlapPost" ,1600);
   fTotalSamplesPerRecord=pset.get< int   >("TotalSamplesPerRecord",3200+fSamplesOverlapPre+fSamplesOverlapPost);
+
+  std::string logfilename = pset.get< std::string >("LogFile","");
+  if(logfilename.size()>0)
+    fLogfile = std::shared_ptr<std::ofstream>(new std::ofstream(logfilename));
+
 
   if(fTotalSamplesPerRecord < 3200+fSamplesOverlapPre+fSamplesOverlapPost) {
     mf::LogError("SnFileSourceDriver") << "Inconsistent TotalSamplesPerRecord. Suggested values: 3200+pre+post OR 12800 if getting whole trigger records.";
@@ -208,12 +212,12 @@ bool SnFileSourceDriver::readNext(
                                 "sndaq"); // Module label
    
   fCurrRecord->evaluateSupernovaTpcData(); // Make sure
-  logfile <<"ART event: " << "----Event " << fCurrentSubRunID.run() << "|" <<fCurrentSubRunID.subRun() << "|" << event_number << "   ";
-  logfile << "Frame " << fCurrRecord->fTpcFrame << "   ";
-  logfile << "CurrFrame " << fCurrentFrame << "   ";
-  logfile << "subframe " << do_subframe << "   ";
-  logfile << "Frames: " << fCurrRecord->fNumFrames << std::endl;
-  logfile.flush();
+  if(fLogfile) *fLogfile <<"ART event: " << "----Event " << fCurrentSubRunID.run() << "|" <<fCurrentSubRunID.subRun() << "|" << event_number << "   ";
+  if(fLogfile) *fLogfile << "Frame " << fCurrRecord->fTpcFrame << "   ";
+  if(fLogfile) *fLogfile << "CurrFrame " << fCurrentFrame << "   ";
+  if(fLogfile) *fLogfile << "subframe " << do_subframe << "   ";
+  if(fLogfile) *fLogfile << "Frames: " << fCurrRecord->fNumFrames << std::endl;
+  if(fLogfile) fLogfile->flush();
 
   /// PMT          
   SnRecordHolder::pmtmap_t pmt_map;
