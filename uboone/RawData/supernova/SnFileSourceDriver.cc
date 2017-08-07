@@ -26,7 +26,6 @@
 #include "lardataobj/RecoBase/Wire.h"
 #include "lardata/ArtDataHelper/WireCreator.h"
 #include "larcore/Geometry/Geometry.h"
-#include "larcore/Geometry/GeometryCore.h"
 #include "lardata/DetectorInfoServices/DetectorClocksService.h"
 
 
