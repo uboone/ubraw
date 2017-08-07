@@ -38,7 +38,7 @@ genie_xsec      v2_12_6
 larsoft         v06_45_01
 ubutil          v06_45_01
 uboonedata   	v01_18_01
-uboonedaq_datatypes v6_19_02_e14
+uboonedaq_datatypes v6_22_01
 
 cetbuildtools	v5_09_01	-	only_for_build
 end_product_list
