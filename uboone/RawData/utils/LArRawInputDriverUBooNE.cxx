@@ -12,6 +12,7 @@
 #include "lardata/RawData/RawDigit.h"
 #include "lardata/RawData/TriggerData.h"
 #include "lardata/RawData/DAQHeader.h"
+#include "uboone/RawData/utils/DAQHeaderTimeUBooNE.h"
 #include "lardata/RawData/BeamInfo.h"
 #include "lardata/RawData/OpDetWaveform.h"
 #include "larcore/SummaryData/RunData.h"
@@ -132,12 +133,26 @@ namespace lris {
     fMaxEvents(-1),
     fSkipEvents(0)
   	{
+
+	if (!fUseGPS && !fUseNTP) {
+	  std::cout << std::endl << "You are specifying neither NTP or GPS time. That is rather poor form." << std::endl;
+	  std::cout << "Defaulting to the NTP time..." << std::endl << std::endl;
+	}
+	if (fUseGPS && fUseNTP) {
+	  std::cout << std::endl << "You are trying to specify BOTH the NTP and GPS time. That is rather poor form." << std::endl;
+	  std::cout << "Defaulting to the NTP time..." << std::endl << std::endl;
+	}
+	if (fUseGPS) std::cout << std::endl << "Using GPS time to set the DAQHeader..." << std::endl << std::endl;
+	if (fUseNTP) std::cout << std::endl << "Using NTP time to set the DAQHeader..." << std::endl << std::endl;
+
+
     	::peek_at_next_event<ub_TPC_CardData_v6>(false);
     	::peek_at_next_event<ub_PMT_CardData_v6>(false);
     	::handle_missing_words<ub_TPC_CardData_v6>(true);
     	::handle_missing_words<ub_PMT_CardData_v6>(true);
 
     	helper.reconstitutes<raw::DAQHeader,                 art::InEvent>("daq");
+    	helper.reconstitutes<raw::DAQHeaderTimeUBooNE,       art::InEvent>("daq");
     	helper.reconstitutes<std::vector<raw::RawDigit>,     art::InEvent>("daq");
     	helper.reconstitutes<raw::BeamInfo,                  art::InEvent>("daq");
     	helper.reconstitutes<std::vector<raw::Trigger>,      art::InEvent>("daq");
@@ -446,6 +461,7 @@ namespace lris {
     	mf::LogInfo(__FUNCTION__)<<"Attempting to read event: "<<fEventCounter<<std::endl;
     	// Create empty result, then fill it from current file:
     	std::unique_ptr<raw::DAQHeader> daq_header(new raw::DAQHeader);
+    	std::unique_ptr<raw::DAQHeaderTimeUBooNE> daq_header_time_uboone(new raw::DAQHeaderTimeUBooNE);
     	std::unique_ptr<std::vector<raw::RawDigit> >  tpc_raw_digits( new std::vector<raw::RawDigit>  );
     	std::unique_ptr<raw::BeamInfo> beam_info(new raw::BeamInfo);
     	std::unique_ptr<std::vector<raw::Trigger>> trig_info( new std::vector<raw::Trigger> );
@@ -483,7 +499,7 @@ namespace lris {
     	bool done = false;
 
     	while(!done) {
-      		res=processNextEvent(*tpc_raw_digits, pmt_raw_digits, *daq_header, *beam_info, *trig_info, *sw_trig_info, event_number, fSkipEvents > 0);
+	  res=processNextEvent(*tpc_raw_digits, pmt_raw_digits, *daq_header, *daq_header_time_uboone, *beam_info, *trig_info, *sw_trig_info, event_number, fSkipEvents > 0);
       		if(fSkipEvents > 0)
 				--fSkipEvents;
       		else
@@ -523,6 +539,9 @@ namespace lris {
       		art::put_product_in_principal(std::move(daq_header),
                                     *outE,
                                     "daq"); // Module label
+      		art::put_product_in_principal(std::move(daq_header_time_uboone),
+                                    *outE,
+                                    "daq"); // Module label
       		art::put_product_in_principal(std::move(beam_info),
                                     *outE,
                                     "daq"); // Module label
@@ -544,6 +563,7 @@ namespace lris {
                                                  std::map< opdet::UBOpticalChannelCategory_t,
                                                  std::unique_ptr<std::vector<raw::OpDetWaveform>> >& pmtDigitList,
                                                  raw::DAQHeader& daqHeader,
+						 raw::DAQHeaderTimeUBooNE& daqHeaderTimeUBooNE,
                                                  raw::BeamInfo& beamInfo,
 						 std::vector<raw::Trigger>& trigInfo,
 						 raw::ubdaqSoftwareTriggerData& sw_trigInfo,
@@ -631,7 +651,7 @@ namespace lris {
     	_trigger_beam_window_time = std::numeric_limits<double>::max();
     	fillTriggerData(event_record, trigInfo);
     	//if (skipEvent){return false;} // check that trigger data doesn't suggest we should skip event. // commented out because this doesn't work at the moment
-    	fillDAQHeaderData(event_record, daqHeader);
+    	fillDAQHeaderData(event_record, daqHeader, daqHeaderTimeUBooNE);
     	fillTPCData(event_record, tpcDigitList);
     	//please keep fillPMTData ahead of fillSWTriggerData in cases of events without any PMT data
     	fillPMTData(event_record, pmtDigitList);
@@ -665,13 +685,10 @@ namespace lris {
 
   // =====================================================================
   	void LArRawInputDriverUBooNE::fillDAQHeaderData(ubdaq::ub_EventRecord& event_record,
-                                                  raw::DAQHeader& daqHeader)
+							raw::DAQHeader& daqHeader,
+							raw::DAQHeaderTimeUBooNE& daqHeaderTimeUBooNE)
 	{
     	ubdaq::ub_GlobalHeader global_header = event_record.getGlobalHeader();
-    	if(fUseGPS)
-      		global_header.useGPSTime();
-    	else if(fUseNTP)
-      		global_header.useLocalHostTime();
 
     	// art::Timestamp is an unsigned long long. The conventional
     	// use is for the upper 32 bits to have the seconds since 1970 epoch
@@ -679,10 +696,50 @@ namespace lris {
     	// current second.
     	// (time_t is a 64 bit word)
 
-      	uint32_t seconds=global_header.getSeconds();
+	global_header.useGPSTime();
+
+	uint32_t seconds=global_header.getSeconds();
       	uint32_t nano_seconds=global_header.getNanoSeconds()+
 	                    	global_header.getMicroSeconds()*1000;
-      	time_t mytime = ((time_t)seconds<<32) | nano_seconds;
+	//std::cout << "The GPS time is..." << std::endl;
+	//std::cout << "The number of seconds is: " << seconds << std::endl;
+	//std::cout << "The number of nano seconds is: " << nano_seconds << std::endl;
+      	time_t mytime_gps = ((time_t)seconds<<32) | nano_seconds;
+	//printf ("The GPS time is: %s %lu \n", ctime(&mytime_gps), uint64_t(mytime_gps));
+	time_t mytime(0);
+	if (fUseGPS) {
+	  mytime = ((time_t)seconds<<32) | nano_seconds;
+	  //printf ("The DAQ Header time is: %s %lu \n", ctime(&mytime), uint64_t(mytime));
+	  //std::cout << "Using GPS time" << std::endl;
+	}
+
+	if ( (seconds==0) && (nano_seconds==0) ) {
+	  std::cerr << "Warning: both seconds and nanoseconds of GPS time are 0. Likely that GPS time is corrupt!" << std::endl;
+	  throw std::exception();
+	}
+
+	seconds=0;
+	nano_seconds=0;
+
+	global_header.useLocalHostTime();
+	seconds=global_header.getSeconds();
+      	nano_seconds=global_header.getNanoSeconds()+
+	                    	global_header.getMicroSeconds()*1000;
+	//std::cout << "The NTP time is..." << std::endl;
+	//std::cout << "The number of seconds is: " << seconds << std::endl;
+	//std::cout << "The number of nano seconds is: " << nano_seconds << std::endl;
+      	time_t mytime_ntp = ((time_t)seconds<<32) | nano_seconds;
+	//printf ("The NTP time is: %s %lu \n", ctime(&mytime_ntp), uint64_t(mytime_ntp));
+	if ((fUseNTP)  || (!fUseGPS && !fUseNTP) ){
+	  mytime = ((time_t)seconds<<32) | nano_seconds;
+	  //printf ("The DAQ Header time is: %s %lu \n", ctime(&mytime), uint64_t(mytime));
+	  std::cout << "Using NTP time" << std::endl;
+	}
+
+	if ( (seconds==0) && (nano_seconds==0) ) {
+	  std::cerr << "Warning: both seconds and nanoseconds of NTP time are 0. Likely that NTP time is corrupt!" << std::endl;
+	  throw std::exception();
+	}
 
     	//\/      uint32_t subrun_num = global_header->getSubrunNumber();
 
@@ -696,10 +753,14 @@ namespace lris {
     	daqHeader.SetEvent(global_header.getEventNumber()+1);
     	daqHeader.SetTimeStamp(mytime);
 
+	daqHeaderTimeUBooNE.SetGPSTime(mytime_gps);
+	daqHeaderTimeUBooNE.SetNTPTime(mytime_ntp);
+
     	/// \todo: What is the "fixed word" ? Leaving it unset for now
     	/// \todo: What is the "spare word" ? Leaving it unset for now
     	//daqHeader.SetFixedWord(h1.header);
     	//daqHeader.SetSpareWord(h1.spare);
+
   	}
 
   // =====================================================================

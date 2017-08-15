@@ -44,6 +44,7 @@ namespace raw {
   class RawDigit; 
   class BeamInfo;
   class DAQHeader;
+  class DAQHeaderTimeUBooNE;
   class Trigger;
   class OpDetWaveform;
 }
@@ -82,13 +83,14 @@ namespace lris {
 			  std::map< opdet::UBOpticalChannelCategory_t,
 			  std::unique_ptr< std::vector<raw::OpDetWaveform> > > & pmtDigitList,
 			  raw::DAQHeader& daqHeader,
+			  raw::DAQHeaderTimeUBooNE& daqHeaderTimeUBooNE,
 			  raw::BeamInfo& beamInfo,
 			  std::vector<raw::Trigger>& trigInfo,
 			  raw::ubdaqSoftwareTriggerData& sw_trigInfo,
 			  uint32_t& event_number,
 			  bool skip);
     void fillDAQHeaderData(gov::fnal::uboone::datatypes::ub_EventRecord& event_record,
-			   raw::DAQHeader& daqHeader);
+			   raw::DAQHeader& daqHeader, raw::DAQHeaderTimeUBooNE& daqHeaderTimeUBooNE);
     void fillTPCData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record, 
 		     std::vector<raw::RawDigit>& digitList);
     void fillPMTData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record, 
