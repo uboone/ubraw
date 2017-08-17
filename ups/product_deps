@@ -34,8 +34,8 @@ table_fragment_end
 
 product          version
 swtrigger       v02_02_03
-larlite         v06_26_01_02
-larcv           v06_26_01_02
+larlite         v06_26_01_01
+larcv           v06_26_01_01
 genie_xsec      v2_12_0
 larsoft         v06_26_01_04
 ubutil          v06_26_01_06
