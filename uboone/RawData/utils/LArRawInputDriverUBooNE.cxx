@@ -740,6 +740,13 @@ namespace lris {
 	  std::cout << "Using NTP time" << std::endl;
 	}
 
+	// Calculate gps-ntp time difference.
+
+	//double dt_gps_ntp = double(mytime_gps>>32) - double(mytime_ntp>>32) + 
+	//  1.e-9 * (double(mytime_gps & 0xffffffff) - double((mytime_ntp) & 0xffffffff));
+	//std::cout << "GPS time - NTP time difference = " << dt_gps_ntp << " seconds."
+	//	  << std::endl;
+
 	if ( (seconds==0) && (nano_seconds==0) ) {
 	  std::cerr << "Warning: both seconds and nanoseconds of NTP time are 0. Likely that NTP time is corrupt!" << std::endl;
 	  throw std::exception();

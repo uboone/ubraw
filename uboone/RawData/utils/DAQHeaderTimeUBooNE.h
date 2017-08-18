@@ -8,8 +8,8 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#ifndef DAQHEADEREXTENDED_H
-#define DAQHEADEREXTENDED_H
+#ifndef DAQHEADERTIMEUBOONE_H
+#define DAQHEADERTIMEUBOONE_H
 
 #include <time.h>
 
@@ -43,4 +43,4 @@ namespace raw {
 
 inline void           raw::DAQHeaderTimeUBooNE::SetGPSTime(time_t t)   { fGPSTime = t; }
 inline void           raw::DAQHeaderTimeUBooNE::SetNTPTime(time_t t)   { fNTPTime = t; }
-#endif // DAQHEADEREXTENDED_H
+#endif // DAQHEADERTIMEUBOONE_H
