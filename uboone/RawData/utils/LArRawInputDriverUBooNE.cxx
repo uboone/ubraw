@@ -151,16 +151,6 @@ namespace lris {
     	::handle_missing_words<ub_TPC_CardData_v6>(true);
     	::handle_missing_words<ub_PMT_CardData_v6>(true);
 
-    	helper.reconstitutes<raw::DAQHeader,                 art::InEvent>("daq");
-    	helper.reconstitutes<raw::DAQHeaderTimeUBooNE,       art::InEvent>("daq");
-    	helper.reconstitutes<std::vector<raw::RawDigit>,     art::InEvent>("daq");
-    	helper.reconstitutes<raw::BeamInfo,                  art::InEvent>("daq");
-    	helper.reconstitutes<std::vector<raw::Trigger>,      art::InEvent>("daq");
-    	helper.reconstitutes<raw::ubdaqSoftwareTriggerData, art::InEvent>("daq");
-    	registerOpticalData( helper ); //helper.reconstitutes<std::vector<raw::OpDetWaveform>,art::InEvent>("daq");
-    	fDataTakingTime                    = ps.get< int  >("DataTakingTime", -1);
-    	fSwizzlingTime                     = ps.get< int  >("SwizzlingTime", -1);
-
     	fSwizzleTPC = ps.get<bool>("swizzleTPC",true);
     	fSwizzlePMT = ps.get<bool>("swizzlePMT",true);
     	fSwizzlePMT_init = ps.get<bool>("swizzlePMT",true);
@@ -172,6 +162,18 @@ namespace lris {
 
     	//temporary kazuTestSwizzleTrigger
     	kazuTestSwizzleTrigger = ps.get<bool>("kazuTestSwizzleTrigger",true);
+
+    	helper.reconstitutes<raw::DAQHeader,                 art::InEvent>("daq");
+    	helper.reconstitutes<raw::DAQHeaderTimeUBooNE,       art::InEvent>("daq");
+    	helper.reconstitutes<raw::BeamInfo,                  art::InEvent>("daq");
+    	if (fSwizzleTPC) helper.reconstitutes<std::vector<raw::RawDigit>,     art::InEvent>("daq");
+    	if (fSwizzleTrigger) {
+	  helper.reconstitutes<std::vector<raw::Trigger>,      art::InEvent>("daq");
+	  helper.reconstitutes<raw::ubdaqSoftwareTriggerData, art::InEvent>("daq");
+	}
+    	if (fSwizzlePMT_init) registerOpticalData( helper ); //helper.reconstitutes<std::vector<raw::OpDetWaveform>,art::InEvent>("daq");
+    	fDataTakingTime                    = ps.get< int  >("DataTakingTime", -1);
+    	fSwizzlingTime                     = ps.get< int  >("SwizzlingTime", -1);
 
     	//if ( fHuffmanDecode )
     	tpc_crate_data_t::doDissect(true); // setup for decoding
@@ -533,7 +535,7 @@ namespace lris {
       		//std::cout<<"\033[93mDone\033[00m"<<std::endl;
 
       		// Put products in the event.
-      		art::put_product_in_principal(std::move(tpc_raw_digits),
+      		if (fSwizzleTPC) art::put_product_in_principal(std::move(tpc_raw_digits),
                                     *outE,
                                     "daq"); // Module label
       		art::put_product_in_principal(std::move(daq_header),
@@ -545,13 +547,15 @@ namespace lris {
       		art::put_product_in_principal(std::move(beam_info),
                                     *outE,
                                     "daq"); // Module label
-      		art::put_product_in_principal(std::move(trig_info),
-				    				*outE,
-				    				"daq"); // Module label
-      		art::put_product_in_principal(std::move(sw_trig_info),
-				    				*outE,
-				    				"daq"); // Module label
-      		putPMTDigitsIntoEvent( pmt_raw_digits, outE );
+      		if (fSwizzleTrigger) {
+		  art::put_product_in_principal(std::move(trig_info),
+						*outE,
+						"daq"); // Module label
+		  art::put_product_in_principal(std::move(sw_trig_info),
+						*outE,
+						"daq"); // Module label
+		}
+      		if (fSwizzlePMT_init) putPMTDigitsIntoEvent( pmt_raw_digits, outE );
 
     	}
 
