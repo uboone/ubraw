@@ -719,7 +719,6 @@ namespace lris {
 
 	if ( (seconds==0) && (nano_seconds==0) ) {
 	  std::cerr << "Warning: both seconds and nanoseconds of GPS time are 0. Likely that GPS time is corrupt!" << std::endl;
-	  throw std::exception();
 	}
 
 	seconds=0;
