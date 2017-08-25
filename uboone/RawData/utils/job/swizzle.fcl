@@ -51,6 +51,7 @@ source:
   swizzleTPC:      true
   swizzlePMT:      true
   swizzleTrigger:  true
+#  UseGPS:	   true
 
   swizzleTriggerType: ALL ## This is the only option that works currently!
 #  swizzleTriggerType: BNB

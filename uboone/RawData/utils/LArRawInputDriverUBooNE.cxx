@@ -135,8 +135,8 @@ namespace lris {
   	{
 
 	if (!fUseGPS && !fUseNTP) {
-	  std::cout << std::endl << "You are specifying neither NTP or GPS time. That is rather poor form." << std::endl;
-	  std::cout << "Defaulting to the NTP time..." << std::endl << std::endl;
+	  std::cout << std::endl << "YOU ARE SPECIFYING NEITHER ntp NOR gps TIME. THAT IS RATHER POOR FORM." << std::endl;
+	  std::cout << "<sigh> Fine. </sigh> Defaulting to the NTP time..." << std::endl << std::endl;
 	}
 	if (fUseGPS && fUseNTP) {
 	  std::cout << std::endl << "You are trying to specify BOTH the NTP and GPS time. That is rather poor form." << std::endl;
@@ -720,6 +720,16 @@ namespace lris {
 	if ( (seconds==0) && (nano_seconds==0) ) {
 	  std::cerr << "Warning: both seconds and nanoseconds of GPS time are 0. Likely that GPS time is corrupt!" << std::endl;
 	}
+	bool bad_GPS_default_to_NTP = false; //used to catch bad GPS time in the first events of subrun 0 when trying to set
+	//the DAQHeader time to GPS time as configured in the fcl for the swizzler
+	//this happens when the GPS sync signal hasn't yet arrived at the beginning of the run. will default back to the NTP time
+	//for the DAQHeader time while still filling the DAQHeaderTimeUBooNE with a GPS time of 0
+	if ( (seconds==0) && (nano_seconds==0) && (fUseGPS) ) {
+	  std::cerr << "Warning: Swizzler configured to use GPS time for DAQ Header, but the GPS time is 0 (a.k.a. Jan 1, 1970)." << std::endl;
+	  std::cerr << "Going to default to the NTP time instead and leave the DAQHeaderTimeUBooNE GPS time to 0." << std::endl;
+	  bad_GPS_default_to_NTP = true; //This is a local bool variable and reset every call four lines above.
+	  //bad_GPS_deafult is set to true if the swizzler is trying to fill DAQHeader time with GPS times, but the GPS time is 0
+	}
 
 	seconds=0;
 	nano_seconds=0;
@@ -733,7 +743,10 @@ namespace lris {
 	//std::cout << "The number of nano seconds is: " << nano_seconds << std::endl;
       	time_t mytime_ntp = ((time_t)seconds<<32) | nano_seconds;
 	//printf ("The NTP time is: %s %lu \n", ctime(&mytime_ntp), uint64_t(mytime_ntp));
-	if ((fUseNTP)  || (!fUseGPS && !fUseNTP) ){
+	if ((fUseNTP)  || (!fUseGPS && !fUseNTP) || (bad_GPS_default_to_NTP) ){ //the reasons to do this:
+	  //configured to use the NTP time for the event time in the swizzler fcl (traditional configuration for swizzling through Aug 25,2017)
+	  //configured to use NTP time if there is nothing specified in the swizzler fcl
+	  //configured to use NTP if fcl says to use GPS time, but the GPS time is 0 for the event
 	  mytime = ((time_t)seconds<<32) | nano_seconds;
 	  //printf ("The DAQ Header time is: %s %lu \n", ctime(&mytime), uint64_t(mytime));
 	  std::cout << "Using NTP time" << std::endl;
