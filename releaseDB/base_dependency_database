@@ -76,7 +76,7 @@ larana : lardata : lardata/DetectorInfoServices/LArPropertiesService.h
 larana : lardata : lardata/DetectorInfoServices/ServicePack.h
 larana : lardata : lardata/RecoObjects/Cluster3D.h
 larana : lardata : lardata/Utilities/AssociationUtil.h
-larana : lardata : lardata/Utilities/PtrMaker.h
+larana : lardata : art/Persistency/Common/PtrMaker.h
 larana : lardataobj : lardataobj/AnalysisBase/Calorimetry.h
 larana : lardataobj : lardataobj/AnalysisBase/CosmicTag.h
 larana : lardataobj : lardataobj/AnalysisBase/FlashMatch.h
@@ -374,7 +374,7 @@ lardata : lardata : lardata/Utilities/LArFFT.h
 lardata : lardata : lardata/Utilities/LArPropertiesServiceArgoNeuT.h
 lardata : lardata : lardata/Utilities/MakeIndex.h
 lardata : lardata : lardata/Utilities/NestedIterator.h
-lardata : lardata : lardata/Utilities/PtrMaker.h
+lardata : lardata : art/Persistency/Common/PtrMaker.h
 lardata : lardata : lardata/Utilities/PxHitConverter.h
 lardata : lardata : lardata/Utilities/PxUtils.h
 lardata : lardata : lardata/Utilities/Range.h
@@ -799,7 +799,7 @@ larpandora : lardata : lardata/DetectorInfoServices/LArPropertiesService.h
 larpandora : lardata : lardata/Utilities/AssociationUtil.h
 larpandora : lardata : lardata/Utilities/Dereference.h
 larpandora : lardata : lardata/Utilities/GeometryUtilities.h
-larpandora : lardata : lardata/Utilities/PtrMaker.h
+larpandora : lardata : art/Persistency/Common/PtrMaker.h
 larpandora : lardata : lardata/Utilities/PxUtils.h
 larpandora : lardata : lardata/Utilities/UtilException.h
 larpandora : lardataobj : lardataobj/AnalysisBase/CosmicTag.h
@@ -1129,7 +1129,7 @@ larreco : lardata : lardata/Utilities/ForEachAssociatedGroup.h
 larreco : lardata : lardata/Utilities/GeometryUtilities.h
 larreco : lardata : lardata/Utilities/LArFFT.h
 larreco : lardata : lardata/Utilities/MakeIndex.h
-larreco : lardata : lardata/Utilities/PtrMaker.h
+larreco : lardata : art/Persistency/Common/PtrMaker.h
 larreco : lardata : lardata/Utilities/PxHitConverter.h
 larreco : lardata : lardata/Utilities/PxUtils.h
 larreco : lardata : lardata/Utilities/RangeForWrapper.h
