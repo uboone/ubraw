@@ -156,7 +156,7 @@ namespace lris {
     	fSwizzlePMT_init = ps.get<bool>("swizzlePMT",true);
     	fSwizzleTrigger = ps.get<bool>("swizzleTrigger",true);
     	fSwizzleTriggerType = ps.get<std::string>("swizzleTriggerType"); // Only use ALL for this option, other options will not work
-    	fEnforceFrameMatching = ps.get<bool>("enforceFrameMatching"); // should be set to TRUE usually - false for debugging only
+    	fEnforceFrameMatching = ps.get<bool>("enforceFrameMatching",true); // should be set to TRUE usually - false for debugging only
     	fMaxEvents = ps.get<int>("maxEvents", -1);
     	fSkipEvents = ps.get<int>("skipEvents", 0);
 
