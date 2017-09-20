@@ -9,29 +9,15 @@
 #include "seedservice_microboone.fcl"
 #include "beamdata_microboone.fcl"
 #include "triggerenforcement.fcl"
-
-
+#include "time_memory_tracker_microboone.fcl" 
 #include "reco_uboone_data_notpc.fcl"
 
 process_name: Swizzler
 services:
 {
   TFileService: { fileName: "daq_hist.root" }
-  TimeTracker: { 
-    printSummary : true
-    dbOutput     : {
-      filename   :  "time.db"
-      overwrite  :  true
-    }
-  }
-  MemoryTracker: {
-    ignoreTotal       : 1 # no. of events to exclude - '1' by default
-    includeMallocInfo : true
-    dbOutput     : {
-      filename   : "mem.db" 
-      overwrite  :  true
-    }
-  }
+  TimeTracker:      @local::microboone_time_tracker
+  MemoryTracker:    @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
   NuRandomService:  @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
@@ -112,7 +98,7 @@ outputs:
    streamName: "outbnbhsnc0"
    compressionLevel: 3
    saveMemoryObjectThreshold: 0
-   SelectEvents: { SelectEvents: [ path_bnb_hsnc0 ] }
+   SelectEvents: [ path_bnb_hsnc0 ]
   }
  outnumi:
   {
@@ -287,7 +273,6 @@ services.message.destinations :
   {
      type:      "cout"      #tells the message service to output this destination to cout
      threshold: "WARNING"   #tells the message service that this destination applies to WARNING and higher level messages
-     append:     true       #says to append all messages to the output
      categories:
      {
        ChannelFilter:
