@@ -399,9 +399,14 @@ void BooNEtoGSimple::DoIt(char* input_file, char* output_file, long int POTGoal)
   for ( ; setitr != pdglist.end(); ++setitr)  fmeta->pdglist.push_back(*setitr);
   
   fmeta->maxEnergy = maxe;
-  fmeta->minWgt    = minwgt;
-  fmeta->maxWgt    = maxwgt;
-
+  /*
+    fmeta->minWgt    = minwgt;
+    fmeta->maxWgt    = maxwgt;
+  */
+  //GENIE uses maxwgt when doing pot accounting, this should be the wgt of final events
+  //since after gsimple all neutrino rays have weight 1 minwgt=maxwgt=1
+  fmeta->minWgt    = 1.;
+  fmeta->maxWgt    = 1.;
   fWindowtree->GetEntry(0);   
 
   fmeta->protons   = nwrite*(fBeamNtp.pot / SumWeights);
