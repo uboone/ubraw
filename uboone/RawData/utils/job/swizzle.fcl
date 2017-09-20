@@ -48,6 +48,7 @@ source:
   swizzleTPC:      true
   swizzlePMT:      true
   swizzleTrigger:  true
+#  UseGPS:	   true
 
   swizzleTriggerType: ALL ## This is the only option that works currently!
 #  swizzleTriggerType: BNB
@@ -58,6 +59,7 @@ source:
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
                      "E:TOR875, 100, 0, 5" ]
+  enforceFrameMatching: true ## quit if TPC, PMT, and TRIG stream frames don't match - should be true by default
 }
 
 outputs:

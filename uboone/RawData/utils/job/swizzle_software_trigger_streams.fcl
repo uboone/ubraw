@@ -71,6 +71,7 @@ source:
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
                      "E:TOR875, 100, 0, 5" ]
+  enforceFrameMatching: true ## quit if TPC, PMT, and TRIG stream frames don't match - should be true by default
 }
 
 outputs:
@@ -102,6 +103,16 @@ outputs:
      maxInputFiles: 1
      granularity: "InputFile"
     }
+  }
+ outbnbhsnc0:
+  {
+   module_type: RootOutput
+   fileName: "%ifb_%tc_bnb_hsnc0.root"
+   dataTier: "raw"
+   streamName: "outbnbhsnc0"
+   compressionLevel: 3
+   saveMemoryObjectThreshold: 0
+   SelectEvents: { SelectEvents: [ path_bnb_hsnc0 ] }
   }
  outnumi:
   {
@@ -217,6 +228,7 @@ physics:
  path_notpc:         [ @sequence::microboone_reco_notpc ]
  path_bnb:           [ swtrigbnb ]
  path_bnb_unbiased:  [ swtrigbnbunbiased ]
+ path_bnb_hsnc0:     [ swtrigbnbhsnc0 ]
  path_numi:          [ swtrignumi ]
  path_numi_unbiased: [ swtrignumiunbiased ]
  path_ext_bnb:       [ swtrigextbnb ]
@@ -227,6 +239,7 @@ physics:
  stream_notpc:         [ outnotpc ]
  stream_bnb:           [ outbnb ]
  stream_bnb_unbiased:  [ outbnbunbiased ]
+ stream_bnb_hsnc0:     [ outbnbhsnc0 ]
  stream_numi:          [ outnumi ]
  stream_numi_unbiased: [ outnumiunbiased ]
  stream_ext_bnb:       [ outextbnb ]
@@ -237,6 +250,7 @@ physics:
  trigger_paths: [ path_notpc,
                   path_bnb,
                   path_bnb_unbiased,
+                  path_bnb_hsnc0,
                   path_numi,
                   path_numi_unbiased,
                   path_ext_bnb,
@@ -246,6 +260,7 @@ physics:
 
  end_paths:     [ stream_notpc,
                   stream_bnb,
+                  stream_bnb_hsnc0,
                   stream_bnb_unbiased,
                   stream_numi,
                   stream_numi_unbiased,
