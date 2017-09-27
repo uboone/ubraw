@@ -19,7 +19,7 @@
 #include "uboone/Geometry/UBOpChannelTypes.h"
 #include "uboone/Geometry/UBOpReadoutMap.h"
 #include "uboone/Geometry/UBOpChannelTypes.h"
-#include "uboone/RawData/utils/LArRawInputDriverUBooNE.h"
+// #include "uboone/RawData/utils/LArRawInputDriverUBooNE.h"
 
 // larsoft
 #include "lardata/Utilities/DatabaseUtil.h" // lardata
@@ -67,7 +67,12 @@ SnFileSourceDriver::SnFileSourceDriver(fhicl::ParameterSet const &pset,
   helper.reconstitutes< std::vector<recob::Wire> ,   art::InEvent>("sndaq");  
   helper.reconstitutes<std::vector<raw::Trigger>,    art::InEvent>("sndaq");
   
-  lris::registerOpticalData( helper, fPMTdataProductNames ); 
+  // from: registerOpticalData in lris
+  fPMTdataProductNames.clear();
+  for ( unsigned int cat=0; cat<(unsigned int)opdet::NumUBOpticalChannelCategories; cat++ ) {
+    helper.reconstitutes<std::vector<raw::OpDetWaveform>,art::InEvent>( "pmtreadout", opdet::UBOpChannelEnumName( (opdet::UBOpticalChannelCategory_t)cat ) );
+    fPMTdataProductNames.insert( std::make_pair( (opdet::UBOpticalChannelCategory_t)cat, opdet::UBOpChannelEnumName( (opdet::UBOpticalChannelCategory_t)cat ) ) );
+  }
 }
 
 
@@ -156,14 +161,30 @@ bool SnFileSourceDriver::readNext(
   }
 
 
-  // Header and principal
+  // DAQ Header object.
   std::unique_ptr<raw::DAQHeader> daq_header(new raw::DAQHeader);
-  lris::fillDAQHeaderData(*(fCurrRecord->fEvent),*daq_header,
-                          false, // use gps
-                          true ); // use ntp
-    
-                          // FIXME: Timestamp in DAQHeaderData is wrong if do_subframe is not zero.
+  gov::fnal::uboone::datatypes::ub_GlobalHeader global_header = fCurrRecord->fEvent->getGlobalHeader();
+  global_header.useLocalHostTime();
+  uint32_t seconds=global_header.getSeconds();
+  uint32_t nano_seconds=global_header.getNanoSeconds()+
+                        global_header.getMicroSeconds()*1000;
+  time_t mytime = ((time_t)seconds<<32) | nano_seconds;
+  if(do_subframe > 0) {
+    // One frame is 3200 ticks at 2 MHz
+    const time_t frame_duration = 3200 * 500.;
+    mytime += do_subframe * frame_duration;
+  }
 
+  daq_header->SetStatus(1);
+  daq_header->SetFileFormat(global_header.getRecordType());
+  daq_header->SetSoftwareVersion(global_header.DAQ_version_number);
+  daq_header->SetRun(global_header.getRunNumber());
+  daq_header->SetSubRun(global_header.getSubrunNumber());
+  //\/ Add the subRun number too!
+  daq_header->SetEvent(global_header.getEventNumber()); // Have this match the daq
+  daq_header->SetTimeStamp(mytime);
+
+  // Principal
   art::RunNumber_t rn = daq_header->GetRun();//+1;
   art::Timestamp tstamp = daq_header->GetTimeStamp();
   art::SubRunID newID(rn, daq_header->GetSubRun());
@@ -230,8 +251,16 @@ bool SnFileSourceDriver::readNext(
   }
   
   // Store.
-  if(pmt_map.size()>0)
-    lris::putPMTDigitsIntoEvent(pmt_map,outE,fPMTdataProductNames);
+  if(pmt_map.size()>0) {
+    // copied from lris::putPMTDigitsIntoEvent(pmt_map,outE,fPMTdataProductNames);
+    for ( unsigned int cat=0; cat<(unsigned int)opdet::NumUBOpticalChannelCategories; cat++ ) {      
+      art::put_product_in_principal(std::move( pmt_map[(opdet::UBOpticalChannelCategory_t)cat]  ),
+                                          *outE,
+                                         "pmtreadout", // module
+                                          fPMTdataProductNames[ (opdet::UBOpticalChannelCategory_t)cat ]); // instance
+    }
+    
+  }
 
   
   // fCurrRecord->getSupernovaTpcData(*outE,"sndaq",fRemovePedestal);
