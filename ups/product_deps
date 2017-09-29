@@ -41,8 +41,8 @@ ubutil          v06_36_00
 uboone_data     v01_16_00
 uboonedaq_datatypes v6_19_01_e14
 bernfebdaq_core v01_00_00
-gallery         v1_03_08
-uboonedaq_datatypes v6_19_01_e10
+gallery         v1_03_12
+
 
 
 cetbuildtools	v5_06_07	-	only_for_build
