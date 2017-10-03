@@ -1,0 +1,71 @@
+#ifndef NuMINtuple_h
+#define NuMINtuple_h
+
+//Numi ntuple
+struct NuMINtuple {
+  int      run;
+  int      evtno;
+  float    Ndxdz;
+  float    Ndydz;
+  float    Npz;
+  float    Nenergy;
+  float    NdxdzNea;
+  float    NdydzNea;
+  float    NenergyN;
+  float    NWtNear;
+  float    NdxdzFar;
+  float    NdydzFar;
+  float    NEnergyF;
+  float    NWtFar;
+  int      Norig;
+  int      Ndecay;
+  int      Ntype;
+  float    Vx;
+  float    Vy;
+  float    Vz;
+  float    pdPx;
+  float    pdPy;
+  float    pdPz;
+  float    ppdxdz;
+  float    ppdydz;
+  float    pppz;
+  float    ppenergy;
+  int      ppmedium;
+  int      ptype;
+  float    ppvx;
+  float    ppvy;
+  float    ppvz;
+  float    muparpx;
+  float    muparpy;
+  float    muparpz;
+  float    mupare;
+  float    Necm;
+  float    Nimpwt;
+  float    xpoint;
+  float    ypoint;
+  float    zpoint;
+  float    tvx;
+  float    tvy;
+  float    tvz;
+  float    tpx;
+  float    tpy;
+  float    tpz;
+  int      tptype;
+  int      tgen;
+
+  int      tgptype;
+  float    tgppx;
+  float    tgppy;
+  float    tgppz;
+  float    tprivx;
+  float    tprivy;
+  float    tprivz;
+  float    beamx;
+  float    beamy;
+  float    beamz;
+  float    beampx;
+  float    beampy;
+  float    beampz;
+};
+
+#endif
