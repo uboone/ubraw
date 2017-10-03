@@ -136,9 +136,10 @@ void BooNEtoGSimple::DoIt(char* input_file, char* output_file, long int POTGoal)
   
   set<int> pdglist;
   double maxe = 0;
+  /* not used
   double minwgt = +1.0e10;
   double maxwgt = -1.0e10;
-  
+  */
   UInt_t metakey = TString::Hash(output_file,strlen(output_file));
   
   TRandom3* rnd = new TRandom3();
@@ -161,9 +162,11 @@ void BooNEtoGSimple::DoIt(char* input_file, char* output_file, long int POTGoal)
       faux->Reset();
       
       fentry->metakey = metakey;
-      
+
+      /* not used
       int pdg = fBooneNtp.id[0]; 
-      
+      */
+
       if ( fBooneNtp.ntp == 1 ){
 	fentry->pdg = 12; //nue
 	//fentry->ntype = 12; //nue
@@ -242,17 +245,21 @@ void BooNEtoGSimple::DoIt(char* input_file, char* output_file, long int POTGoal)
       double Nenergy = fBooneNtp.ini_eng[0] ;
       double Ndxdz   = fBooneNtp.ini_mom[0][0]/fBooneNtp.ini_mom[0][2] ;
       double Ndydz   = fBooneNtp.ini_mom[0][1]/fBooneNtp.ini_mom[0][2] ;
+      /* not used
       double Npz     = fBooneNtp.ini_mom[0][2] ;
-      
+      */
+
       double ppenergy = fBooneNtp.ini_eng[1];
       double pdPx     = fBooneNtp.fin_mom[1][0] ;
       double pdPy     = fBooneNtp.fin_mom[1][1] ;
       double pdPz     = fBooneNtp.fin_mom[1][2] ;
-      
+
+      /* not used
       double ppvx     = fBooneNtp.ini_pos[1][0] ;
       double ppvy     = fBooneNtp.ini_pos[1][1] ;
       double ppvz     = fBooneNtp.ini_pos[1][2] ;    
-      
+      */
+
       double ppdxdz   = fBooneNtp.ini_mom[1][0]/fBooneNtp.ini_mom[1][2] ;
       double ppdydz   = fBooneNtp.ini_mom[1][1]/fBooneNtp.ini_mom[1][2] ;
       double pppz     = fBooneNtp.ini_mom[1][2] ;
@@ -369,8 +376,10 @@ void BooNEtoGSimple::DoIt(char* input_file, char* output_file, long int POTGoal)
       ++nwrite;
       
       pdglist.insert(fentry->pdg);
+      /* not used
       minwgt = TMath::Min(MinWeight,fentry->wgt);
       maxwgt = TMath::Max(MaxWeight,fentry->wgt);
+      */
       maxe   = TMath::Max(maxe,fentry->E);
       
       fEventNo++;
