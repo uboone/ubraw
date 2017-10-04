@@ -50,8 +50,8 @@ end_product_list
 # Make a table by adding columns before "notes". 
 # e10  - with gcc 4.9.3 and -std=c++1y
 qualifier	larlite	    larcv	swtrigger	genie_xsec	larsoft		ubutil		uboonedata	uboonedaq_datatypes	notes
-e10:debug	e10:prof    e10:prof	e10:debug	DefaultPlusMECWithNC	e10:debug	e10:debug	-nq-		e10:debug	
-e10:opt		e10:prof    e10:prof	e10:opt		DefaultPlusMECWithNC	e10:opt		e10:opt		-nq-        	e10:opt		
+e10:debug	e10:debug   e10:debug	e10:debug	DefaultPlusMECWithNC	e10:debug	e10:debug	-nq-		e10:debug	
+e10:opt		e10:opt     e10:opt	e10:opt		DefaultPlusMECWithNC	e10:opt		e10:opt		-nq-        	e10:opt		
 e10:prof	e10:prof    e10:prof	e10:prof	DefaultPlusMECWithNC	e10:prof	e10:prof	-nq-        	e10:prof	
 e10:prof:fg	e10:prof    e10:prof	e10:prof	LocalFGNievesQEAndMEC	e10:prof	e10:prof	-nq-        	e10:prof	
 end_qualifier_list
