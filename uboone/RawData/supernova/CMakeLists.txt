@@ -15,8 +15,8 @@ art_make( NO_PLUGINS
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         lardata_ArtDataHelper
-                        uboone_RawData
-                        LArRawInputSourceUBooNE_source
+                        # uboone_RawData
+                        # LArRawInputSourceUBooNE_source
                         ${UBDut}
                         ${PQ}
                         ${Boost_SERIALIZATION_LIBRARY}
@@ -50,8 +50,8 @@ art_make( NO_PLUGINS
                         lardataobj_RecoBase
                         lardata_RecoBaseArt
                         larcoreobj_SummaryData
-                        uboone_RawData
-                        uboone_RawData_utils                        
+                        # uboone_RawData
+                        # uboone_RawData_utils
                         ${UBDut}
                         ${PQ}
                         ${Boost_SERIALIZATION_LIBRARY}

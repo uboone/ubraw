@@ -23,7 +23,7 @@
 #include "uboone/Geometry/UBOpChannelTypes.h"
 #include "uboone/Geometry/UBOpReadoutMap.h"
 #include "larcore/Geometry/Geometry.h"
-#include "uboone/RawData/utils/LArRawInputDriverUBooNE.h"
+// #include "uboone/RawData/utils/LArRawInputDriverUBooNE.h"
 
 
 
@@ -31,6 +31,30 @@
 #include <fstream>
 
 namespace snassembler {
+  
+  uint32_t resolveFrame(uint32_t frameCourse,uint32_t frameFine, uint32_t bitmask)
+  {
+    /// My version of the RollOver function in the default assembler. This version is faster and covers at 
+    /// least one case missed by RollOver. 
+    /// 
+    /// Figure out the correct roll-over.  Given a frame number frameCourse which is usually the
+    /// event readout frame, figure out which absolute frame number should be assigned to frameFine, 
+    /// which contains only <bitmask> bits of specific information.
+    /// eg. (0x100,0x1,0xf) resolves to 0x101, which is the nearest solution,
+    /// but (0x100,0xe,0xF) resolves to 0x9e, which is closer.
+    ///
+    // note that modulus = bitmask + 1. E.g. bitmask=0x7 means modulus-8 arithmetic.
+    // This could probably be optimized, further, but it's miles easier than the RollOver function that we had previously
+    uint32_t option1 = (frameCourse - (frameCourse & bitmask)) | (frameFine & bitmask);
+    int max = (bitmask+1)/2; // This is half-way point; you should never be further than this.
+    int diff = option1-frameCourse;
+    if(diff >  max) return option1 - (bitmask+1);
+    if(diff < -max) return option1 + (bitmask+1);
+    return option1;
+  }
+  
+  
+  
   bool SnRecordHolder::evaluateSupernovaTpcData()
   {
     ///
@@ -263,7 +287,7 @@ namespace snassembler {
           // Important error check:
           // Does the channel frame number match the card frame? Channel header.
           uint16_t frame6 = channel_data.header().getFrameNumber_6bit();
-          uint32_t channelFrame = lris::resolveFrame(frame, frame6, 0x3F);
+          uint32_t channelFrame = resolveFrame(frame, frame6, 0x3F);
           if(channelFrame != frame) {
             mf::LogError("SnRecordHolder" )<< "Channel header doesn't match frame on card " << card << " channel " << channel << " frame " << frame;
             mf::LogError("SnRecordHolder" )<< "This indicates corrupt data.";
@@ -373,7 +397,7 @@ namespace snassembler {
   bool SnRecordHolder::addSupernovaPmtData( pmtmap_t& pmt_map )
   {
     // PMT data is just like as in regular swizzling:
-    lris::PMT_tracking_data_t dummy_tracking; // Maybe do some stats on this later.
+    // lris::PMT_tracking_data_t dummy_tracking; // Maybe do some stats on this later.
   
     // Create a digit list to store, if it hasn't happend already.
     for ( unsigned int opdetcat=0; opdetcat<(unsigned int)opdet::NumUBOpticalChannelCategories; opdetcat++ ) {
@@ -423,7 +447,7 @@ namespace snassembler {
             size_t win_data_size=window_data.size();
 
             uint32_t sample=window_header.getSample();
-            uint32_t frame = lris::resolveFrame(card_data.getFrame(),window_header.getFrame(),0x7);
+            uint32_t frame = resolveFrame(card_data.getFrame(),window_header.getFrame(),0x7);
 
             unsigned int data_product_ch_num = ub_pmt_channel_map->GetChannelNumberFromCrateSlotFEMCh( crate_data.crateHeader()->crate_number, card_data.getModule(), channel_number );
             
