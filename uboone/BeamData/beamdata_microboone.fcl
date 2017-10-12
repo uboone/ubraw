@@ -19,6 +19,7 @@ microboone_beamdata:
          merge_time_tolerance: 30. #in ms
 	 sum_devices: [ "E:TOR860", "E:TOR875" ]
 	 write_beam_data: true
+	 FOM_version: 2
 	 FOM_cut : 0.95
         }
   numi: {
@@ -28,6 +29,7 @@ microboone_beamdata:
          merge_time_tolerance: 100.
 	 sum_devices: [ "E:TORTGT" ]
 	 write_beam_data: true
+	 FOM_version: 2
 	 FOM_cut : 0.95
 	}
 }

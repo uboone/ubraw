@@ -23,6 +23,7 @@
 #include <bitset>
 #include <memory>
 #include "getFOM.h"
+#include "getFOM2.h"
 
 #include "datatypes/ub_BeamHeader.h"
 #include "datatypes/ub_BeamData.h"
@@ -64,6 +65,7 @@ private:
     int fNHornCurrentCut;
     int fNIntensityCut;
     int fNFOMCut;
+    int fFOMversion;
   } beamcuts_t;
   std::map<uint32_t, beamcuts_t> fBeamCutMap;
   TTree* fTree;
@@ -95,6 +97,7 @@ BeamDataQualityFilter::BeamDataQualityFilter(fhicl::ParameterSet const & p)
     bc.fBeamName=eps.get<std::string>("beam_name");
     bc.fHornCurrentRange=eps.get<std::vector<double> >("horn_current_range");
     bc.fIntensityRange=eps.get<std::vector<double> >("intensity_range");
+    bc.fFOMversion=eps.get<int>("fom_version");
     bc.fFOMRange=eps.get<std::vector<double> >("fom_range");
     std::pair<uint32_t, beamcuts_t> bcpair(trigger_mask, bc);
     fBeamCutMap.insert(bcpair);
@@ -171,7 +174,13 @@ bool BeamDataQualityFilter::filter(art::Event & e)
 	ubbd.setData(bdata.second);
 	ubbdvec.push_back(ubbd);
       } 
-      fFOM=bmd::getFOM(bc->fBeamName,ubbh,ubbdvec);
+      if (bc->fFOMversion==1)
+	fFOM=bmd::getFOM(bc->fBeamName,ubbh,ubbdvec);
+      else if (bc->fFOMversion==2) 
+	fFOM=bmd::getFOM2(bc->fBeamName,ubbh,ubbdvec);
+      else
+	mf::LogError(__FUNCTION__)<<"Invalid FOM version"<<fFOM;
+
       mf::LogDebug(__FUNCTION__)<<"Recalculated fom="<<fFOM;
     } else {
       //get it from BeamInfo
@@ -214,7 +223,6 @@ void BeamDataQualityFilter::beginJob()
 {
   // Implementation of optional member function here.
   for (auto& bc: fBeamCutMap) {
-    bc.second.fRecalculateFOM=false;
     bc.second.fNHornCurrentCut=0;
     bc.second.fNIntensityCut=0;
     bc.second.fNFOMCut=0;
