@@ -6,6 +6,7 @@
 #include <string>
 #include "TMath.h"
 #include "TH1.h"
+#include "TGraph.h"
 
 namespace bmd
 {
@@ -18,6 +19,23 @@ namespace bmd
   double func_intbivar(const double cx, const double cy, const double sx, const double sy, const double rho );
   void processBNBprofile(const double* mwdata, double &x, double& sx, double& chi2); 
   
+  //NuMI code copied from NOvA http://nusoft.fnal.gov/nova/novasoft/doxygen/html/IFDBSpillInfo__module_8cc_source.html
+  double NuMIExtrapolatePosition(double t1, double z1, double t2, double z2, double z3);
+  void NuMIBpmProjection(std::vector<double> &xp, std::vector<double> &yp, 
+			 std::vector<double> &xi, std::vector<double> &yi,
+			 std::vector<std::vector<double>> BPMS);
+  double NuMIBpmAtTarget(double &xpmean, double &ypmean, 
+			 double &xpstdev, double &ypstdev,
+			 std::vector<double>TargBpmX,
+			 std::vector<double>TargBpmY,
+			 std::vector<double>BpmIntX, 
+			 std::vector<double>BpmIntY);
+  int NuMIProfileProjection(double &x, double &y, 
+			    double &xstdev, double &ystdev,
+			    std::vector<double> PM121,
+			    std::vector<double> PMTGT);
+  double NuMIGetGaussFit(double &mean, double &sigma, std::vector<double> profile);
+  double NuMIGetStats(TGraph *prof, double &mean, double &stdev);
 
 }
 

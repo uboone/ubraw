@@ -26,8 +26,8 @@ microboone_beamdata:
   	 trigger_mask : 0x1000
   	 path_to_beam_file: "./"
 	 time_offset: 0.        
-         merge_time_tolerance: 100.
-	 sum_devices: [ "E:TORTGT" ]
+         merge_time_tolerance: 500.
+	 sum_devices: [ "E:TORTGT", "E:TRTGTD", "E:TR101D" ]
 	 write_beam_data: true
 	 FOM_version: 2
 	 FOM_cut : 0.95

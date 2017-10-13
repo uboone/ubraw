@@ -19,10 +19,10 @@ beam_data_quality: {
     beam_name: "numi"
     trigger_mask: 0x1000
     recalculate_fom: true
-    intensity_range: [0.5, 80]
-    horn_current_range: [198, 202]
+    intensity_range: [2.0, 80]
+    horn_current_range: [-202,-198]
     fom_version: 2
-    fom_range: [0.95, 100]
+    fom_range: [0.95, 1.1]
     }
 }
 END_PROLOG

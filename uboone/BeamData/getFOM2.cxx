@@ -158,7 +158,133 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     fom=1-pow(10,bmd::calcFOM2(horpos,horang,verpos,verang,tor,tgtsx,tgtsy));
     
   } else if (beam=="numi") {
+    //cuts copied from https://cdcvs.fnal.gov/redmine/projects/novaart/repository/entry/trunk/IFDBSpillInfo/IFDBSpillInfo.fcl
+    double fMinPosXCut   = -2.00; //   #mm
+    double fMaxPosXCut   =  2.00; //   #mm
+    double fMinPosYCut   = -2.00; //   #mm
+    double fMaxPosYCut   =  2.00; //   #mm
+    double fMinWidthXCut =  0.57; //   #mm
+    double fMaxWidthXCut =  1.58; //   #mm
+    double fMinWidthYCut =  0.57; //   #mm
+    double fMaxWidthYCut =  1.58; //   #mm
 
+    std::vector<double> tor101;
+    std::vector<double> tortgt;
+    std::vector<double> hp121;
+    std::vector<double> vp121;
+    std::vector<double> hptgt;
+    std::vector<double> vptgt;
+    std::vector<double> hitgt;
+    std::vector<double> vitgt;
+    std::vector<double> mw121;
+    std::vector<double> mwtgt;
+
+    for(auto& bdata : bd) {	// get toroid, BPM, and multiwire data
+      if(bdata.getDeviceName().find("E:TR101D") != std::string::npos) {	
+	tor101 = bdata.getData();
+	continue;
+      } else if(bdata.getDeviceName().find("E:TRTGTD") != std::string::npos) {
+	tortgt = bdata.getData();
+	continue;
+      }	else if(bdata.getDeviceName().find("E:HP121") != std::string::npos) {
+	hp121 = bdata.getData();
+	continue;
+      }	else if(bdata.getDeviceName().find("E:VP121") != std::string::npos) {
+	vp121 = bdata.getData();
+	continue;
+      }	else if(bdata.getDeviceName().find("E:HPTGT") != std::string::npos) {
+	hptgt = bdata.getData();
+	continue;
+      } else if(bdata.getDeviceName().find("E:VPTGT") != std::string::npos) {
+	vptgt = bdata.getData();
+	continue;
+      }	else if(bdata.getDeviceName().find("E:HITGT") != std::string::npos) {
+	hitgt = bdata.getData();
+	continue;
+      } else if(bdata.getDeviceName().find("E:VITGT") != std::string::npos) {
+	vitgt = bdata.getData();
+	continue;
+      } else if(bdata.getDeviceName().find("E:M121DS") != std::string::npos) {
+	mw121.resize(bdata.getData().size());
+	for (unsigned int ii=0;ii<mw121.size();ii++) 
+	  mw121[ii]=bdata.getData()[ii];
+	continue;
+      } else if(bdata.getDeviceName().find("E:MTGTDS") != std::string::npos) {
+	mwtgt.resize(bdata.getData().size());
+	for (unsigned int ii=0;ii<mwtgt.size();ii++) 
+	  mwtgt[ii]=bdata.getData()[ii];
+	continue;    
+      }
+    }
+
+    if (tor101.size()==0 && tortgt.size()==0) {
+      //missing toroid info
+      return -1;
+    } else if (hp121.size()==0 || vp121.size()==0 || hptgt.size()==0 || vptgt.size() == 0 || hitgt.size() ==0 || vitgt.size()==0) {
+      //missing bpms
+      return 2;
+    } else if (mwtgt.size()==0) {
+      //missing multiwire
+      return 3;
+    }
+    
+    double temppot=0;
+    if (tortgt.size()>0) temppot=tortgt[0];
+    else if (tor101.size()>0) temppot=tor101[0];
+    
+    if (temppot<=0) 
+      return 0; //no pot info or no beam, so no need to check beam position
+
+    std::vector<std::vector<double>> BPMS;
+    BPMS.push_back(vp121);
+    BPMS.push_back(hp121);
+    BPMS.push_back(vptgt);
+    BPMS.push_back(hptgt);
+    BPMS.push_back(vitgt);
+    BPMS.push_back(hitgt);
+ 
+    std::vector<double> xp, yp, xi, yi;
+    std::vector<double> xpmm, ypmm;
+    double totxi=0;
+    double totyi=0;
+    double convx=1;
+    double convy=1;
+
+    // Use Beam Position Monitors to estimate x and y position of
+    // beam (xp,yp) and intensities (xi,yi) at target.	
+    // Do this for all six readings of positions monitors
+    NuMIBpmProjection(xp,yp,xi,yi,BPMS);
+    for(int i=0;i<6;i++){
+      totxi+=xi[i];
+      totyi+=yi[i];
+    }
+    convx=totxi/temppot;
+    convy=totyi/temppot;
+    for(int i=0;i<6;i++){
+      xi[i]=xi[i]/convx;
+      yi[i]=yi[i]/convy;
+    }
+    double xpmean = -9., ypmean = -9., xpstdev = -9., ypstdev=-9.;
+    // Use 6 position and intensity values to get mean and stdev
+    // values of positions
+    NuMIBpmAtTarget(xpmean,ypmean,xpstdev,ypstdev,xp,yp,xi,yi);
+
+    double x = -9., y = -9., xstdev= -9., ystdev= -9.;
+    // Use Beam Profile Monitors to estimate x and y widths and positions
+    // of beam at target
+    NuMIProfileProjection(x,y,xstdev,ystdev,mw121,mwtgt);
+
+    if ((xpmean > fMinPosXCut) &&
+	(xpmean < fMaxPosXCut) &&     // x position
+	(ypmean > fMinPosYCut) &&	
+	(ypmean < fMaxPosYCut) &&    // y position
+	(xstdev > fMinWidthXCut) &&
+	(xstdev < fMaxWidthXCut) && // x width
+	(ystdev > fMinWidthYCut) &&
+	(ystdev < fMaxWidthYCut)) // y width
+      fom=1;
+    else
+      fom=0;
   }
   return fom;
 }
@@ -361,12 +487,12 @@ void bmd::swimBNB(const double centroid1[6], const double sigma1[6][6],
   //  cout<<"Swim "<<sx<<"\t"<<sy<<"\t"<<rho<<endl;
 }
  
- double bmd::func_intbivar(const double cx, const double cy, const double sx, const double sy, const double rho )
- {
+double bmd::func_intbivar(const double cx, const double cy, const double sx, const double sy, const double rho )
+{
   //integrate beam overlap with target cylinder
   double x0  =  cx;
   double y0  =  cy;
-
+  
   double dbin = 0.1;
   double dx = dbin;
   double dy = dbin;
@@ -401,3 +527,333 @@ void bmd::swimBNB(const double centroid1[6], const double sigma1[6][6],
   //  cout<<"sum = "<<sum<<endl;
   return log10(1-sum);
 }
+
+//NuMI code copied from NOvA http://nusoft.fnal.gov/nova/novasoft/doxygen/html/IFDBSpillInfo__module_8cc_source.html
+double bmd::NuMIExtrapolatePosition(double t1, double z1, double t2, double z2, double z3)
+{
+  return t1+(t2-t1)*(z3-z1)/(z2-z1);
+}
+
+void bmd::NuMIBpmProjection(std::vector<double> &xp, std::vector<double> &yp, 
+			    std::vector<double> &xi, std::vector<double> &yi,
+			     std::vector<std::vector<double>> BPMS)
+{
+  xp.clear();
+  yp.clear();
+  xi.clear();
+  yi.clear();
+  
+  // In NOvA era (for now) we will assume the following
+  // In MINOS era, target location was 3937 after time period 1155564632
+  double z_targ = 0;
+  
+  // Return shortest array length of all BPM positions and intensities used
+  int size = BPMS.size();
+  int n    = BPMS[0].size();
+  for(int ind = 1; ind < size; ++ind) {
+    int n2 = BPMS[ind].size();
+    if(n2 < n) n = n2;
+  }
+  
+  int start = 0;
+  // Skip first BPMS value (average used in auto-tune) but only if 
+  // there are multiple batches
+  
+  if(n > 1) ++start; 
+  // Check to see if elements of BPMS[4] and BPMS[5] (BPM intensities) are 0.
+  // If they are, set position values to 0.  Otherwise, use corresponding values of
+  // vertical and horizontal position monitors to extrapolate vertical and 
+  // horizontal position at target.  Simply transfer intensities over.
+  
+  for(int ind = start; ind < n; ++ind) {
+    
+    if(BPMS[4][ind] == 0.0 || BPMS[5][ind]== 0.0) {
+      yp.push_back(0.0);
+      xp.push_back(0.0);
+      yi.push_back(0.0);
+      xi.push_back(0.0);
+      
+      continue;
+    }
+    
+    // Returns transverse position (x or y) at z_targ assuming a linear 
+    // extrapolation from z_vp121 to z_vptgt
+    double ft_to_m=0.3048;
+    double z_hp121     = -68.04458*ft_to_m;//-72.2309*Munits::foot,  // HP121
+    double z_vp121     = -66.99283*ft_to_m;//-71.3142*Munits::foot,  // VP121
+    double z_hptgt     = -31.25508*ft_to_m;//-33.1564*Munits::foot,  // HPTGT
+    double z_vptgt     = -30.16533*ft_to_m;//-32.2397*Munits::foot,  // VPTGT
+    yp.push_back
+      (NuMIExtrapolatePosition(BPMS[0][ind],z_vp121,BPMS[2][ind],z_vptgt,z_targ));
+    xp.push_back
+      (NuMIExtrapolatePosition(BPMS[1][ind],z_hp121,BPMS[3][ind],z_hptgt,z_targ));
+    
+    // Returns the horizontal or vertical intensity of beam        
+    yi.push_back(BPMS[4][ind]);
+    xi.push_back(BPMS[5][ind]);
+    
+  }
+  return;
+} // BpmProjection
+
+double bmd::NuMIBpmAtTarget(double &xpmean, double &ypmean, 
+			    double &xpstdev, double &ypstdev,
+			    std::vector<double>TargBpmX,
+			    std::vector<double>TargBpmY,
+			    std::vector<double>BpmIntX, 
+			    std::vector<double>BpmIntY)
+{
+ 
+  //xpmean = ypmean = xpstdev = ypstdev = 0.0;
+  double IXtot = 0.0, IYtot = 0.0;
+  double ix = 0.0, iy = 0.0, ix2 = 0.0, iy2 = 0.0;
+  
+  // For intensity-weighted position values...
+  // Remember, TargBpmX, TargBpmY, BpmIntX and BpmIntY have one fewer element than
+  // the devices because first device value was an average used for beam tuning
+  for(size_t ind = 0; ind < BpmIntX.size(); ++ind) {
+    
+    // If average intensity is 0, skip to next value
+    if(BpmIntX[ind] == 0.0 || BpmIntY[ind] == 0.0) continue;
+    
+    double X  = TargBpmX[ind]; //xp[ind]
+    double Y  = TargBpmY[ind]; //yp[ind]
+    double IX = BpmIntX[ind];  //xi[ind]
+    double IY = BpmIntY[ind];  //yi[ind]
+    
+    // if I>0, set I=I, else set I=0  
+    IX = IX > 0 ? IX : 0;
+    IY = IY > 0 ? IY : 0;
+                   
+    // sum intensities
+    IXtot += IX;
+    IYtot += IY;
+         
+    // intensity-weighted position value
+    ix += IX*X;
+    iy += IY*Y;
+    
+    ix2 += IX*X*X;
+    iy2 += IY*Y*Y;
+        
+  } // end for-loop over elements of xp, yp, xi and yi
+       
+  if(IXtot <= 0.0) return 0.0;
+  if(IYtot <= 0.0) return 0.0;
+      
+  // intensity-weighted average positions
+  xpmean = ix/IXtot;
+  ypmean = iy/IYtot;
+  
+  // standard deviation
+  double xvar = ix2/IXtot-xpmean*xpmean;
+  if(xvar > 0.0) xpstdev = sqrt(xvar);
+  double yvar = iy2/IYtot-ypmean*ypmean;
+  if(yvar > 0.0) ypstdev = sqrt(yvar);
+  
+  return xpmean;
+  
+}
+int bmd::NuMIProfileProjection(double &x, double &y, 
+			       double &xstdev, double &ystdev,
+			       std::vector<double> PM121,
+			       std::vector<double> PMTGT)
+{
+  double xtgt = 0., ytgt = 0., xstdevtgt = 0., ystdevtgt = 0.;
+  
+  std::vector<double> hchannels121, vchannels121, hchannelstgt, vchannelstgt;
+  // Need to add line here to return 0 if no data from devices 
+  // Get relevant channels from the device                
+  for(int ind = 0; ind <= 47; ++ind) {
+    hchannels121.push_back(PM121[103+ind]);
+    vchannels121.push_back(PM121[103+48+ind]);
+    hchannelstgt.push_back(PMTGT[103+ind]);
+    vchannelstgt.push_back(PMTGT[103+48+ind]);
+  }
+  
+  NuMIGetGaussFit(xtgt,xstdevtgt,hchannelstgt);
+  NuMIGetGaussFit(ytgt,ystdevtgt,vchannelstgt);
+  
+  // If values at MTGTDS are reasonable, set them to values at target 
+  if(std::abs(xtgt) < 11 && std::abs(ytgt) < 11) {
+    x = xtgt;
+    y = ytgt;
+  }
+  // Standard deviation values are not extrapolated to target
+  xstdev = xstdevtgt;
+  ystdev = ystdevtgt;
+  return 1;
+}// ProfileProjection
+
+double bmd::NuMIGetGaussFit(double &mean, double &sigma, 
+			    std::vector<double> profile)
+{              
+  double  wirespacing = 0.5;
+  TGraph Prof;        
+  Prof.Set(0);
+  //Prof.Clear("");
+  int npoints = 0;
+  // For each of 48 channels of profile monitor
+  for(int ch = 1; ch <= 48; ++ch) {
+    // Get position of wire. Origin is halfway between channels 24 and 25
+    double X = (ch-24.5)*wirespacing;
+    // Get the voltage value.
+    double Qx = profile[ch-1];
+    // ensure that they are greater than or equal to zero
+    // NOTE: FOR NOW DON'T DO THIS - INSTEAD FIT TO AN OFFSET
+    // Qx = Qx > 0 ? Qx : 0;
+    // Set values of points in TGraph, x=X/Munits::mm and y=-1*Qx/Munits::millivolt
+    // Invert voltage to make it positive in Gaussian peak - may lead to 
+    // better fitting
+    Prof.SetPoint(npoints,X,-1*Qx);
+    ++npoints;
+  } // for channels 1 to 48
+  
+    // Now that all of channel information has been loaded...
+    // Remove dead and hot channels from profiles being fitted.
+    // I DON'T DO THIS BUT I WILL REMOVE DEAD CHANNELS (IE THOSE WITH ZERO READING)
+    // SuppressDeadHot(&xProf);
+  
+  for(int i = 0; i < Prof.GetN(); ++i) {
+    if (Prof.GetY()[i] == 0.0){
+      Prof.RemovePoint(i);
+      --i;
+    }
+  }
+
+  // For some reason this is faster than if I use a TMath::Gaus:
+  TF1 gausF("gausF","[3]+([0]*exp((-1*(x-[1])*(x-[1]))/(2*[2]*[2]))/(sqrt(2*3.142)*[2]))");
+  //TF1 gausF("gausF","[3]+[0]*TMath::Gaus(x,[1],[2],1)");
+  
+  gausF.SetParName(0,"Area");
+  gausF.SetParName(1,"Mean");
+  gausF.SetParName(2,"Sigma");
+  gausF.SetParName(3,"Offset");
+  
+  // NOT SURE WE NEED THIS
+  //gausF.SetParLimits(0,0.00,100000000);
+  //gausF.SetParLimits(2,0,1000);
+  
+  // Gaussian fit parameters
+  double area = -9.;
+  double offset = -9.;
+  mean  = -9., sigma = -9.;
+  
+  // Get statistical mean and standard deviation of profile distribution
+  double StatMean = 0.0, stdev = 0.0;
+  area = NuMIGetStats(&Prof,StatMean,stdev);
+  // Check we have enough points and enough charge for a reasonable fit 
+  if(Prof.GetN() > 5 && std::abs(area) > 1.0 &&
+     std::abs(StatMean) < 20*wirespacing &&
+     std::abs(stdev) < 12*wirespacing) {
+    gausF.SetParameter(0,area);
+    gausF.SetParameter(1,StatMean);
+    gausF.SetParameter(2,stdev/2);
+    //offset value should be fixed to the baseline, get avg value of the neagtive readings
+    int nbneg=0;
+    double avgneg=0.;
+    for(int i = 0; i < Prof.GetN(); ++i) {
+      if (Prof.GetY()[i] < 0.0){
+	avgneg=avgneg+Prof.GetY()[i];
+	nbneg++;
+      }
+    }
+    
+    if(nbneg!=0){
+      offset=avgneg/nbneg;
+    }else{
+      // Starting offset value is a guess based on looking at data
+      offset = -3.0;
+    }
+    gausF.SetParameter(3,offset);
+    if(Prof.Fit("gausF","q","",-24*wirespacing,24*wirespacing) == 0) {
+      bool goodfit = true;
+      // Are fit results physical?
+      if(gausF.GetParameter(0) < 0.1){
+	goodfit = false;
+      }
+      
+      if(std::abs(gausF.GetParameter(1)) > 24*wirespacing){
+	goodfit = false;
+      }
+      
+      if(gausF.GetParameter(2) > 24*wirespacing || gausF.GetParameter(2) < 0.0){
+	goodfit = false;
+      }
+      if(goodfit) {
+	// Remember to correct fit result for area by dividing by "bin size" and correcting units
+	area   = gausF.GetParameter(0)/wirespacing;
+	mean   = gausF.GetParameter(1);
+	sigma  = gausF.GetParameter(2);
+	offset = gausF.GetParameter(3);                                        
+      } // if goodfit
+    }
+  } // if we can make a reasonable fit
+    //    else{
+    //      //mf::LogInfo("IFDBSpillInfo") << "POINTS DID NOT PASS BASIC CUTS in profile fit to Gaussian" << std::endl;
+    //    }
+    
+  return area;
+} // GetGaussFit
+  
+
+// Calculate mean and standard deviation for points in TGraph to use as 
+// starting parameters values in Fit
+double bmd::NuMIGetStats(TGraph *prof, double &mean, double &stdev)
+{
+  double qx = 0, qtot = 0;
+  double X = 0.0;                
+  double Qx = 0.0;                
+  
+  double minprof = 1E6;
+  double maxprof = -1E6;
+  
+  // Find min and max values of profile.  Profile is upside down Gaussian 
+  // with offset.  All profile values have already been inverted to make 
+  // Gaussian right-side up - offset is now negative.
+  // To get good starting param values, shift all profile values up by the 
+  // most negative of all profile values, ie minprof, as found above.
+  for(int i = 0; i < prof->GetN(); ++i) {
+    Qx = prof->GetY()[i];
+    if (Qx <= minprof) minprof = Qx;
+    if (Qx >= maxprof) maxprof = Qx;
+  }
+
+  for(int i = 0; i < prof->GetN(); ++i) {
+    // For each point in profile, get wire position and charge values
+    X = prof->GetX()[i];
+    Qx = prof->GetY()[i];
+    prof->SetPoint(i,X,Qx-minprof);
+    Qx = prof->GetY()[i];
+    // Total charge on all wires
+    qtot += Qx;
+    // Total charge-weighted position value
+    qx += Qx*X;
+  }
+
+  // If total charge is 0, mean and stdev are 0
+  if(qtot == 0.0) {
+    mean = 0.0;
+    stdev = 0.0;
+  }
+  
+  // Otherwise, mean position is charge-weighted mean
+  else{
+    mean = qx/qtot;
+    // Charge-weighted variance
+    double var = 0.0;
+    for(int i = 0; i < prof->GetN(); ++i) {
+      X = prof->GetX()[i];
+      Qx = prof->GetY()[i];
+      var +=  Qx*(X-mean)*(X-mean);
+    }
+    
+    var = var/qtot;
+    if(var > 0.0){
+      stdev = std::sqrt(var);
+    } else {
+      stdev = 0.0;
+    }
+  }
+  return qtot;        
+} // GetStats

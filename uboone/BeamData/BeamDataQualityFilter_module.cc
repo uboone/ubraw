@@ -196,17 +196,24 @@ bool BeamDataQualityFilter::filter(art::Event & e)
     if (bc->fBeamName=="bnb" && datamap["E:TOR860"].size()>0) fTor=datamap["E:TOR860"][0];
     else if (bc->fBeamName=="bnb" && datamap["E:TOR875"].size()>0) fTor=datamap["E:TOR875"][0];
     else if (bc->fBeamName=="numi" && datamap["E:TORTGT"].size()>0) fTor=datamap["E:TORTGT"][0];
+    else if (bc->fBeamName=="numi" && datamap["E:TOR101"].size()>0) fTor=datamap["E:TOR101"][0];
     if ( fTor<bc->fIntensityRange[0] || fTor>bc->fIntensityRange[1]) {
       fResult=false;
       bc->fNIntensityCut+=1;
     }
     if (bc->fBeamName=="bnb" && datamap["E:THCURR"].size()>0) fHorn=datamap["E:THCURR"][0];
+
     else if (bc->fBeamName=="numi" && datamap["E:NSLINA"].size()>0 &&
 	     datamap["E:NSLINB"].size()>0 && datamap["E:NSLINC"].size()>0 &&
-	     datamap["E:NSLIND"].size()>0) 
-      fHorn=-datamap["E:NSLINA"][0]-datamap["E:NSLINB"][0]-datamap["E:NSLINC"][0]-datamap["E:NSLIND"][0];
-
-    
+	     datamap["E:NSLIND"].size()>0) {
+      //from http://nusoft.fnal.gov/nova/novasoft/doxygen/html/IFDBSpillInfo__module_8cc_source.html
+      //it references maul from Jim Hylen from Oct 4 2013
+      fHorn=0;
+      fHorn+=(datamap["E:NSLINA"][0]-(+0.01))/0.9951;
+      fHorn+=(datamap["E:NSLINB"][0]-(-0.14))/0.9957;
+      fHorn+=(datamap["E:NSLINC"][0]-(-0.05))/0.9965;
+      fHorn+=(datamap["E:NSLIND"][0]-(-0.07))/0.9945;
+    }
     if ( fHorn<bc->fHornCurrentRange[0] || fHorn>bc->fHornCurrentRange[1]) {
       fResult=false;
       bc->fNHornCurrentCut+=1;
