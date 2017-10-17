@@ -123,16 +123,22 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 
     double xx,yy,sx,sy,chi2x,chi2y;
     double tgtsx, tgtsy;
-    if (bh.getSeconds()<1463677200) {
+    bool good_tgt=false;
+    bool good_876=false;
+    bool good_875=false;
+
+    if (bh.getSeconds()<1463677200 && mwtgt.size()>0) {
+      //target multiwire started failing after May 20 2016 (1463677200)
       //skip this if data from when tgt multiwire was already dead
       bmd::processBNBprofile(&mwtgt[0], xx, sx,chi2x);
       bmd::processBNBprofile(&mwtgt[48], yy, sy, chi2y);
-    } 
-    //target multiwire started failing after May 20 2016 (1463677200)
-    if (bh.getSeconds()<1463677200 && sx>0.5 && sx<10 && sy>0.3 && sy<10 && chi2x<20 && chi2y<20) {
-      tgtsx=sx;
-      tgtsy=sy;
-    } else {
+      if (sx>0.5 && sx<10 && sy>0.3 && sy<10 && chi2x<20 && chi2y<20 && mwtgt.size()>0) {
+	tgtsx=sx;
+	tgtsy=sy;
+	good_tgt=true;
+      } 
+    }
+    if (!good_tgt && mw876.size()>0) {
       bmd::processBNBprofile(&mw876[0], xx,sx,chi2x);
       bmd::processBNBprofile(&mw876[48], yy,sy,chi2y);
       double tgtsx876=p876x[0]+p876x[1]*sx+p876x[2]*sx*sx;
@@ -140,20 +146,24 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
       if (tgtsx876>0.5 && tgtsx876<10 && tgtsy876>0.3 && tgtsy876<10 && chi2x<20 && chi2y<20) {
 	tgtsx=tgtsx876;
 	tgtsy=tgtsy876;
-      } else {
-	bmd::processBNBprofile(&mw875[0], xx,sx,chi2x);
-	bmd::processBNBprofile(&mw875[48], yy,sy,chi2y);
-	double tgtsx875=p875x[0]+p875x[1]*sx+p875x[2]*sx*sx;
-	double tgtsy875=p875y[0]+p875y[1]*sy+p875y[2]*sy*sy;
-	if (tgtsx875>0.5 && tgtsx875<10 && tgtsy875>0.3 && tgtsy875<10 && chi2x<20 && chi2y<20) {
-	  tgtsx=tgtsx875;
-	  tgtsy=tgtsy875;
-	} else {
-	  //failed getting  multiwire data
-	  return 4;
-	}
-      }
-    }   
+	good_876=true;
+      } 
+    }
+    if (!good_tgt && !good_876 && mw875.size()>0){
+      bmd::processBNBprofile(&mw875[0], xx,sx,chi2x);
+      bmd::processBNBprofile(&mw875[48], yy,sy,chi2y);
+      double tgtsx875=p875x[0]+p875x[1]*sx+p875x[2]*sx*sx;
+      double tgtsy875=p875y[0]+p875y[1]*sy+p875y[2]*sy*sy;
+      if (tgtsx875>0.5 && tgtsx875<10 && tgtsy875>0.3 && tgtsy875<10 && chi2x<20 && chi2y<20) {
+	tgtsx=tgtsx875;
+	tgtsy=tgtsy875;
+	good_875=true;
+      } 
+    }  
+    if (!good_tgt && !good_876 && !good_875) {
+      //failed getting  multiwire data
+      return 4;
+    }  
 
     fom=1-pow(10,bmd::calcFOM2(horpos,horang,verpos,verang,tor,tgtsx,tgtsy));
     
