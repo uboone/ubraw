@@ -54,7 +54,7 @@ end_product_list
 
 # e14  - with gcc 6.3.0 and -std=c++1y
 qualifier	swtrigger	genie_xsec	larsoft		ubutil		uboone_data	uboonedaq_datatypes	bernfebdaq_core gallery  notes
-e14:debug	e14:debug	DefaultPlusMECWithNC	e14:debug	e14:debug	-nq-		e14:debug	e14:debug:s48	e14:debug:nu
+e14:debug	e14:debug	DefaultPlusMECWithNC	e14:debug	e14:debug	-nq-		e14:debug	e14:debug:nu:s48	e14:debug:nu
 e14:opt		e14:opt		DefaultPlusMECWithNC	e14:opt		e14:opt		-nq-        	e14:opt		e14:opt:s48	e14:opt:nu	
 e14:prof	e14:prof	DefaultPlusMECWithNC	e14:prof	e14:prof	-nq-        	e14:prof	e14:prof:s48	e14:prof:nu
 e14:prof:fg	e14:prof	LocalFGNievesQEAndMEC	e14:prof	e14:prof	-nq-        	e14:prof	e14:prof:s48 	e14:prof:nu
