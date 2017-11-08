@@ -73,6 +73,7 @@ include(ArtMake)
 include(BuildPlugins)
 
 # ADD SOURCE CODE SUBDIRECTORIES HERE
+add_subdirectory(ubooneobj)
 add_subdirectory(uboone)
 # subdirectory for test code
 add_subdirectory(test)
