@@ -162,7 +162,7 @@ void BooNEtoGSimple::DoIt(char* input_file, char* output_file, long int POTGoal)
       
       fentry->metakey = metakey;
       
-      int pdg = fBooneNtp.id[0]; 
+      //int pdg = fBooneNtp.id[0]; 
       
       if ( fBooneNtp.ntp == 1 ){
 	fentry->pdg = 12; //nue
@@ -242,16 +242,16 @@ void BooNEtoGSimple::DoIt(char* input_file, char* output_file, long int POTGoal)
       double Nenergy = fBooneNtp.ini_eng[0] ;
       double Ndxdz   = fBooneNtp.ini_mom[0][0]/fBooneNtp.ini_mom[0][2] ;
       double Ndydz   = fBooneNtp.ini_mom[0][1]/fBooneNtp.ini_mom[0][2] ;
-      double Npz     = fBooneNtp.ini_mom[0][2] ;
+      //double Npz     = fBooneNtp.ini_mom[0][2] ;
       
       double ppenergy = fBooneNtp.ini_eng[1];
       double pdPx     = fBooneNtp.fin_mom[1][0] ;
       double pdPy     = fBooneNtp.fin_mom[1][1] ;
       double pdPz     = fBooneNtp.fin_mom[1][2] ;
       
-      double ppvx     = fBooneNtp.ini_pos[1][0] ;
-      double ppvy     = fBooneNtp.ini_pos[1][1] ;
-      double ppvz     = fBooneNtp.ini_pos[1][2] ;    
+      //double ppvx     = fBooneNtp.ini_pos[1][0] ;
+      //double ppvy     = fBooneNtp.ini_pos[1][1] ;
+      //double ppvz     = fBooneNtp.ini_pos[1][2] ;    
       
       double ppdxdz   = fBooneNtp.ini_mom[1][0]/fBooneNtp.ini_mom[1][2] ;
       double ppdydz   = fBooneNtp.ini_mom[1][1]/fBooneNtp.ini_mom[1][2] ;
