@@ -35,6 +35,8 @@ add_subdirectory(LLSelectionTool)
 add_subdirectory(LLBasicTool)
 add_subdirectory(LLApp)
 add_subdirectory(CosmicTagging)
+add_subdirectory(QuietEventFilter)
+add_subdirectory(DLFilters)
 
 add_subdirectory(DataOverlay)
 add_subdirectory(PatternFilter)
