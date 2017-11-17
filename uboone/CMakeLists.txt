@@ -43,7 +43,7 @@ add_subdirectory(MicroBooNEPandora)
 add_subdirectory(DQMTools)
 
 
-add_subdirectory(LEEdeltaRadSinglePhoton)
+add_subdirectory(LEEPhotonAnalysis)
 
 # Respect the order specified in lar_build, which is:
 #
