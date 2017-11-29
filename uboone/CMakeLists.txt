@@ -40,7 +40,7 @@ add_subdirectory(DataOverlay)
 add_subdirectory(PatternFilter)
 add_subdirectory(MicroBooNEPandora)
 
-add_subdirectory(DQMTools)
+ add_subdirectory(DQMTools)
 
 # Respect the order specified in lar_build, which is:
 #
