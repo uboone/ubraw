@@ -136,6 +136,9 @@ larana : larreco : larreco/Deprecated/BezierTrack.h
 larana : larreco : larreco/RecoAlg/Cluster3DAlgs/PrincipalComponentsAlg.h
 larana : larreco : larreco/RecoAlg/SpacePointAlg.h
 larana : larsim : larsim/MCCheater/BackTracker.h
+larana : larsim : larsim/MCCheater/BackTrackerService.h
+larana : larsim : larsim/MCCheater/ParticleInventory.h
+larana : larsim : larsim/MCCheater/ParticleInventoryService.h
 larana : larsim : larsim/MCSTReco/MCTrackCollectionAnaAlg.h
 larana : larsim : larsim/PhotonPropagation/PhotonLibrary.h
 larana : larsim : larsim/PhotonPropagation/PhotonVisibilityService.h
@@ -1440,6 +1443,9 @@ larreco : larreco : larreco/SpacePointSolver/QuadExpr.h
 larreco : larreco : larreco/SpacePointSolver/Solver.h
 larreco : larreco : larreco/TrackFinder/TrackMaker.h
 larreco : larsim : larsim/MCCheater/BackTracker.h
+larreco : larsim : larsim/MCCheater/BackTrackerService.h
+larreco : larsim : larsim/MCCheater/ParticleInventory.h
+larreco : larsim : larsim/MCCheater/ParticleInventoryService.h
 larreco : larsim : larsim/Simulation/LArG4Parameters.h
 larreco : larsim : larsim/Simulation/LArVoxelData.h
 larreco : larsim : larsim/Simulation/LArVoxelID.h
@@ -1568,6 +1574,7 @@ larsim : larsim : larsim/LArG4/ParticleListAction.h
 larsim : larsim : larsim/LArG4/PhysicsList.h
 larsim : larsim : larsim/LArG4/VisualizationAction.h
 larsim : larsim : larsim/MCCheater/BackTracker.h
+larsim : larsim : larsim/MCCheater/BackTrackerService.h
 larsim : larsim : larsim/MCCheater/ParticleInventory.h
 larsim : larsim : larsim/MCCheater/ParticleInventoryService.h
 larsim : larsim : larsim/MCCheater/PhotonBackTracker.h
@@ -1829,6 +1836,9 @@ uboonecode : larreco : larreco/Deprecated/BezierTrack.h
 uboonecode : larreco : larreco/RecoAlg/SpacePointAlg.h
 uboonecode : larreco : larreco/RecoAlg/TrackMomentumCalculator.h
 uboonecode : larsim : larsim/MCCheater/BackTracker.h
+uboonecode : larsim : larsim/MCCheater/BackTrackerService.h
+uboonecode : larsim : larsim/MCCheater/ParticleInventory.h
+uboonecode : larsim : larsim/MCCheater/ParticleInventoryService.h
 uboonecode : larsim : larsim/PhotonPropagation/PhotonLibrary.h
 uboonecode : larsim : larsim/PhotonPropagation/PhotonVisibilityService.h
 uboonecode : larsim : larsim/Simulation/LArG4Parameters.h
