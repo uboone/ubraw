@@ -1,0 +1,44 @@
+process_name: CRTRawtoCRTHit
+#include "services_microboone.fcl"
+#include "sam_microboone.fcl"
+##include "subevent_module.fcl"
+
+services:
+{
+	TFileService		: { fileName: "CRTRawtoCRTHit_QP_%ifb_%tc_%#.root" }
+	TimeTracker		: {}
+	RandomNumberGenerator	: {}
+}
+
+source:
+{
+	module_type	:CRTRawtoCRTHit
+	fileNames       :[]
+	ModuleLabel	:"crthit"
+	InstanceLabel	:""
+	run_mode: 3   #3=beam, 11=all
+	Nr_Files: 0   
+	Offset: 40000 #ns
+	verbose:0
+	CRTpositions_file: "/uboone/app/users/dlorca/testberncode_june/larsoft_v06_36_00/srcs/uboonecode/uboone/CRT/CRTpositionsSiPM-V8.txt"
+	FEBDelays_file: "/uboone/app/users/dlorca/testberncode_june/larsoft_v06_36_00/srcs/uboonecode/uboone/CRT/FEB_CableDelay-V8.txt"
+      	CRTgains_file: "/uboone/app/users/dlorca/testberncode_june/larsoft_v06_36_00/srcs/uboonecode/uboone/CRT/CRTgains-V8.txt"
+      	CRTpedestals_file: "/uboone/app/users/dlorca/testberncode_june/larsoft_v06_36_00/srcs/uboonecode/uboone/CRT/CRTpedestals-V8.txt"
+}
+
+outputs:
+{
+	out1:
+	{
+		module_type	: RootOutput
+		fileName	: "CRTHits_%ifb_%tc_%#.root" 
+		compressionLevel: 1
+		dataTier	: "raw"
+	}
+}
+
+physics:
+{
+	stream1		: [out1]
+	end_paths	: [stream1]
+}
