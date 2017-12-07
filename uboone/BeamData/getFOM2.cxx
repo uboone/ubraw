@@ -327,12 +327,16 @@ void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double&
     if (-mwdata[i]-minx    > (maxx-minx)*0.2)                last_x=i+1;
     hProf->SetBinError(i+1,(maxx-minx)*0.02);
   }
-  hProf->Fit("gaus","Q0","",-12+first_x*0.5,-12+last_x*0.5);
-  
-  x   =hProf->GetFunction("gaus")->GetParameter(1);
-  sx  =hProf->GetFunction("gaus")->GetParameter(2);
-  chi2=hProf->GetFunction("gaus")->GetChisquare()/hProf->GetFunction("gaus")->GetNDF();
-
+  if (hProf->GetSumOfWeights()>0) {
+    hProf->Fit("gaus","Q0","",-12+first_x*0.5,-12+last_x*0.5);
+    x   =hProf->GetFunction("gaus")->GetParameter(1);
+    sx  =hProf->GetFunction("gaus")->GetParameter(2);
+    chi2=hProf->GetFunction("gaus")->GetChisquare()/hProf->GetFunction("gaus")->GetNDF();
+  } else {
+    x=99999;
+    sx=99999;
+    chi2=99999;
+  }
 }
 
 double bmd::calcFOM2(double horpos, double horang, double verpos, double verang, double ppp, double tgtsx, double tgtsy)
