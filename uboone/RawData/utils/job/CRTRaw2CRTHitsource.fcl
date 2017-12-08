@@ -32,10 +32,10 @@ source:
 	Nr_Files: 0   
 	Offset: 40000 #ns
 	verbose:0
-	CRTpositions_file: "/pnfs/uboone/scratch/users/echurch/crt/CRTpositionsSiPM-V8.txt"
-	FEBDelays_file: "/pnfs/uboone/scratch/users/echurch/crt/FEB_CableDelay-V8.txt"
-      	CRTgains_file: "/pnfs/uboone/scratch/users/echurch/crt/CRTgains-V8.txt"
-      	CRTpedestals_file: "/pnfs/uboone/scratch/users/echurch/crt/CRTpedestals-V8.txt"
+	CRTpositions_file: "CRTpositionsSiPM-V8.txt"
+	FEBDelays_file: "FEB_CableDelay-V8.txt"
+      	CRTgains_file: "CRTgains-V8.txt"
+      	CRTpedestals_file: "CRTpedestals-V8.txt"
 }
 
 outputs:
