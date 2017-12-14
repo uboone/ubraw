@@ -100,7 +100,8 @@ microboone_reco_notpc_filters.opflashfilternumi.DisableFilter: false
 microboone_reco_notpc_filters.swtrigbnb.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnb.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnb.IncludeBits: [ "TriggerBNB" ]
-microboone_reco_notpc_filters.swtrigbnb.includeSoftwareTriggers: [ "BNB_FEMBeamTriggerAlgo" ]
+microboone_reco_notpc_filters.swtrigbnb.includeSoftwareTriggers: [ "BNB_FEMBeamTriggerAlgo",
+								   "BNB_2017Dec_SWTrigger5PE_FEMBeamTriggerAlgo" ]
 
 microboone_reco_notpc_filters.swtrigbnbunbiased.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnbunbiased.SoftwareTriggerProducer: "daq"
@@ -111,7 +112,8 @@ microboone_reco_notpc_filters.swtrigbnbhsnc0.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnbhsnc0.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnbhsnc0.IncludeBits: [ "TriggerBNB" ]
 microboone_reco_notpc_filters.swtrigbnbhsnc0.includeSoftwareTriggers: [ "BNB_HSN_c0_FEMBeamTriggerAlgo" ]
-microboone_reco_notpc_filters.swtrigbnbhsnc0.excludeSoftwareTriggers: [ "BNB_FEMBeamTriggerAlgo" ]
+microboone_reco_notpc_filters.swtrigbnbhsnc0.excludeSoftwareTriggers: [ "BNB_FEMBeamTriggerAlgo",
+								      	"BNB_2017Dec_SWTrigger5PE_FEMBeamTriggerAlgo" ]
 
 microboone_reco_notpc_filters.swtrignumi.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrignumi.SoftwareTriggerProducer: "daq"
@@ -126,7 +128,8 @@ microboone_reco_notpc_filters.swtrignumiunbiased.includeSoftwareTriggers: [ "NUM
 microboone_reco_notpc_filters.swtrigextbnb.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigextbnb.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigextbnb.IncludeBits: [ "TriggerEXT" ]
-microboone_reco_notpc_filters.swtrigextbnb.includeSoftwareTriggers: [ "EXT_BNBwin_FEMBeamTriggerAlgo" ]
+microboone_reco_notpc_filters.swtrigextbnb.includeSoftwareTriggers: [ "EXT_BNBwin_FEMBeamTriggerAlgo",
+								      "EXT_BNBwin_2017Dec_SWTrigger5PE_FEMBeamTriggerAlgo" ]
 
 microboone_reco_notpc_filters.swtrigextnumi.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigextnumi.SoftwareTriggerProducer: "daq"
