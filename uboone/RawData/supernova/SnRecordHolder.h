@@ -16,6 +16,9 @@
 
 namespace snassembler {
 
+  uint32_t resolveFrame(uint32_t frameCourse,uint32_t frameFine, uint32_t bitmask);
+
+
 struct SnRecordHolder {
 
   SnRecordHolder(std::shared_ptr<gov::fnal::uboone::datatypes::ub_EventRecord> ev)

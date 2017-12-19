@@ -34,6 +34,7 @@
 #include "../BeamDAQ/beamRunHeader.h"
 #include "../BeamDAQ/beamDAQConfig.h"
 #include "getFOM.h"
+#include "getFOM2.h"
 
 #include <iostream>
 #include <iomanip>
@@ -62,7 +63,6 @@ namespace {
   std::string get_raw_ancestor(const std::string& filename, uint32_t run, uint32_t subrun)
   {
     art::ServiceHandle<ifdh_ns::IFDH> ifdh;
-
     std::ostringstream dim;
     dim << "isparentof: ( file_name " << filename << ")"
 	<< " and run_number " << run << "." << subrun
@@ -116,6 +116,8 @@ public:
   int compareTime(ub_BeamHeader& bh, art::Event& e, float dt, float offsetT);
   void createBranches(std::string beam);
   void fillTreeData(std::string beam, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd);
+  void addPOT(std::string beam, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd);
+  void removePOT(std::string beam, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd);
 
 private:
 
@@ -135,6 +137,7 @@ private:
     float fDt;
     uint32_t fTriggerMask;
     bool fWriteBeamData;
+    int fFOMversion;
     float fFOMcut;
     TTree* fTree;
     std::map<std::string, double> fTreeVar;
@@ -151,18 +154,24 @@ private:
   float fFOM;
   std::string fInputFileName;
 
+  std::map<std::string,bool> fCreateBranches;
   bool fFetchBeamData;
   std::string fBDAQfhicl;
+
+  boost::posix_time::ptime fSubrunT0;
+  boost::posix_time::ptime fSubrunT1;
+  std::map<std::string, boost::posix_time::ptime> fTLast;
 };
 
 BeamData::BeamData(fhicl::ParameterSet const & p)
-// :
+//  :
 // Initialize member data here.
 {
+  std::cout<<"Init BeamData"<<std::endl;
   // Set timezone to Fermilab.
   setenv("TZ", "CST+6CDT", 1);
   tzset();
-
+  
   // Call appropriate produces<>() functions here.
   fBeams=p.get<std::vector<std::string> >("beams");
   for (unsigned int i=0;i<fBeams.size();i++) {
@@ -177,11 +186,14 @@ BeamData::BeamData(fhicl::ParameterSet const & p)
     bconf.fTriggerMask=pbeam.get<uint32_t>("trigger_mask");
     bconf.fOffsetT=pbeam.get<float>("time_offset");
     bconf.fDt=pbeam.get<float>("merge_time_tolerance");
+    bconf.fFOMversion=pbeam.get<int>("FOM_version");
     bconf.fFOMcut=pbeam.get<float>("FOM_cut");
     bconf.fFilePath=pbeam.get<std::string>("path_to_beam_file");
     bconf.fWriteBeamData=pbeam.get<bool>("write_beam_data");
     std::pair<std::string, BeamConf_t> p(fBeams[i],bconf);
     fBeamConf.insert(p);
+    std::pair<std::string, bool> p2(fBeams[i],true);
+    fCreateBranches.insert(p2);
   }
   
   fFetchBeamData=p.get<bool>("fetch_beam_data");
@@ -195,7 +207,7 @@ BeamData::BeamData(fhicl::ParameterSet const & p)
       //create branches once the file is open
     }
   }
-
+  
   produces< raw::BeamInfo >();  
   for (auto& it_beamline : fBeamConf ) {
     for (auto& it_dev : it_beamline.second.fTotalSums ) {
@@ -290,15 +302,20 @@ void BeamData::beginSubRun(art::SubRun & sr)
  
     boost::posix_time::time_duration zoneOffset = boost::posix_time::second_clock::local_time()-boost::posix_time::second_clock::universal_time();
 
-    boost::posix_time::ptime pt0= boost::posix_time::from_time_t(tstart)+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(tstart_us);
-    boost::posix_time::ptime pt1= boost::posix_time::from_time_t(tend)+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(tend_us);
+    fSubrunT0= boost::posix_time::from_time_t(tstart)+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(tstart_us);
+    fSubrunT1= boost::posix_time::from_time_t(tend)+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(tend_us);
 
     gov::fnal::uboone::beam::beamRun brm;
     gov::fnal::uboone::beam::beamRunHeader rh;
     rh.fRun=fRun;
     rh.fSubRun=fSubRun;
-    brm.StartRun(rh,pt0);
-    brm.EndRun(pt1);
+    brm.StartRun(rh,fSubrunT0);
+    brm.EndRun(fSubrunT1);
+    
+    //need to pad beginning and end time to account for possible time diff between detector and beam time and make 
+    //sure first and last event are not discarded in if (tevent<fSubrunT0 || tevent>fSubrunT1) statement
+    fSubrunT0=fSubrunT0- boost::posix_time::microseconds(20000);
+    fSubrunT1=fSubrunT1+ boost::posix_time::microseconds(20000);
   }
   
   mf::LogInfo(__FUNCTION__)<<"Open beam files for run "<<sr.run()
@@ -334,6 +351,11 @@ void BeamData::beginSubRun(art::SubRun & sr)
       fBeamConf[fBeams[ibeam]].fFileName=fname.str();
       fBeamConf[fBeams[ibeam]].fTotalSpillCount=0;
       fBeamConf[fBeams[ibeam]].fGoodSpillCount=0;
+      for (auto it=fBeamConf[fBeams[ibeam]].fTotalSums.begin();
+	   it!=fBeamConf[fBeams[ibeam]].fTotalSums.end();it++) {
+	fBeamConf[fBeams[ibeam]].fTotalSums[it->first]=0;
+	fBeamConf[fBeams[ibeam]].fGoodSums[it->first]=0;
+      }
       fBeamConf[fBeams[ibeam]].fNonMergedEventCount=0;
       fBeamConf[fBeams[ibeam]].fMergedEventCount=0;
       fBeamConf[fBeams[ibeam]].fBeamStream=fin;
@@ -347,7 +369,7 @@ void BeamData::beginSubRun(art::SubRun & sr)
   mf::LogInfo(__FUNCTION__) <<ss.str();
 
   for (auto& it : fBeamConf) 
-    if (it.second.fWriteBeamData) createBranches(it.first);
+    if (fCreateBranches[it.first] && it.second.fWriteBeamData) createBranches(it.first);
 }
 
 void BeamData::endSubRun(art::SubRun & sr)
@@ -361,8 +383,21 @@ void BeamData::endSubRun(art::SubRun & sr)
       ub_BeamHeader bh;
       std::vector<ub_BeamData> bd;
       if (nextBeamEvent(it->first,bh,bd)) {
-	if (fBeamConf[it->first].fWriteBeamData) 
-	  fillTreeData(it->first,bh,bd);
+	boost::posix_time::time_duration zoneOffset = boost::posix_time::second_clock::local_time()-boost::posix_time::second_clock::universal_time();
+	boost::posix_time::ptime tevnt= boost::posix_time::from_time_t(bh.getSeconds())+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(bh.getMilliSeconds()*1000)+ boost::posix_time::microseconds(fBeamConf[it->first].fOffsetT*1000);
+	//calculate FOM
+	if (fBeamConf[it->first].fFOMversion==1) {
+	  fFOM=bmd::getFOM(it->first,bh,bd);
+	} else if(fBeamConf[it->first].fFOMversion==2) {
+	  fFOM=bmd::getFOM2(it->first,bh,bd);
+	} else {
+	  mf::LogError(__FUNCTION__)<<"Unkown FOM version!";
+	}
+	if (tevnt>fSubrunT0 && tevnt<=fSubrunT1) {
+	  if (fBeamConf[it->first].fWriteBeamData) 
+	    fillTreeData(it->first,bh,bd);
+	  addPOT(it->first,bh,bd);
+	}
       } else {
 	break;
       }
@@ -524,12 +559,31 @@ void BeamData::produce(art::Event & e)
     std::vector<ub_BeamData> bd;
     if (nextBeamEvent(beam_name,bh,bd)) {
       int comp=compareTime(bh,e,fBeamConf[beam_name].fDt, fBeamConf[beam_name].fOffsetT);
+      boost::posix_time::time_duration zoneOffset = boost::posix_time::second_clock::local_time()-boost::posix_time::second_clock::universal_time();
+      boost::posix_time::ptime tevnt= boost::posix_time::from_time_t(bh.getSeconds())+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(bh.getMilliSeconds()*1000)+ boost::posix_time::microseconds(fBeamConf[beam_name].fOffsetT*1000);
+
+      if (tevnt<fSubrunT0 || tevnt>fSubrunT1) {
+	mf::LogInfo(__FUNCTION__)<<"Event time not consistent with subrun begin/end "
+				 <<tevnt<<"\t"<<fSubrunT0<<"\t"<<fSubrunT1;
+	continue;
+      }
+      //calculate FOM
+      if (fBeamConf[beam_name].fFOMversion==1) {
+	fFOM=bmd::getFOM(beam_name,bh,bd);
+      } else if(fBeamConf[beam_name].fFOMversion==2) {
+	fFOM=bmd::getFOM2(beam_name,bh,bd);
+      } else {
+	mf::LogError(__FUNCTION__)<<"Unkown FOM version!";
+      }
       switch (comp) {
       case -1:
 	mf::LogDebug(__FUNCTION__)<<"Beam event before";
 	ready_for_next_det_event=false;
+
 	if (fBeamConf[beam_name].fWriteBeamData) 
 	  fillTreeData(beam_name,bh,bd);
+	addPOT(beam_name,bh,bd);
+
 	break;
       case 0:
 	mf::LogDebug(__FUNCTION__)<<"Found beam match";
@@ -543,12 +597,12 @@ void BeamData::produce(art::Event & e)
 	  for (int i=0;i<bh.getNumberOfDevices();i++) 
 	    beam_info->Set(bd[i].getDeviceName(),bd[i].getData());
 
-	  //calculate FOM
-	  beam_info->Set("FOM",bmd::getFOM(beam_name,bh,bd));
+	  beam_info->Set("FOM",fFOM);
 	}
 	ready_for_next_det_event=true;
 	if (fBeamConf[beam_name].fWriteBeamData) 
 	  fillTreeData(beam_name,bh,bd);
+	addPOT(beam_name,bh,bd);
 	break;
       case 1:
 	mf::LogDebug(__FUNCTION__)<<"Beam event after";
@@ -580,30 +634,48 @@ bool BeamData::nextBeamEvent(std::string beamline, ub_BeamHeader &bh, std::vecto
       ia_beam>>bdata;
       bd.push_back(bdata);
     }
-    fFOM=bmd::getFOM(beamline,bh,bd);
-    for (auto& bdata : bd) {
-      for (auto it=fBeamConf[beamline].fTotalSums.begin();
-	   it!=fBeamConf[beamline].fTotalSums.end();it++) {
-	if (bdata.getDeviceName().find(it->first)!=std::string::npos) {
-	  fBeamConf[beamline].fTotalSums[it->first]+=bdata.getData()[0];
-	  if (fFOM>fBeamConf[beamline].fFOMcut) 
-	    fBeamConf[beamline].fGoodSums[it->first]+=bdata.getData()[0];
-	}
-      }
-    }
     std::streampos endpos=file_in->tellg();
     bh.setNumberOfBytesInRecord(endpos-begpos);
-    fBeamConf[beamline].fTotalSpillCount+=1;
-    if (fFOM>fBeamConf[beamline].fFOMcut) 
-      fBeamConf[beamline].fGoodSpillCount+=1;
   } catch ( ... ) {
     mf::LogInfo(__FUNCTION__)<<"Reached end of beam file "<<fBeamConf[beamline].fFileName;
     result=false;
   }
-  mf::LogInfo(__FUNCTION__)<<"Returning beam event "<<bh.getSeconds()<<"\t"<<bh.getMilliSeconds();
+  mf::LogDebug(__FUNCTION__)<<"Returning beam event "<<bh.getSeconds()<<"\t"<<bh.getMilliSeconds();
   return result;
 }
 
+void BeamData::addPOT(std::string beamline, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd)
+{
+  for (auto& bdata : bd) {
+    for (auto it=fBeamConf[beamline].fTotalSums.begin();
+	 it!=fBeamConf[beamline].fTotalSums.end();it++) {
+      if (bdata.getDeviceName().find(it->first)!=std::string::npos) {
+	fBeamConf[beamline].fTotalSums[it->first]+=bdata.getData()[0];
+	if (fFOM>fBeamConf[beamline].fFOMcut) 
+	  fBeamConf[beamline].fGoodSums[it->first]+=bdata.getData()[0];
+      }
+    }
+  }
+  fBeamConf[beamline].fTotalSpillCount+=1;
+  if (fFOM>fBeamConf[beamline].fFOMcut) 
+    fBeamConf[beamline].fGoodSpillCount+=1;
+}
+void BeamData::removePOT(std::string beam_name, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd)
+{
+  for (auto& bdata : bd) {
+    for (auto it=fBeamConf[beam_name].fTotalSums.begin();
+	 it!=fBeamConf[beam_name].fTotalSums.end();it++) {
+      if (bdata.getDeviceName().find(it->first)!=std::string::npos) {
+	fBeamConf[beam_name].fTotalSums[it->first]-=bdata.getData()[0];
+	if (fFOM>fBeamConf[beam_name].fFOMcut) 
+	  fBeamConf[beam_name].fGoodSums[it->first]-=bdata.getData()[0];
+      }
+    }
+  }
+  fBeamConf[beam_name].fTotalSpillCount-=1;
+  if (fFOM>fBeamConf[beam_name].fFOMcut) 
+    fBeamConf[beam_name].fGoodSpillCount-=1;     
+}
 bool BeamData::rewindBeamFile(std::string beam_name, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd)
 {
   bool result=true;
@@ -611,20 +683,6 @@ bool BeamData::rewindBeamFile(std::string beam_name, const ub_BeamHeader& bh, co
     //rewind beam file
     std::streampos nbytes=bh.getNumberOfBytesInRecord();
     fBeamConf[beam_name].fBeamStream->seekg(fBeamConf[beam_name].fBeamStream->tellg()-nbytes);
-    fFOM=bmd::getFOM(beam_name,bh,bd);
-    for (auto& bdata : bd) {
-      for (auto it=fBeamConf[beam_name].fTotalSums.begin();
-	   it!=fBeamConf[beam_name].fTotalSums.end();it++) {
-	if (bdata.getDeviceName().find(it->first)!=std::string::npos) {
-	  fBeamConf[beam_name].fTotalSums[it->first]-=bdata.getData()[0];
-	  if (fFOM>fBeamConf[beam_name].fFOMcut) 
-	    fBeamConf[beam_name].fGoodSums[it->first]-=bdata.getData()[0];
-	}
-      }
-    }
-    fBeamConf[beam_name].fTotalSpillCount-=1;
-    if (fFOM>fBeamConf[beam_name].fFOMcut) 
-      fBeamConf[beam_name].fGoodSpillCount-=1;     
   } catch ( ... ) {
     mf::LogError(__FUNCTION__)<<"Failed to rewind file "<<fBeamConf[beam_name].fFileName;
     result=false;
@@ -671,9 +729,17 @@ int BeamData::compareTime(ub_BeamHeader& bh, art::Event& e, float dt, float offs
 void BeamData::fillTreeData(std::string beam, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd)
 {
   mf::LogDebug(__FUNCTION__)<<"Filling "<<beam<<" ntuple";
-  fFOM=bmd::getFOM(beam, bh,bd);
   fSeconds=bh.getSeconds();
   fMilliSeconds=bh.getMilliSeconds();
+
+  boost::posix_time::time_duration zoneOffset = boost::posix_time::second_clock::local_time()-boost::posix_time::second_clock::universal_time();
+
+  boost::posix_time::ptime tevnt= boost::posix_time::from_time_t(fSeconds)+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(fMilliSeconds*1000);
+
+  if (!fTLast[beam].is_not_a_date_time() && tevnt<fTLast[beam]) {
+    mf::LogInfo(__FUNCTION__)<<"Event already written";
+    return;
+  } 
 
   for (int i=0;i<bh.getNumberOfDevices();i++) {
     std::string varname=bd[i].getDeviceName();
@@ -687,6 +753,7 @@ void BeamData::fillTreeData(std::string beam, const ub_BeamHeader& bh, const std
     }
   }
   fBeamConf[beam].fTree->Fill();
+  fTLast[beam]=tevnt;
 }
 
 void BeamData::createBranches(std::string beam) 
@@ -751,7 +818,7 @@ void BeamData::createBranches(std::string beam)
 
   }
   mf::LogDebug(__FUNCTION__)<<ss.str();
-  
+  fCreateBranches[beam]=false;
 }
 
 DEFINE_ART_MODULE(BeamData)
