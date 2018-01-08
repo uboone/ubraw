@@ -46,7 +46,7 @@ namespace snassembler {
 
   private:
 
-    art::SourceHelper              fSourceHelper;
+    art::SourceHelper const&       fSourceHelper;
     art::SubRunID                  fCurrentSubRunID;
     std::unique_ptr<DaqFile>       fDaqFile;
     std::map< opdet::UBOpticalChannelCategory_t, std::string > fPMTdataProductNames;
