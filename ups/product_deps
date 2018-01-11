@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent uboonecode v06_62_00
+parent uboonecode v06_63_00
 defaultqual e14
 
 # These optional lines define where headers, libraries, and executables go and should
@@ -35,12 +35,12 @@ table_fragment_end
 product          version
 swtrigger       v02_02_05c
 genie_xsec      v2_12_8
-larsoft         v06_62_00
-ubutil          v06_62_00
+larsoft         v06_63_00
+ubutil          v06_63_00
 uboonedata      v01_18_05
 uboonedaq_datatypes v6_19_03_e14
 
-cetbuildtools	v6_01_00	-	only_for_build
+cetbuildtools	v6_01_01	-	only_for_build
 end_product_list
 
 
