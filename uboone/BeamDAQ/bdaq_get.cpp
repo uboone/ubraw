@@ -80,8 +80,7 @@ int main(int ac, char* av[])
   beamDAQConfig* bdconfig=beamDAQConfig::GetInstance();
 
   //start message facility
-  mf::StartMessageFacility( mf::MessageFacilityService::MultiThread,
-			    bdconfig->GetParameterSet().get<fhicl::ParameterSet>("message_facility"));
+  mf::StartMessageFacility( bdconfig->GetParameterSet().get<fhicl::ParameterSet>("message_facility"));
   mf::SetApplicationName( "BeamDAQ" );
 
   int run=vm["run-number"].as<int>();
