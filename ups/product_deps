@@ -33,6 +33,7 @@ table_fragment_end
 # Add the dependent product and version
 
 product          version
+<<<<<<< HEAD
 swtrigger       v02_02_05c
 genie_xsec      v2_12_8
 larsoft         v06_64_00
@@ -41,17 +42,30 @@ uboonedata      v01_18_05
 uboonedaq_datatypes v6_19_03_e14
 
 cetbuildtools	v6_01_01	-	only_for_build
+gallery         v1_03_12
+artdaq_core 	v1_07_02
+
+
 end_product_list
 
 
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
 # Make a table by adding columns before "notes". 
+
 # e14  - with gcc 6.3.0 and -std=c++1y
+<<<<<<< HEAD
 qualifier	swtrigger	genie_xsec	larsoft		ubutil		uboonedata	uboonedaq_datatypes	notes
 e14:debug	e14:debug	DefaultPlusMECWithNC	e14:debug	e14:debug	-nq-		e14:debug
 e14:opt		e14:opt		DefaultPlusMECWithNC	e14:opt		e14:opt		-nq-        	e14:opt
 e14:prof	e14:prof	DefaultPlusMECWithNC	e14:prof	e14:prof	-nq-        	e14:prof
 e14:prof:fg	e14:prof	LocalFGNievesQEAndMEC	e14:prof	e14:prof	-nq-        	e14:prof
+=======
+qualifier	swtrigger	genie_xsec	larsoft		ubutil		uboone_data	uboonedaq_datatypes	gallery         artdaq_core
+e14:debug	e14:debug	DefaultPlusMECWithNC	e14:debug	e14:debug	-nq-		e14:debug	e14:debug:nu    e14:s48:nu:debug
+e14:opt		e14:opt		DefaultPlusMECWithNC	e14:opt		e14:opt		-nq-        	e14:opt		e14:opt:nu	e14:s48:nu:prof
+e14:prof	e14:prof	DefaultPlusMECWithNC	e14:prof	e14:prof	-nq-        	e14:prof	e14:prof:nu	e14:s48:nu:prof
+e14:prof:fg	e14:prof	LocalFGNievesQEAndMEC	e14:prof	e14:prof	-nq-        	e14:prof	e14:prof:nu	e14:s48:nu:prof
+>>>>>>> feature/CRT_v063600_nobfdc
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
