@@ -23,6 +23,9 @@
 #include "datatypes/ub_EventRecord.h"
 #include "uboone/RawData/utils/ubdaqSoftwareTriggerData.h"
 
+//root
+#include "TTree.h"
+
 #include "uboone/Geometry/UBOpChannelTypes.h"
 #include "lardata/Utilities/DatabaseUtil.h" // lardata
 
@@ -106,7 +109,7 @@ namespace lris {
     
     double _trigger_beam_window_time;
 
-    art::SourceHelper            fSourceHelper;
+    art::SourceHelper const&       fSourceHelper;
     art::SubRunID                  fCurrentSubRunID;
     std::ifstream                  fInputStream;
     std::vector<std::streampos>    fEventLocation;

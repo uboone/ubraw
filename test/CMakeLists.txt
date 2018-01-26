@@ -12,5 +12,6 @@ add_subdirectory(RecoObjects)
 add_subdirectory(test_fcl)
 add_subdirectory(Production)
 add_subdirectory(SpaceCharge)
+add_subdirectory(SparseRawDigits)
 
 add_subdirectory(ci)
