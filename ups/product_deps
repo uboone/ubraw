@@ -44,8 +44,8 @@ uboonedaq_datatypes v6_19_03_e14
 cetbuildtools	v6_01_01	-	only_for_build
 #gallery         v1_03_12
 gallery         v1_05_03
-#artdaq_core 	v1_07_02
-artdaq_core 	v1_07_12
+
+#artdaq_core 	v1_07_12
 
 
 end_product_list
