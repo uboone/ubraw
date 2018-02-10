@@ -44,6 +44,7 @@ add_subdirectory(MicroBooNEPandora)
 add_subdirectory(MicroBooNEWireCell)
 add_subdirectory(FakeNEWS)
 add_subdirectory(DQMTools)
+add_subdirectory(BurstNoiseMetrics)
 
 # Respect the order specified in lar_build, which is:
 #
