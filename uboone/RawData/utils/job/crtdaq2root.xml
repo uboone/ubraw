@@ -1,0 +1,65 @@
+<!-- Production Project -->
+
+<!DOCTYPE project [
+<!ENTITY uBversion "v06_36_00">
+<!ENTITY file_type "data">
+<!ENTITY run_type "physics">
+<!ENTITY proj_name "crtdaq2CRTHits">
+<!ENTITY file_path_ec "/pnfs/uboone/scratch/users/echurch/work/run/">
+<!ENTITY projStage "dev">
+]>
+
+<project name="&proj_name;">
+        <check>1</check>
+	
+        <!-- <group>uboone</group> -->
+	
+        <!-- Project size -->
+        <numevents>10000000000</numevents>
+	
+        <memory>4000</memory>
+        <!-- <disk>50GB</disk> -->
+	
+        <!-- Operating System -->
+        <os>SL6</os>
+	<!--        <script>&file_path_ec;condor_lar_ec.sh</script> -->
+
+	
+        <!-- Batch resources -->
+        <resource>DEDICATED,OPPORTUNISTIC</resource>
+	
+        <!-- <maxfilesperjob>1</maxfilesperjob> -->
+	
+        <!-- Larsoft information -->
+        <larsoft>
+          <tag>&uBversion;</tag>
+          <qual>e14:debug</qual>
+	  <!--<local>/uboone/app/users/kolahalb/MicroBooNE/Swizzler/crtdaq2artroot/uboonecode/uBooNEbern.tar.gz</local>-->
+	  <local>&file_path_ec;convert_crt.tgz</local>
+        </larsoft>
+	
+        <!-- Project stages -->
+	
+        <stage name="crtdaq2artroot">
+          <!--<fcldir>/uboone/app/users/echurch/lgm4/debug.slf6.v06_36_00/run</fcldir>-->
+
+	  <inputfile>/uboone/data/users/echurch/crt/ProdRun20170604_081007-crt01.1.crtdaq</inputfile>
+	  <!--<inputdef>kb_crtdef</inputdef>-->
+	  <fcl>CRTRaw2CRTHitsource.fcl</fcl>
+          <outdir>/pnfs/uboone/scratch/users/echurch/work/&proj_name;/&uBversion;/&projStage;</outdir>
+          <logdir>/pnfs/uboone/scratch/users/echurch/work/&proj_name;/&uBversion;/&projStage;</logdir>
+          <workdir>/pnfs/uboone/scratch/users/echurch/work/&proj_name;/&uBversion;/&projStage;</workdir>
+
+          <numjobs>1</numjobs>
+          <!-- <output>kb_test_${PROCESS}_%tc.root</output> -->
+          <datatier>swizzled</datatier>
+          <defname>crtdaq_to_artroot_ec</defname>
+        </stage>
+	
+        <!-- file type -->
+        <filetype>&file_type;</filetype>
+	
+        <!-- run type -->
+        <runtype>&run_type;</runtype>
+	
+</project>
