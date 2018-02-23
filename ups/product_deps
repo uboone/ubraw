@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent uboonecode v06_68_00
+parent uboonecode v06_69_00
 defaultqual e15
 
 # These optional lines define where headers, libraries, and executables go and should
@@ -36,8 +36,8 @@ product          version
 swtrigger       v02_02_05e
 
 genie_xsec      v2_12_8
-larsoft         v06_68_00
-ubutil          v06_68_00
+larsoft         v06_69_00
+ubutil          v06_69_00
 uboonedata      v01_18_06
 uboonedaq_datatypes v6_20_00_e15
 
@@ -45,7 +45,7 @@ uboonedaq_datatypes v6_20_00_e15
 
 gallery         v1_06_04
 artdaq_core 	v3_00_08
-cetbuildtools	v7_00_02	-	only_for_build
+cetbuildtools	v7_00_03	-	only_for_build
 
 end_product_list
 
