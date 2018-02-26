@@ -59,6 +59,7 @@ microboone_reco_notpc_filters: {
   swtrigextbnb:       @local::trigger_enforcement
   swtrigextnumi:      @local::trigger_enforcement
   swtrigextunbiased:  @local::trigger_enforcement
+  swtrigexthsnc0:     @local::trigger_enforcement
 
 
   opflashfilter:      @local::microboone_flashtrigger
@@ -140,5 +141,12 @@ microboone_reco_notpc_filters.swtrigextunbiased.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigextunbiased.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigextunbiased.IncludeBits: [ "TriggerEXT" ]
 microboone_reco_notpc_filters.swtrigextunbiased.includeSoftwareTriggers: [ "EXT_unbiased_PrescaleAlgo" ]
+
+microboone_reco_notpc_filters.swtrigexthsnc0.HardwareTriggerProducer: "daq"
+microboone_reco_notpc_filters.swtrigexthsnc0.SoftwareTriggerProducer: "daq"
+microboone_reco_notpc_filters.swtrigexthsnc0.IncludeBits: [ "TriggerEXT" ]
+microboone_reco_notpc_filters.swtrigexthsnc0.includeSoftwareTriggers: [ "EXT_HSN_c0_FEMBeamTriggerAlgo" ]
+microboone_reco_notpc_filters.swtrigexthsnc0.excludeSoftwareTriggers: [ "EXT_BNBwin_FEMBeamTriggerAlgo",
+								        "EXT_BNBwin_2017Dec_SWTrigger5PE_FEMBeamTriggerAlgo" ]
 
 END_PROLOG
