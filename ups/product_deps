@@ -36,6 +36,7 @@ larsoft         v05_08_00_01
 ubutil          v01_39_05_06
 uboone_data     v01_05_00
 uboonedaq_datatypes v6_19_00a_e9
+uboone_example_data v01_00_00
 
 cetbuildtools	v4_19_04	-	only_for_build
 end_product_list
@@ -44,10 +45,10 @@ end_product_list
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
 # Make a table by adding columns before "notes". 
 # e9  - with gcc 4.9.3 and -std=c++1y
-qualifier	swtrigger	larsoft		ubutil		uboone_data	uboonedaq_datatypes	notes
-e9:debug	e9:debug	e9:debug	e9:debug	-nq-		e9:debug
-e9:opt		e9:opt		e9:opt		e9:opt		-nq-        	e9:opt
-e9:prof		e9:prof		e9:prof		e9:prof		-nq-        	e9:prof
+qualifier	swtrigger	larsoft		ubutil		uboone_data	uboonedaq_datatypes	uboone_example_data	notes
+e9:debug	e9:debug	e9:debug	e9:debug	-nq-		e9:debug		-nq-
+e9:opt		e9:opt		e9:opt		e9:opt		-nq-        	e9:opt			-nq-
+e9:prof		e9:prof		e9:prof		e9:prof		-nq-        	e9:prof			-nq-
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
