@@ -14,5 +14,6 @@ add_subdirectory(Production)
 add_subdirectory(SpaceCharge)
 add_subdirectory(SparseRawDigits)
 add_subdirectory(Swizzle)
+add_subdirectory(CRTSwizzle)
 
 add_subdirectory(ci)
