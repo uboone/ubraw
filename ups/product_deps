@@ -2,7 +2,8 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent uboonecode v06_69_00
+parent uboonecode v06_70_00
+
 defaultqual e15
 
 # These optional lines define where headers, libraries, and executables go and should
@@ -33,18 +34,18 @@ table_fragment_end
 # Add the dependent product and version
 
 product          version
-swtrigger       v02_02_05e
+swtrigger       v02_02_05f
 
 genie_xsec      v2_12_8
-larsoft         v06_69_00
-ubutil          v06_69_00
+larsoft         v06_70_00
+ubutil          v06_70_00
 uboonedata      v01_18_06
-uboonedaq_datatypes v6_20_00_e15
+uboonedaq_datatypes v6_20_01_e15
 
 
 
-gallery         v1_06_04
-artdaq_core 	v3_00_08
+gallery         v1_07_02
+artdaq_core 	v3_01_06
 cetbuildtools	v7_00_03	-	only_for_build
 
 end_product_list
@@ -54,10 +55,10 @@ end_product_list
 # Make a table by adding columns before "notes". 
 # e15  - with gcc 6.3.0 and -std=c++1y
 qualifier	swtrigger	genie_xsec	larsoft		ubutil		uboonedata	uboonedaq_datatypes	gallery         artdaq_core	
-e15:debug	e15:debug	DefaultPlusMECWithNC	e15:debug	e15:debug	-nq-		e15:debug	e15:debug:nu    e15:s62:nu:debug
-e15:opt		e15:opt		DefaultPlusMECWithNC	e15:opt		e15:opt		-nq-        	e15:opt		e15:opt:nu	e15:s62:nu:opt
-e15:prof	e15:prof	DefaultPlusMECWithNC	e15:prof	e15:prof	-nq-        	e15:prof	e15:prof:nu	e15:s62:nu:prof	
-e15:prof:fg	e15:prof	LocalFGNievesQEAndMEC	e15:prof	e15:prof	-nq-        	e15:prof	e15:prof:nu	e15:s62:nu:prof 
+e15:debug	e15:debug	DefaultPlusMECWithNC	e15:debug	e15:debug	-nq-		e15:debug	e15:debug    	e15:s65:debug
+e15:opt		e15:opt		DefaultPlusMECWithNC	e15:opt		e15:opt		-nq-        	e15:opt		e15:opt		e15:s65:opt
+e15:prof	e15:prof	DefaultPlusMECWithNC	e15:prof	e15:prof	-nq-        	e15:prof	e15:prof	e15:s65:prof	
+e15:prof:fg	e15:prof	LocalFGNievesQEAndMEC	e15:prof	e15:prof	-nq-        	e15:prof	e15:prof	e15:s65:prof 
 
 end_qualifier_list
 
