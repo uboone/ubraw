@@ -40,6 +40,7 @@ genie_xsec      v2_12_8
 larsoft         v06_70_00
 ubutil          v06_70_00
 uboonedata      v01_18_06
+uboone_example_data v01_00_00
 
 uboonedaq_datatypes v6_20_01_e15
 
@@ -53,11 +54,11 @@ end_product_list
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
 # Make a table by adding columns before "notes". 
 # e15  - with gcc 6.3.0 and -std=c++1y
-qualifier	swtrigger	genie_xsec	larsoft		ubutil		uboonedata	uboonedaq_datatypes	gallery         artdaq_core	
-e15:debug	e15:debug	DefaultPlusMECWithNC	e15:debug	e15:debug	-nq-		e15:debug	e15:debug    	e15:s65:debug
-e15:opt		e15:opt		DefaultPlusMECWithNC	e15:opt		e15:opt		-nq-        	e15:opt		e15:opt		e15:s65:opt
-e15:prof	e15:prof	DefaultPlusMECWithNC	e15:prof	e15:prof	-nq-        	e15:prof	e15:prof	e15:s65:prof	
-e15:prof:fg	e15:prof	LocalFGNievesQEAndMEC	e15:prof	e15:prof	-nq-        	e15:prof	e15:prof	e15:s65:prof 
+qualifier	swtrigger	genie_xsec		larsoft		ubutil		uboonedata	uboone_example_data	uboonedaq_datatypes	gallery		artdaq_core	
+e15:debug	e15:debug	DefaultPlusMECWithNC	e15:debug	e15:debug	-nq-		-nq-			e15:debug		e15:debug	e15:s65:debug
+e15:opt		e15:opt		DefaultPlusMECWithNC	e15:opt		e15:opt		-nq-		-nq-			e15:opt			e15:opt		e15:s65:opt
+e15:prof	e15:prof	DefaultPlusMECWithNC	e15:prof	e15:prof	-nq-		-nq-			e15:prof		e15:prof	e15:s65:prof	
+e15:prof:fg	e15:prof	LocalFGNievesQEAndMEC	e15:prof	e15:prof	-nq-		-nq-			e15:prof		e15:prof	e15:s65:prof
 
 end_qualifier_list
 
