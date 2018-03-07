@@ -107,6 +107,16 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_bnb_hsnc0 ]
   }
+ outbnbhsnc0:
+  {
+   module_type: RootOutput
+   fileName: "%ifb_%tc_bnb_hsnc0.root"
+   dataTier: "raw"
+   streamName: "outbnbhsnc0"
+   compressionLevel: 3
+   saveMemoryObjectThreshold: 0
+   SelectEvents: [ path_bnb_hsnc0 ]
+  }
  outnumi:
   {
    module_type: RootOutput
