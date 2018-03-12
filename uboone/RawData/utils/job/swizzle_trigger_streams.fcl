@@ -10,7 +10,6 @@
 #include "beamdata_microboone.fcl"
 #include "triggerenforcement.fcl"
 #include "time_memory_tracker_microboone.fcl" 
-
 #include "reco_uboone_data_notpc.fcl"
 
 process_name: Swizzler
@@ -20,7 +19,7 @@ services:
   TimeTracker:            @local::microboone_time_tracker
   MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
-  NuRandomService:  @local::microboone_seedservice
+  NuRandomService:        @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
   DatabaseUtil:           @local::microboone_database
   @table::microboone_reco_notpc_services
@@ -66,7 +65,7 @@ outputs:
  outbnb:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb.root"
+   fileName: "%ifb_%tc_bnb_%#.root"
    dataTier: "raw"
    streamName: "outbnb"
    compressionLevel: 3
@@ -80,7 +79,7 @@ outputs:
  outnumi:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_numi.root"
+   fileName: "%ifb_%tc_numi_%#.root"
    dataTier: "raw"
    streamName: "outnumi"
    compressionLevel: 3
@@ -94,7 +93,7 @@ outputs:
  outext:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext.root"
+   fileName: "%ifb_%tc_ext_%#.root"
    dataTier: "raw"
    streamName: "outext"
    compressionLevel: 3
@@ -108,7 +107,7 @@ outputs:
  outmucs:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_mucs.root"
+   fileName: "%ifb_%tc_mucs_%#.root"
    dataTier: "raw"
    streamName: "outmucs"
    compressionLevel: 3
@@ -122,7 +121,7 @@ outputs:
  outprescale:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_prescale.root"
+   fileName: "%ifb_%tc_prescale_%#.root"
    dataTier: "raw"
    streamName: "outprescale"
    compressionLevel: 3
@@ -136,7 +135,7 @@ outputs:
  outnotpc:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_notpc.root"
+   fileName: "%ifb_%tc_notpc_%#.root"
    dataTier: "raw"
    streamName: "outnotpc"
    compressionLevel: 3
@@ -194,7 +193,6 @@ services.message.destinations :
   {
      type:      "cout"      #tells the message service to output this destination to cout
      threshold: "WARNING"   #tells the message service that this destination applies to WARNING and higher level messages
-     append:     true       #says to append all messages to the output
      categories:
      {
        ChannelFilter:

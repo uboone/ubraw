@@ -73,7 +73,7 @@ outputs:
  out1:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc.root"
+   fileName: "%ifb_%tc_%#.root"
    dataTier: "raw"
    compressionLevel: 3
    fileProperties: {
