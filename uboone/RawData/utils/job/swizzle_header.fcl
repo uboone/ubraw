@@ -5,24 +5,24 @@
 #include "sam_microboone.fcl"
 #include "opticaldetectormodules_microboone.fcl"
 #include "triggerenforcement.fcl"
-#include "time_memory_tracker_microboone.fcl" 
-
 
 process_name: Swizzler
 services:
 {
+  scheduler: { fileMode: NOMERGE }
   TFileService: { fileName: "daq_hist.root" }
-  TimeTracker:            @local::microboone_time_tracker
-  MemoryTracker:          @local::microboone_memory_tracker
+  Timing:       {}
   RandomNumberGenerator: {} 
   FileCatalogMetadata:    @local::art_file_catalog_data
-  ExptGeoHelperInterface: @local::microboone_geometry_helper
-  Geometry:               @local::microboone_geo
-  UBOpReadoutMap:           @local::microboone_opreadoutmap
-  DetectorClocksService:            @local::microboone_detectorclocks
-  DatabaseUtil:           @local::microboone_database
+  user: {
+          ExptGeoHelperInterface: @local::microboone_geometry_helper
+          Geometry:               @local::microboone_geo
+	  UBOpReadoutMap:           @local::microboone_opreadoutmap
+          DetectorClocksService:            @local::microboone_detectorclocks
+          DatabaseUtil:           @local::microboone_database
+          }
 }
-services.DetectorClocksService.InheritClockConfig: false
+services.user.DetectorClocksService.InheritClockConfig: false
 
 microboone_tfile_metadata:
 {
@@ -33,14 +33,14 @@ microboone_tfile_metadata:
 }
 
 # Database settings
-services.DatabaseUtil.DBHostName:    "ifdbprod2.fnal.gov"
-services.DatabaseUtil.DBName:        "hootgibson_prod"
-services.DatabaseUtil.DBUser:        "uboonedaq_web"
-services.DatabaseUtil.Port:          5444
-services.DatabaseUtil.PassFileName:  "uboonedb_passwd"  # name of password file. searched for using env var FW_SEARCH_PATH
-services.DatabaseUtil.ToughErrorTreatment: true
-services.DatabaseUtil.ShouldConnect: true
-services.DatabaseUtil.TableName: "main_run"
+services.user.DatabaseUtil.DBHostName:    "ifdbprod2.fnal.gov"
+services.user.DatabaseUtil.DBName:        "hootgibson_prod"
+services.user.DatabaseUtil.DBUser:        "uboonedaq_web"
+services.user.DatabaseUtil.Port:          5444
+services.user.DatabaseUtil.PassFileName:  "uboonedb_passwd"  # name of password file. searched for using env var FW_SEARCH_PATH
+services.user.DatabaseUtil.ToughErrorTreatment: true
+services.user.DatabaseUtil.ShouldConnect: true
+services.user.DatabaseUtil.TableName: "main_run"
 
 source:
 {
@@ -48,10 +48,9 @@ source:
   module_type:	   LArRawInputSourceUBooNE
   maxEvents:       -1
   huffmanDecode:   true
-  swizzleTPC:      true
-  swizzlePMT:      true
+  swizzleTPC:      false
+  swizzlePMT:      false
   swizzleTrigger:  true
-#  UseGPS:	   true
 
   swizzleTriggerType: ALL ## This is the only option that works currently!
 #  swizzleTriggerType: BNB
@@ -73,10 +72,6 @@ outputs:
    fileName: "%ifb_%tc.root"
    dataTier: "raw"
    compressionLevel: 3
-   fileProperties: {
-     maxInputFiles: 1
-     granularity: "InputFile"
-    }
   }
 }
 
@@ -84,22 +79,22 @@ physics:
 {
   producers: {
   ### flash finders
-  ophit            : @local::microboone_ophit_beam_highgain
+  #ophit            : @local::microboone_ophit_beam_highgain
   #ophitLow         : @local::microboone_ophit_beam_lowgain
-  ophitCosmic      : @local::microboone_ophit_cosmic_highgain
+  #ophitCosmic      : @local::microboone_ophit_cosmic_highgain
   #ophitCosmicLow   : @local::microboone_ophit_cosmic_lowgain
-  opflash          : @local::microboone_opflash_beam_highgain
+  #opflash          : @local::microboone_opflash_beam_highgain
   #opflashLow       : @local::microboone_opflash_beam_lowgain
-  opflashCosmic    : @local::microboone_opflash_cosmic_highgain
+  #opflashCosmic    : @local::microboone_opflash_cosmic_highgain
   #opflashCosmicLow : @local::microboone_opflash_cosmic_lowgain
  }
  filters: {
-  triggerEnforcement: @local::trigger_enforcement
+  #triggerEnforcement: @local::trigger_enforcement
  }
- reco: [ triggerEnforcement, ophit, opflash ]
+ reco: [ ]
  stream1:   [ out1 ]
  trigger_paths: [ reco ]
  end_paths: [ stream1 ]
 }
 
-services.DetectorClocksService.TrigModuleName: "daq"
+services.user.DetectorClocksService.TrigModuleName: "daq"
