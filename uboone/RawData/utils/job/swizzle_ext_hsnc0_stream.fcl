@@ -16,11 +16,12 @@
 process_name: Swizzler
 services:
 {
+  scheduler: { fileMode: NOMERGE }
   TFileService: { fileName: "daq_hist.root" }
   TimeTracker:            @local::microboone_time_tracker
   MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
-  NuRandomService:  @local::microboone_seedservice
+  SeedService:  @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
   DatabaseUtil:           @local::microboone_database
   @table::microboone_reco_notpc_services
@@ -63,91 +64,15 @@ source:
 
 outputs:
 {
- outbnb:
+ outexthsnc0:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb.root"
+   fileName: "%ifb_%tc_ext_hsnc0.root"
    dataTier: "raw"
-   streamName: "outbnb"
+   streamName: "outexthsnc0"
    compressionLevel: 3
    saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_bnb ]
-   fileProperties: {
-     maxInputFiles: 1
-     granularity: "InputFile"
-    }
-  }
- outnumi:
-  {
-   module_type: RootOutput
-   fileName: "%ifb_%tc_numi.root"
-   dataTier: "raw"
-   streamName: "outnumi"
-   compressionLevel: 3
-   saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_numi ]
-   fileProperties: {
-     maxInputFiles: 1
-     granularity: "InputFile"
-    }
-  }
- outext:
-  {
-   module_type: RootOutput
-   fileName: "%ifb_%tc_ext.root"
-   dataTier: "raw"
-   streamName: "outext"
-   compressionLevel: 3
-   saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_ext ]
-   fileProperties: {
-     maxInputFiles: 1
-     granularity: "InputFile"
-    }
-  }
- outmucs:
-  {
-   module_type: RootOutput
-   fileName: "%ifb_%tc_mucs.root"
-   dataTier: "raw"
-   streamName: "outmucs"
-   compressionLevel: 3
-   saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_mucs ]
-   fileProperties: {
-     maxInputFiles: 1
-     granularity: "InputFile"
-    }
-  }
- outprescale:
-  {
-   module_type: RootOutput
-   fileName: "%ifb_%tc_prescale.root"
-   dataTier: "raw"
-   streamName: "outprescale"
-   compressionLevel: 3
-   saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_prescale ]
-   fileProperties: {
-     maxInputFiles: 1
-     granularity: "InputFile"
-    }
-  }
- outnotpc:
-  {
-   module_type: RootOutput
-   fileName: "%ifb_%tc_notpc.root"
-   dataTier: "raw"
-   streamName: "outnotpc"
-   compressionLevel: 3
-   saveMemoryObjectThreshold: 0
-   outputCommands: ["keep *_*_*_*",
-                    "drop raw::RawDigits_*_*_*"]
-   SelectEvents: [ path_notpc ]
-   fileProperties: {
-     maxInputFiles: 1
-     granularity: "InputFile"
-    }
+   SelectEvents: { SelectEvents: [ path_ext_hsnc0 ] }
   }
 }
 
@@ -160,30 +85,24 @@ physics:
   @table::microboone_reco_notpc_filters
  }
 
- path_notpc:    [ @sequence::microboone_reco_notpc ]
- path_bnb:      [ trigbnb,  @sequence::microboone_reco_notpc, opflashfilter ]
- path_numi:     [ trignumi, @sequence::microboone_reco_notpc, opflashfilternumi ]
- path_ext:      [ trigext ]
- path_mucs:     [ trigmucs ]
- path_prescale: [ randomfilter ]
- stream_notpc:    [ outnotpc ]
- stream_bnb:      [ outbnb ]
- stream_numi:     [ outnumi ]
- stream_ext:      [ outext ]
- stream_mucs:     [ outmucs ]
- stream_prescale: [ outprescale ]
+ path_notpc:         [ @sequence::microboone_reco_notpc ]
+ path_ext_hsnc0:     [ swtrigexthsnc0 ]
 
- trigger_paths: [ path_notpc, path_bnb, path_numi, path_ext, path_mucs, path_prescale ] 
- end_paths:     [ stream_notpc, stream_bnb, stream_numi, stream_ext, stream_mucs, stream_prescale ]
+ stream_ext_hsnc0:     [ outexthsnc0 ]
+
+ trigger_paths: [ path_notpc,
+                  path_ext_hsnc0 ]
+
+ end_paths:     [ stream_ext_hsnc0 ]
 }
 
 services.DetectorClocksService.TrigModuleName: "daq"
 
-physics.filters.opflashfilter.OpFlashModule : "opflash"
-physics.filters.opflashfilter.DisableFilter: false
+#physics.filters.opflashfilter.OpFlashModule : "opflash"
+#physics.filters.opflashfilter.DisableFilter: false
 
-physics.filters.opflashfilternumi.OpFlashModule : "opflash"
-physics.filters.opflashfilternumi.DisableFilter: false
+#physics.filters.opflashfilternumi.OpFlashModule : "opflash"
+#physics.filters.opflashfilternumi.DisableFilter: false
 
 
 
