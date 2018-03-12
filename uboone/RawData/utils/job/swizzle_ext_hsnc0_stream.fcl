@@ -9,6 +9,7 @@
 #include "seedservice_microboone.fcl"
 #include "beamdata_microboone.fcl"
 #include "triggerenforcement.fcl"
+#include "time_memory_tracker_microboone.fcl" 
 
 
 #include "reco_uboone_data_notpc.fcl"
@@ -18,19 +19,8 @@ services:
 {
   scheduler: { fileMode: NOMERGE }
   TFileService: { fileName: "daq_hist.root" }
-  TimeTracker: { 
-    printSummary : true
-    dbOutput     : {
-      filename   :  "time.db"
-      overwrite  :  true
-    }
-  }
-  MemoryTracker: {
-    ignoreTotal       : 1 # no. of events to exclude - '1' by default
-    printSummaries    : ["*"] # or any combination of ["general","event","module"]
-    includeMallocInfo : true
-    filename          : "mem.db" 
-  }
+  TimeTracker:            @local::microboone_time_tracker
+  MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
   SeedService:  @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data

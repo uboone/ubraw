@@ -9,6 +9,7 @@ services:
 {
   TFileService: { fileName: "daq_hist.root" }
   TimeTracker:            @local::microboone_time_tracker
+  MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
   ExptGeoHelperInterface: @local::microboone_geometry_helper
   Geometry:               @local::microboone_geo
