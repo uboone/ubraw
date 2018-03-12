@@ -10,8 +10,6 @@
 #include "beamdata_microboone.fcl"
 #include "triggerenforcement.fcl"
 #include "time_memory_tracker_microboone.fcl" 
-
-
 #include "reco_uboone_data_notpc.fcl"
 
 process_name: Swizzler
@@ -21,7 +19,7 @@ services:
   TimeTracker:            @local::microboone_time_tracker
   MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
-  NuRandomService:  @local::microboone_seedservice
+  NuRandomService:        @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
   DatabaseUtil:           @local::microboone_database
   @table::microboone_reco_notpc_services
@@ -95,12 +93,12 @@ outputs:
  outbnbhsnc0:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb_hsnc0.root"
+   fileName: "%ifb_%tc_bnb_hsnc0_%#.root"
    dataTier: "raw"
    streamName: "outbnbhsnc0"
    compressionLevel: 3
    saveMemoryObjectThreshold: 0
-   SelectEvents: { SelectEvents: [ path_bnb_hsnc0 ] }
+   SelectEvents: [ path_bnb_hsnc0 ]
   }
  outnumi:
   {
@@ -180,7 +178,7 @@ outputs:
    streamName: "outexthsnc0"
    compressionLevel: 3
    saveMemoryObjectThreshold: 0
-   SelectEvents: { SelectEvents: [ path_ext_hsnc0 ] }
+   SelectEvents: [ path_ext_hsnc0 ]
   }
  outmucs:
   {
@@ -289,7 +287,6 @@ services.message.destinations :
   {
      type:      "cout"      #tells the message service to output this destination to cout
      threshold: "WARNING"   #tells the message service that this destination applies to WARNING and higher level messages
-     append:     true       #says to append all messages to the output
      categories:
      {
        ChannelFilter:

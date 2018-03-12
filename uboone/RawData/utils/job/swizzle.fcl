@@ -7,7 +7,6 @@
 #include "triggerenforcement.fcl"
 #include "time_memory_tracker_microboone.fcl" 
 
-
 process_name: Swizzler
 services:
 {
@@ -70,7 +69,7 @@ outputs:
  out1:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc.root"
+   fileName: "%ifb_%tc_%#.root"
    dataTier: "raw"
    compressionLevel: 3
    fileProperties: {
