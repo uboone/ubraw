@@ -106,8 +106,26 @@ void beamRun::Update(boost::posix_time::ptime tend)
 		  to_iso_extended_string(fLastQueryTime[fBeamLine[ibeam]]-seconds(2)).c_str(),
 		  endtime.c_str());  
 	}
+	httpResponse* locresponse=new httpResponse();
 	mf::LogInfo("") <<"Query server:\n"<<sbuf;
-	fIFDB.GetData(sbuf,response);	
+	int itry=0;
+	bool got_data=false;
+	while (itry<10 && !got_data) {
+	  try {
+	    fIFDB.GetData(sbuf,locresponse);
+	    got_data=true;
+	  } catch (...) {
+	    mf::LogError("")<<"Failed to get data. Will need to try again "<<itry;
+	    mf::LogError("")<<locresponse->memory;
+	    itry++;
+	    locresponse->memory="";
+	  }
+	}
+	if (!got_data)
+	  throw cet::exception(__PRETTY_FUNCTION__) << "Failed to get beam data from IFBEAM. Giving up after trying 10 times...\n";
+
+	response->memory+=locresponse->memory;
+	delete locresponse;
       }
       mf::LogDebug("")<<response;
       ProcessResponse(response, data_map, fBeamLine[ibeam], t1);   

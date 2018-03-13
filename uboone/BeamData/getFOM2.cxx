@@ -186,7 +186,6 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     std::vector<double> vptgt;
     std::vector<double> hitgt;
     std::vector<double> vitgt;
-    std::vector<double> mw121;
     std::vector<double> mwtgt;
 
     for(auto& bdata : bd) {	// get toroid, BPM, and multiwire data
@@ -213,11 +212,6 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 	continue;
       } else if(bdata.getDeviceName().find("E:VITGT") != std::string::npos) {
 	vitgt = bdata.getData();
-	continue;
-      } else if(bdata.getDeviceName().find("E:M121DS") != std::string::npos) {
-	mw121.resize(bdata.getData().size());
-	for (unsigned int ii=0;ii<mw121.size();ii++) 
-	  mw121[ii]=bdata.getData()[ii];
 	continue;
       } else if(bdata.getDeviceName().find("E:MTGTDS") != std::string::npos) {
 	mwtgt.resize(bdata.getData().size());
@@ -282,7 +276,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     double x = -9., y = -9., xstdev= -9., ystdev= -9.;
     // Use Beam Profile Monitors to estimate x and y widths and positions
     // of beam at target
-    NuMIProfileProjection(x,y,xstdev,ystdev,mw121,mwtgt);
+    NuMIProfileProjection(x,y,xstdev,ystdev,mwtgt);
 
     if ((xpmean > fMinPosXCut) &&
 	(xpmean < fMaxPosXCut) &&     // x position
@@ -670,17 +664,14 @@ double bmd::NuMIBpmAtTarget(double &xpmean, double &ypmean,
 }
 int bmd::NuMIProfileProjection(double &x, double &y, 
 			       double &xstdev, double &ystdev,
-			       std::vector<double> PM121,
 			       std::vector<double> PMTGT)
 {
   double xtgt = 0., ytgt = 0., xstdevtgt = 0., ystdevtgt = 0.;
   
-  std::vector<double> hchannels121, vchannels121, hchannelstgt, vchannelstgt;
+  std::vector<double> hchannelstgt, vchannelstgt;
   // Need to add line here to return 0 if no data from devices 
-  // Get relevant channels from the device                
+  // Get relevant channels from the device
   for(int ind = 0; ind <= 47; ++ind) {
-    hchannels121.push_back(PM121[103+ind]);
-    vchannels121.push_back(PM121[103+48+ind]);
     hchannelstgt.push_back(PMTGT[103+ind]);
     vchannelstgt.push_back(PMTGT[103+48+ind]);
   }
