@@ -173,7 +173,7 @@ outputs:
  outexthsnc0:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext_hsnc0.root"
+   fileName: "%ifb_%tc_ext_hsnc0_%#.root"
    dataTier: "raw"
    streamName: "outexthsnc0"
    compressionLevel: 3
