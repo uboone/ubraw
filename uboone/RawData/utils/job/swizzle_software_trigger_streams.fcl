@@ -16,10 +16,10 @@ process_name: Swizzler
 services:
 {
   TFileService: { fileName: "daq_hist.root" }
-  TimeTracker:      @local::microboone_time_tracker
-  MemoryTracker:    @local::microboone_memory_tracker
+  TimeTracker:            @local::microboone_time_tracker
+  MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
-  NuRandomService:  @local::microboone_seedservice
+  NuRandomService:        @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
   DatabaseUtil:           @local::microboone_database
   @table::microboone_reco_notpc_services
@@ -93,7 +93,7 @@ outputs:
  outbnbhsnc0:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb_hsnc0.root"
+   fileName: "%ifb_%tc_bnb_hsnc0_%#.root"
    dataTier: "raw"
    streamName: "outbnbhsnc0"
    compressionLevel: 3
@@ -170,6 +170,16 @@ outputs:
      granularity: "InputFile"
     }
   }
+ outexthsnc0:
+  {
+   module_type: RootOutput
+   fileName: "%ifb_%tc_ext_hsnc0.root"
+   dataTier: "raw"
+   streamName: "outexthsnc0"
+   compressionLevel: 3
+   saveMemoryObjectThreshold: 0
+   SelectEvents: [ path_ext_hsnc0 ]
+  }
  outmucs:
   {
    module_type: RootOutput
@@ -221,6 +231,7 @@ physics:
  path_ext_numi:      [ swtrigextnumi ]
  path_mucs:          [ trigmucs ]
  path_ext_unbiased:  [ swtrigextunbiased ]
+ path_ext_hsnc0:     [ swtrigexthsnc0 ]
 
  stream_notpc:         [ outnotpc ]
  stream_bnb:           [ outbnb ]
@@ -231,6 +242,7 @@ physics:
  stream_ext_bnb:       [ outextbnb ]
  stream_ext_numi:      [ outextnumi ]
  stream_ext_unbiased:  [ outextunbiased ]
+ stream_ext_hsnc0:     [ outexthsnc0 ]
  stream_mucs:          [ outmucs ]
 
  trigger_paths: [ path_notpc,
@@ -242,6 +254,7 @@ physics:
                   path_ext_bnb,
                   path_ext_numi,
                   path_ext_unbiased,
+                  path_ext_hsnc0,
 		  path_mucs ]
 
  end_paths:     [ stream_notpc,
@@ -253,6 +266,7 @@ physics:
                   stream_ext_bnb,
                   stream_ext_numi,
                   stream_ext_unbiased,
+                  stream_ext_hsnc0,
 		  stream_mucs ]
 }
 

@@ -17,6 +17,7 @@ services:
 {
   TFileService: { fileName: "daq_hist.root" }
   TimeTracker:            @local::microboone_time_tracker
+  MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
   NuRandomService:  @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
