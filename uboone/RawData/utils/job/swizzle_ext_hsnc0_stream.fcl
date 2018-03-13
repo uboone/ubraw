@@ -66,7 +66,7 @@ outputs:
  outexthsnc0:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext_hsnc0.root"
+   fileName: "%ifb_%tc_ext_hsnc0_%#.root"
    dataTier: "raw"
    streamName: "outexthsnc0"
    compressionLevel: 3
@@ -116,7 +116,6 @@ services.message.destinations :
   {
      type:      "cout"      #tells the message service to output this destination to cout
      threshold: "WARNING"   #tells the message service that this destination applies to WARNING and higher level messages
-     append:     true       #says to append all messages to the output
      categories:
      {
        ChannelFilter:
