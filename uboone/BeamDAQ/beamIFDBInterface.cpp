@@ -14,13 +14,6 @@ beamIFDBInterface::beamIFDBInterface()
   /* init the curl session */
   fCURLHandle = curl_easy_init();
   
-  /* some servers don't like requests that are made without a user-agent 
-     field, so we provide one 
-  */
-  curl_easy_setopt(fCURLHandle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
-  
-  /* Enable redirection */
-  curl_easy_setopt(fCURLHandle, CURLOPT_FOLLOWLOCATION, 1);
 }
 
 beamIFDBInterface::~beamIFDBInterface()
@@ -34,9 +27,22 @@ beamIFDBInterface::~beamIFDBInterface()
 
 void beamIFDBInterface::GetData(const char *url,httpResponse* response)
 {
+  curl_easy_reset(fCURLHandle);
+
+  /* some servers don't like requests that are made without a user-agent 
+     field, so we provide one 
+  */
+  curl_easy_setopt(fCURLHandle, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+  
+  /* Enable redirection */
+  curl_easy_setopt(fCURLHandle, CURLOPT_FOLLOWLOCATION, 1);
+
   /* specify URL to get */
   curl_easy_setopt(fCURLHandle, CURLOPT_URL, url);
-  
+
+  /* make sure it fails on any problem */
+  curl_easy_setopt(fCURLHandle, CURLOPT_FAILONERROR, 1L);
+
   /* send all data to this function  */
   curl_easy_setopt(fCURLHandle, CURLOPT_WRITEFUNCTION, &writeMemoryCallback);
   
@@ -51,7 +57,8 @@ void beamIFDBInterface::GetData(const char *url,httpResponse* response)
   int retcode=curl_easy_perform(fCURLHandle);
   if ( retcode != CURLE_OK ) {
     mf::LogError("")<<"Received error code "<<retcode<<" while retreiving data from server. Returned error buffer: "<<error;
-    exit(EXIT_FAILURE);
+    throw std::exception();
+    //    exit(EXIT_FAILURE);
   }
 
 }
