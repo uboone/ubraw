@@ -40,7 +40,8 @@ larcv           v06_26_01_01
 genie_xsec      v2_12_0
 larsoft         v06_26_01_10
 ubutil          v06_26_01_12
-uboonedata 	v01_17_00_03
+#uboonedata 	v01_17_00_03
+uboonedata	v01_16_00
 uboonedaq_datatypes v6_19_01_e10
 uboone_example_data v01_00_00
 
