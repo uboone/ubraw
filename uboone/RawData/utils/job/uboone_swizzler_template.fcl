@@ -55,6 +55,7 @@ source:
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
                      "E:TOR875, 100, 0, 5" ]
+  swizzleTriggerType: ALL
 }	
 
 outputs:
