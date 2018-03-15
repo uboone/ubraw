@@ -62,7 +62,7 @@ find_ups_boost( v1_53_0 )
 find_ups_product( uboonedaq_datatypes )
 find_ups_product( ifdh_art )
 find_ups_product( gsl )
-find_ups_product( gallery )
+#find_ups_product( gallery )
 find_ups_product( artdaq_core v1_00_00 )
 
 cet_find_library( GSL NAMES gsl PATHS ENV GSL_LIB NO_DEFAULT_PATH )
