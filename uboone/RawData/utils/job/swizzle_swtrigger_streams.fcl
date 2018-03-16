@@ -15,6 +15,7 @@ services:
 {
   TFileService: { fileName: "daq_hist.root" }
   TimeTracker:            @local::microboone_time_tracker
+  MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
   FileCatalogMetadata:    @local::art_file_catalog_data
   ExptGeoHelperInterface: @local::microboone_geometry_helper
@@ -100,17 +101,7 @@ outputs:
  outbnbhsnc0:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb_hsnc0.root"
-   dataTier: "raw"
-   streamName: "outbnbhsnc0"
-   compressionLevel: 3
-   saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_bnb_hsnc0 ]
-  }
- outbnbhsnc0:
-  {
-   module_type: RootOutput
-   fileName: "%ifb_%tc_bnb_hsnc0.root"
+   fileName: "%ifb_%tc_bnb_hsnc0_%#.root"
    dataTier: "raw"
    streamName: "outbnbhsnc0"
    compressionLevel: 3
