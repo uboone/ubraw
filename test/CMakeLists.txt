@@ -15,5 +15,6 @@ add_subdirectory(DataProduction)
 add_subdirectory(SparseRawDigits)
 add_subdirectory(Swizzle)
 add_subdirectory(CRTSwizzle)
+add_subdirectory(CRTMerge)
 
 add_subdirectory(ci)

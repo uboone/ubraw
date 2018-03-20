@@ -46,6 +46,9 @@ uboone_example_data v01_00_00
 artdaq_core     v1_05_09_01
 gallery         v1_03_13
 
+gallery         v1_03_13 
+artdaq_core     v1_05_09_01
+
 cetbuildtools	v5_06_07	-	only_for_build
 end_product_list
 
