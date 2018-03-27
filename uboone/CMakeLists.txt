@@ -48,7 +48,7 @@ add_subdirectory(MicroBooNEWireCell)
 add_subdirectory(FakeNEWS)
 add_subdirectory(DQMTools)
 add_subdirectory(BurstNoiseMetrics)
-#add_subdirectory(ChargedTrackMultiplicity/MC)
+add_subdirectory(ChargedTrackMultiplicity/MC)
 add_subdirectory(ChargedTrackMultiplicity/DataON)
 add_subdirectory(ChargedTrackMultiplicity/DataOFF)
 
