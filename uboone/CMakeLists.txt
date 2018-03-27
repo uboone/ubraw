@@ -54,7 +54,7 @@ add_subdirectory(ChargedTrackMultiplicity/DataOFF)
 
 #add_subdirectory(ChargedTrackMultiplicitySinglegamma/MC)
 
-#add_subdirectory(LEEPhotonAnalysis)
+add_subdirectory(LEEPhotonAnalysis)
 
 add_subdirectory(UBXSec)
 
