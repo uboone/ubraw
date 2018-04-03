@@ -26,6 +26,8 @@ table_fragment_begin
     pathPrepend(FW_SEARCH_PATH, ${UBOONECODE_DIR}/scripts)
     pathPrepend(FW_SEARCH_PATH, ${UBOONECODE_DIR}/gdml)
     pathPrepend(FHICL_FILE_PATH, .:./job)
+    envSet(UBOONE_EXAMPLE_DATA_DIR, /cvmfs/uboone.osgstorage.org/stash/uboone_example_data)
+    pathPrepend(FW_SEARCH_PATH, ${UBOONE_EXAMPLE_DATA_DIR})
 table_fragment_end
 
 # With "product  version" table below, we now define depdendencies
@@ -42,7 +44,7 @@ larsoft         v06_26_01_10
 ubutil          v06_26_01_13
 uboonedata 	v01_17_00_04
 uboonedaq_datatypes v6_19_01_e10
-uboone_example_data v01_00_00
+#uboone_example_data v01_00_00
 artdaq_core     v1_05_09_01
 gallery         v1_03_13
 
