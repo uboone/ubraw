@@ -358,7 +358,7 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
   double tdp = dp;
 
   //from DQ_BeamLine_beam_init.F
-  double sigma1[6][6]={0};
+  double sigma1[6][6]={{0}};
   double centroid1[6]={0};
   centroid1[0] = horpos;
   centroid1[1] = horang;
@@ -395,11 +395,11 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
     {-0.00104,  0.00232, -0.00001, -0.00224, 1.00000, -0.00450},
     { 0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  1.00000}
   };
-  double cnttoups[6][6]={0};
-  double cnttodns[6][6]={0};
-  double identity[6][6]={0};
-  double begtoups[6][6]={0};
-  double begtodns[6][6]={0};
+  double cnttoups[6][6]={{0}};
+  double cnttodns[6][6]={{0}};
+  double identity[6][6]={{0}};
+  double begtoups[6][6]={{0}};
+  double begtodns[6][6]={{0}};
 
   for (int i=0;i<6;i++) {
     for (int j=0;j<6;j++) {
@@ -474,7 +474,7 @@ void bmd::swimBNB(const double centroid1[6], const double sigma1[6][6],
   cy = centroid2[2];
   
   //sigma
-  double sigma2[6][6]={0};
+  double sigma2[6][6]={{0}};
   
   for (int i = 0; i<6;i++) {
     for (int j = 0;j<6;j++) {

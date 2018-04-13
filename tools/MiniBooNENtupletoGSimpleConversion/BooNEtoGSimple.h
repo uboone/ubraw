@@ -34,7 +34,7 @@ class BooNEtoGSimple {
   
   int fBooneNevents;
 
-  int fNumiNevents;
+  //int fNumiNevents;
 
   TFile* fBooNEfile;
   TTree* fBNBtree;
