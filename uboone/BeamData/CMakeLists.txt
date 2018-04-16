@@ -1,3 +1,4 @@
+cet_add_compiler_flags(CXX -Wno-dynamic-exception-spec -Wno-return-type-c-linkage )
 
 include_directories ( $ENV{IFDHC_FQ_DIR}/inc )
 

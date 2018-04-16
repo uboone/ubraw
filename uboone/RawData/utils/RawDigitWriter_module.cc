@@ -82,7 +82,7 @@ namespace zmqds {
   private:
 
     // Channel Map
-    const util::UBChannelReverseMap_t& fChannelReverseMap;
+    util::UBChannelReverseMap_t fChannelReverseMap;
 
     // FICHL Parameters
     
@@ -95,7 +95,7 @@ namespace zmqds {
     int fFemCH;
     int fWireID;
     std::vector< short > rawdigits;
-    TBranch* fb_rawdigits;
+    //TBranch* fb_rawdigits;
     TTree* fTRawDigits;
     void GetRawDigits(const art::Event& evt);
     
