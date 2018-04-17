@@ -5,5 +5,5 @@
 template class std::vector< bool >;
 template class art::Wrapper< raw::ubdaqSoftwareTriggerData >;
 template class art::Wrapper< raw::DAQHeaderTimeUBooNE >;
-template class std::pair< std::string, bool >;
+template struct std::pair< std::string, bool >;
 template class std::vector< std::pair< std::string, bool > >;
