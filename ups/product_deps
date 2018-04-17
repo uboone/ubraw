@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent uboonecode v06_73_00
+parent uboonecode v06_74_00
 
 defaultqual e15
 
@@ -40,8 +40,8 @@ swtrigger       v02_02_05f
 larlite         v06_70_00
 larcv           v06_70_00
 genie_xsec      v2_12_10
-larsoft         v06_73_00
-ubutil          v06_73_00
+larsoft         v06_74_00
+ubutil          v06_74_00
 uboonedata      v01_18_09
 #uboone_example_data v01_00_00
 
@@ -62,6 +62,10 @@ e15:debug	e15:debug	DefaultPlusMECWithNC	e15:debug	e15:debug	-nq-		e15:debug		e1
 e15:opt		e15:opt		DefaultPlusMECWithNC	e15:opt		e15:opt		-nq-		e15:opt			e15:opt		e15:opt		e15:opt		e15:s65:opt
 e15:prof	e15:prof	DefaultPlusMECWithNC	e15:prof	e15:prof	-nq-		e15:prof		e15:prof	e15:prof	e15:prof	e15:s65:prof	
 e15:prof:fg	e15:prof	LocalFGNievesQEAndMEC	e15:prof	e15:prof	-nq-		e15:prof		e15:prof	e15:prof	e15:prof	e15:s65:prof
+c2:debug        c2:debug        DefaultPlusMECWithNC    c2:debug        c2:debug        -nq-            c2:debug                c2:debug        c2:debug        c2:debug        c2:s65:debug
+c2:opt          c2:opt          DefaultPlusMECWithNC    c2:opt          c2:opt          -nq-            c2:opt                  c2:opt          c2:opt          c2:opt          c2:s65:opt
+c2:prof         c2:prof         DefaultPlusMECWithNC    c2:prof         c2:prof         -nq-            c2:prof                 c2:prof         c2:prof         c2:prof         c2:s65:prof
+c2:prof:fg      c2:prof         LocalFGNievesQEAndMEC   c2:prof         c2:prof         -nq-            c2:prof                 c2:prof         c2:prof         c2:prof         c2:s65:prof
 
 end_qualifier_list
 
