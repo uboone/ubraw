@@ -57,6 +57,15 @@ extern "C" {
 
 namespace ubdaq=gov::fnal::uboone::datatypes;
 
+namespace {
+
+  // Local function to calculate absolute difference between two unsigned integers.
+
+  unsigned int absdiff(unsigned int a, unsigned int b) {
+    return (a>b ? a-b : b-a);
+  }
+}
+
 // +++ Blatant stealing from LongBo
 namespace lris {
 
@@ -422,12 +431,12 @@ namespace lris {
 		if (fCompleteFile) {
         	if (fEventCounter==fNumberEventsInFile) {
               	mf::LogInfo(__FUNCTION__)<<"Already read " << fEventCounter << " events, so checking end of file..." << std::endl;
-              	std::ios::streampos current_position = fInputStream.tellg(); //find out where in the file we're located
-              	std::ios::streampos data_offset = current_position - fPreviousPosition;
+              	std::streampos current_position = fInputStream.tellg(); //find out where in the file we're located
+              	std::streampos data_offset = current_position - fPreviousPosition;
               	mf::LogInfo(__FUNCTION__)<< "For event " << fEventCounter << ", the number of bytes read since the last event is " << data_offset << std::endl;
               	fPreviousPosition = current_position;
               	fInputStream.seekg(0,std::ios::end); //go to the end of the file
-              	std::ios::streampos file_length = fInputStream.tellg(); //get the location which will tell the size.
+              	std::streampos file_length = fInputStream.tellg(); //get the location which will tell the size.
               	fInputStream.seekg(current_position); //put the ifstream back to where it was before
               	if ( ((uint8_t)file_length - (uint8_t)current_position) > (uint8_t)1000 ) {
                   	throw art::Exception( art::errors::FileReadError ) << "We processed " << fEventCounter << " events from the file " <<  std::endl << "But there are still " << (file_length - current_position) << " bytes in the file" << std::endl;
@@ -435,19 +444,19 @@ namespace lris {
               	mf::LogInfo(__FUNCTION__)<<"Completed reading file and closing output file." << std::endl;
               	return false; //tells readNext that you're done reading all of the events in this file.
           	} else {
-              	std::ios::streampos current_position = fInputStream.tellg(); //find out where in the file we're located
-              	std::ios::streampos data_offset = current_position - fPreviousPosition;
+              	std::streampos current_position = fInputStream.tellg(); //find out where in the file we're located
+              	std::streampos data_offset = current_position - fPreviousPosition;
               	mf::LogInfo(__FUNCTION__)<< "For event " << fEventCounter << ", the number of bytes read since the last event is " << data_offset << std::endl;
               	fPreviousPosition = current_position;
 	  		}
       	} else {
           	mf::LogInfo(__FUNCTION__)<<"Read " << fEventCounter << " events from an incomplete file, and checking end of file..." << std::endl;
-          	std::ios::streampos current_position = fInputStream.tellg(); //find out where in the file we're located
-          	std::ios::streampos data_offset = current_position - fPreviousPosition;
+          	std::streampos current_position = fInputStream.tellg(); //find out where in the file we're located
+          	std::streampos data_offset = current_position - fPreviousPosition;
           	mf::LogInfo(__FUNCTION__)<< "For event " << fEventCounter << ", the number of bytes read since the last event is " << data_offset << std::endl;
           	fPreviousPosition = current_position;
           	fInputStream.seekg(0,std::ios::end); //go to the end of the file
-          	std::ios::streampos file_length = fInputStream.tellg(); //get the location which will tell the size.
+          	std::streampos file_length = fInputStream.tellg(); //get the location which will tell the size.
           	fInputStream.seekg(current_position); //put the ifstream back to where it was before
           	if ( (file_length - current_position) < fFinalEventCutOff ) { //this value of 30000000 is the approximate size of an event.
               	mf::LogInfo(__FUNCTION__) << "We processed " << fEventCounter << " events from the incomplete file " << std::endl << "But there are only " << (file_length - current_position) << " bytes in the file, so we're calling that the end of the road." << std::endl;
@@ -866,7 +875,7 @@ namespace lris {
         		unsigned int trigSample = tpc_card_header.getTrigSample();
 
         		if (TPCtriggerFrame == -999){TPCtriggerFrame = trigFrame;} // internal trigFrame consistency checking
-        		if (abs(trigFrame - TPCtriggerFrame) > 1){ // if the trigFrame doesn't match the other TPC trigFrames here then we have a problem
+        		if (absdiff(trigFrame, TPCtriggerFrame) > 1){ // if the trigFrame doesn't match the other TPC trigFrames here then we have a problem
           			std::cerr << "ERROR!" << std::endl;
           			std::cerr << "TPC card header trigger trigFrames not within one frame of each other!!" << std::endl;
           			if (fEnforceFrameMatching){
@@ -874,7 +883,7 @@ namespace lris {
           			}
         		}
         		if (TPCeventFrame == -999){TPCeventFrame = eventFrame;} // internal eventFrame consistency checking
-        		if (abs(trigFrame - TPCeventFrame) > 1){ // if the eventFrame doesn't match the other TPC eventFrames here then we have a problem
+        		if (absdiff(trigFrame, TPCeventFrame) > 1){ // if the eventFrame doesn't match the other TPC eventFrames here then we have a problem
           			std::cerr << "ERROR!" << std::endl;
           			std::cerr << "TPC card header trigger eventFrames not within one frame of each other!!" << std::endl;
           		if (fEnforceFrameMatching){
@@ -882,7 +891,7 @@ namespace lris {
          		}
         		}
 				if (TPCtriggerSample == -999){TPCtriggerSample = trigSample;} // internal trigSample consistency checking
-        		if ((abs(trigSample - TPCtriggerSample) > 1) and (abs(trigSample - TPCtriggerSample) != 3199)){ // if the trigSample doesn't match the other TPC trigSamples here then we have a problem
+				if ((absdiff(trigSample, TPCtriggerSample) > 1) and (absdiff(trigSample, TPCtriggerSample) != 3199)){ // if the trigSample doesn't match the other TPC trigSamples here then we have a problem
           			std::cerr << "ERROR!" << std::endl;
           			std::cerr << "TPC card header trigger trigSamples not within one sample of each other!!" << std::endl;
           			if (fEnforceFrameMatching){
@@ -1205,7 +1214,7 @@ namespace lris {
         		uint32_t trigSample = card_data.getTrigSample();
 
         		if (PMTeventFrame == -999){PMTeventFrame = eventFrame;} // internal frame consistency checking
-        		if (abs(eventFrame - PMTeventFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
+        		if (absdiff(eventFrame, PMTeventFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
           			std::cerr << "ERROR!" << std::endl;
           			std::cerr << "PMT card header event frames not within one frame of each other!!" << std::endl;
           			if (fEnforceFrameMatching){
@@ -1213,7 +1222,7 @@ namespace lris {
           			}
         		}
         		if (PMTtriggerFrame == -999){PMTtriggerFrame = trigFrame;} // internal frame consistency checking
-        		if (abs(trigFrame - PMTtriggerFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
+        		if (absdiff(trigFrame, PMTtriggerFrame) > 1){ // if the frame doesn't match the other PMT frames here then we have a problem
           			std::cerr << "ERROR!" << std::endl;
           			std::cerr << "PMT card header trigger frames not within one frame of each other!!" << std::endl;
           			if (fEnforceFrameMatching){
@@ -1221,7 +1230,7 @@ namespace lris {
           			}
         		}
 				if (PMTtriggerSample == -999){PMTtriggerSample = trigSample;} // internal frame consistency checking
-        		if ((abs(trigSample - PMTtriggerSample) > 1) and (abs(trigSample - PMTtriggerSample) != 3199)){ // if the sample doesn't match the other PMT sample here then we have a problem
+				if ((absdiff(trigSample, PMTtriggerSample) > 1) and (absdiff(trigSample, PMTtriggerSample) != 3199)){ // if the sample doesn't match the other PMT sample here then we have a problem
           			std::cerr << "ERROR!" << std::endl;
           			std::cerr << "PMT card header trigger frames not within one sample of each other!!" << std::endl;
           			if (fEnforceFrameMatching){
@@ -1687,7 +1696,7 @@ namespace lris {
     	//at the end of the event, it is reset to the initial value from the fhicl parameters.
     	//but this means that the trig-TPC comparison will continue, but not the TPC-PMT or Trig-PMT
     	if (fSwizzleTrigger && fSwizzlePMT ){ // trig-PMT comparison
-      		if (abs(PMTtriggerFrame - triggerFrame)>1){
+	  if (absdiff(PMTtriggerFrame, triggerFrame)>1){
         		std::cout << "ERROR!" << std::endl;
         		std::cout << "trigger data and PMT data both read out, but frames disagree (by more than 1)!" << std::endl;
         		std::cout << "trigger data frame = " << triggerFrame << ", PMT data frame = " << PMTtriggerFrame << std::endl;
@@ -1695,7 +1704,7 @@ namespace lris {
       		} // Done trig-PMT comparison
     	}
     	if (fSwizzleTrigger && fSwizzleTPC ){ // trig-TPC comparison
-      		if (abs(TPCtriggerFrame - triggerFrame)>1){
+	  if (absdiff(TPCtriggerFrame, triggerFrame)>1){
         		std::cout << "ERROR!" << std::endl;
         		std::cout << "trigger data and TPC data both read out, but frames disagree (by more than 1)!" << std::endl;
         		std::cout << "trigger data frame = " << triggerFrame << ", TPC data frame = " << TPCtriggerFrame << std::endl;
@@ -1703,7 +1712,7 @@ namespace lris {
       		} // Done trig-TPC comparison
     	}
     	if (fSwizzleTPC && fSwizzlePMT ){ // TPC-PMT comparison
-      		if (abs(PMTtriggerFrame - TPCtriggerFrame)>1){
+	  if (absdiff(PMTtriggerFrame, TPCtriggerFrame)>1){
         		std::cout << "ERROR!" << std::endl;
         		std::cout << "TPC data and PMT data both read out, but frames disagree (by more than 1)!" << std::endl;
         		std::cout << "TPC data frame = " << TPCtriggerFrame << ", PMT data frame = " << PMTtriggerFrame << std::endl;

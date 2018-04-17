@@ -1,3 +1,6 @@
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+cet_add_compiler_flags(CXX -Wno-dynamic-exception-spec -Wno-return-type-c-linkage )
+endif()
 
 include_directories ( $ENV{IFDHC_FQ_DIR}/inc )
 
