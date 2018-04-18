@@ -22,7 +22,7 @@
 
 
 namespace snassembler {
-  class SnRecordHolder; // Forward declaration
+  struct SnRecordHolder; // Forward declaration
 
   class SnFileSourceDriver {
     /// Class to fill the constraints on a template argument to the class,

@@ -186,7 +186,6 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     std::vector<double> vptgt;
     std::vector<double> hitgt;
     std::vector<double> vitgt;
-    std::vector<double> mw121;
     std::vector<double> mwtgt;
 
     for(auto& bdata : bd) {	// get toroid, BPM, and multiwire data
@@ -213,11 +212,6 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 	continue;
       } else if(bdata.getDeviceName().find("E:VITGT") != std::string::npos) {
 	vitgt = bdata.getData();
-	continue;
-      } else if(bdata.getDeviceName().find("E:M121DS") != std::string::npos) {
-	mw121.resize(bdata.getData().size());
-	for (unsigned int ii=0;ii<mw121.size();ii++) 
-	  mw121[ii]=bdata.getData()[ii];
 	continue;
       } else if(bdata.getDeviceName().find("E:MTGTDS") != std::string::npos) {
 	mwtgt.resize(bdata.getData().size());
@@ -282,7 +276,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     double x = -9., y = -9., xstdev= -9., ystdev= -9.;
     // Use Beam Profile Monitors to estimate x and y widths and positions
     // of beam at target
-    NuMIProfileProjection(x,y,xstdev,ystdev,mw121,mwtgt);
+    NuMIProfileProjection(x,y,xstdev,ystdev,mwtgt);
 
     if ((xpmean > fMinPosXCut) &&
 	(xpmean < fMaxPosXCut) &&     // x position
@@ -364,7 +358,7 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
   double tdp = dp;
 
   //from DQ_BeamLine_beam_init.F
-  double sigma1[6][6]={0};
+  double sigma1[6][6]={{0}};
   double centroid1[6]={0};
   centroid1[0] = horpos;
   centroid1[1] = horang;
@@ -401,11 +395,11 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
     {-0.00104,  0.00232, -0.00001, -0.00224, 1.00000, -0.00450},
     { 0.00000,  0.00000,  0.00000,  0.00000,  0.00000,  1.00000}
   };
-  double cnttoups[6][6]={0};
-  double cnttodns[6][6]={0};
-  double identity[6][6]={0};
-  double begtoups[6][6]={0};
-  double begtodns[6][6]={0};
+  double cnttoups[6][6]={{0}};
+  double cnttodns[6][6]={{0}};
+  double identity[6][6]={{0}};
+  double begtoups[6][6]={{0}};
+  double begtodns[6][6]={{0}};
 
   for (int i=0;i<6;i++) {
     for (int j=0;j<6;j++) {
@@ -480,7 +474,7 @@ void bmd::swimBNB(const double centroid1[6], const double sigma1[6][6],
   cy = centroid2[2];
   
   //sigma
-  double sigma2[6][6]={0};
+  double sigma2[6][6]={{0}};
   
   for (int i = 0; i<6;i++) {
     for (int j = 0;j<6;j++) {
@@ -670,17 +664,14 @@ double bmd::NuMIBpmAtTarget(double &xpmean, double &ypmean,
 }
 int bmd::NuMIProfileProjection(double &x, double &y, 
 			       double &xstdev, double &ystdev,
-			       std::vector<double> PM121,
 			       std::vector<double> PMTGT)
 {
   double xtgt = 0., ytgt = 0., xstdevtgt = 0., ystdevtgt = 0.;
   
-  std::vector<double> hchannels121, vchannels121, hchannelstgt, vchannelstgt;
+  std::vector<double> hchannelstgt, vchannelstgt;
   // Need to add line here to return 0 if no data from devices 
-  // Get relevant channels from the device                
+  // Get relevant channels from the device
   for(int ind = 0; ind <= 47; ++ind) {
-    hchannels121.push_back(PM121[103+ind]);
-    vchannels121.push_back(PM121[103+48+ind]);
     hchannelstgt.push_back(PMTGT[103+ind]);
     vchannelstgt.push_back(PMTGT[103+48+ind]);
   }
