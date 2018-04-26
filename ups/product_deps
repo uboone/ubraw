@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent uboonecode v06_74_01
+parent uboonecode v06_75_00
 
 defaultqual e15
 
@@ -40,8 +40,8 @@ swtrigger       v02_02_05f
 larlite         v06_70_00
 larcv           v06_70_00
 genie_xsec      v2_12_10
-larsoft         v06_74_01
-ubutil          v06_74_01
+larsoft         v06_75_00
+ubutil          v06_75_00
 uboonedata      v01_18_09
 #uboone_example_data v01_00_00
 
@@ -49,7 +49,7 @@ uboonedaq_datatypes v6_20_01_e15
 
 gallery         v1_07_02
 artdaq_core 	v3_01_06
-cetbuildtools	v7_02_01	-	only_for_build
+cetbuildtools	v7_03_02	-	only_for_build
 
 end_product_list
 
