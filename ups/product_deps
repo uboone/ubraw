@@ -36,16 +36,16 @@ table_fragment_end
 # Add the dependent product and version
 
 product          version
-swtrigger       v02_02_05f
-larlite         v06_70_00
-larcv           v06_70_00
+swtrigger       v02_02_05g
+larlite         v06_70_00a
+larcv           v06_70_00a
 genie_xsec      v2_12_10
 larsoft         v06_75_00
 ubutil          v06_75_00
 uboonedata      v01_18_09
 #uboone_example_data v01_00_00
 
-uboonedaq_datatypes v6_20_01_e15
+uboonedaq_datatypes v6_20_02
 
 gallery         v1_07_02
 artdaq_core 	v3_01_06
