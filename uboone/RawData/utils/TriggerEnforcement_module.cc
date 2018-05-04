@@ -22,7 +22,7 @@
 
 #include <memory>
 #include "lardataobj/RawData/TriggerData.h"
-#include "uboone/RawData/utils/ubdaqSoftwareTriggerData.h"
+#include "ubooneobj/ubdaqSoftwareTriggerData.h"
 #include "uboone/TriggerSim/UBTriggerTypes.h"
 #include <string>
 

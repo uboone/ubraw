@@ -21,7 +21,7 @@
 #include "datatypes/raw_data_access.h"
 #include <boost/archive/binary_iarchive.hpp>
 #include "datatypes/ub_EventRecord.h"
-#include "uboone/RawData/utils/ubdaqSoftwareTriggerData.h"
+#include "ubooneobj/ubdaqSoftwareTriggerData.h"
 
 //root
 #include "TTree.h"

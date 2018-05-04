@@ -48,7 +48,8 @@ simple_plugin( TriggerEnforcement "module"
 art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc TriggerEnforcement_module.cc
           BASENAME_ONLY
           LIBRARY_NAME uboone_RawData
-          LIB_LIBRARIES lardata_Utilities_DatabaseUtil_service
+          LIB_LIBRARIES ubooneobj
+	  		lardata_Utilities_DatabaseUtil_service
                         larcorealg_Geometry
                         larcore_Geometry_Geometry_service
                         lardata_Utilities

@@ -12,7 +12,7 @@
 #include "lardataobj/RawData/RawDigit.h"
 #include "lardataobj/RawData/TriggerData.h"
 #include "lardataobj/RawData/DAQHeader.h"
-#include "uboone/RawData/utils/DAQHeaderTimeUBooNE.h"
+#include "ubooneobj/DAQHeaderTimeUBooNE.h"
 #include "lardataobj/RawData/BeamInfo.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
 #include "larcoreobj/SummaryData/RunData.h"

@@ -18,7 +18,7 @@
 #include "messagefacility/MessageLogger/MessageLogger.h"
 #include "lardataobj/RawData/TriggerData.h"
 #include "uboone/TriggerSim/UBTriggerTypes.h"
-#include "uboone/RawData/utils/ubdaqSoftwareTriggerData.h"
+#include "ubooneobj/ubdaqSoftwareTriggerData.h"
 
 
 class TriggerDumper;
