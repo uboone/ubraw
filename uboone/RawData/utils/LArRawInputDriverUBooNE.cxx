@@ -20,7 +20,7 @@
 #include "lardata/DetectorInfoServices/DetectorClocksService.h"
 #include "lardata/DetectorInfo/ElecClock.h"
 #include "lardataobj/OpticalDetectorData/OpticalTypes.h" // I want to move the enums we use back to UBooNE as they are UBooNE-specific
-#include "uboone/TriggerSim/UBTriggerTypes.h"
+#include "ubooneobj/UBTriggerTypes.h"
 
 //ART, ...
 #include "art/Framework/IO/Sources/put_product_in_principal.h"
