@@ -17,8 +17,8 @@
 #include "fhiclcpp/ParameterSet.h"
 #include "messagefacility/MessageLogger/MessageLogger.h"
 #include "lardataobj/RawData/TriggerData.h"
-#include "ubooneobj/UBTriggerTypes.h"
-#include "ubooneobj/ubdaqSoftwareTriggerData.h"
+#include "ubooneobj/Trigger/UBTriggerTypes.h"
+#include "ubooneobj/Trigger/ubdaqSoftwareTriggerData.h"
 
 
 class TriggerDumper;

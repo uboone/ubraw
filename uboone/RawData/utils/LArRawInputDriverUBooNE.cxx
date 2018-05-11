@@ -12,7 +12,7 @@
 #include "lardataobj/RawData/RawDigit.h"
 #include "lardataobj/RawData/TriggerData.h"
 #include "lardataobj/RawData/DAQHeader.h"
-#include "ubooneobj/DAQHeaderTimeUBooNE.h"
+#include "ubooneobj/RawData/DAQHeaderTimeUBooNE.h"
 #include "lardataobj/RawData/BeamInfo.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
 #include "larcoreobj/SummaryData/RunData.h"
@@ -20,7 +20,7 @@
 #include "lardata/DetectorInfoServices/DetectorClocksService.h"
 #include "lardata/DetectorInfo/ElecClock.h"
 #include "lardataobj/OpticalDetectorData/OpticalTypes.h" // I want to move the enums we use back to UBooNE as they are UBooNE-specific
-#include "ubooneobj/UBTriggerTypes.h"
+#include "ubooneobj/Trigger/UBTriggerTypes.h"
 
 //ART, ...
 #include "art/Framework/IO/Sources/put_product_in_principal.h"
