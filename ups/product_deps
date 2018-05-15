@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent uboonecode v06_75_01
+parent uboonecode v06_76_00_01
 
 defaultqual e15
 
@@ -36,19 +36,19 @@ table_fragment_end
 # Add the dependent product and version
 
 product          version
-swtrigger       v02_02_05g
-larlite         v06_70_00a
-larcv           v06_70_00a
+swtrigger       v02_02_05h
+larlite         v06_70_00b
+larcv           v06_70_00b
 genie_xsec      v2_12_10
-larsoft         v06_75_01
-ubutil          v06_75_01
+larsoft         v06_76_00_01
+ubutil          v06_76_00_01
 uboonedata      v01_18_09
 #uboone_example_data v01_00_00
 
-uboonedaq_datatypes v6_20_02
+uboonedaq_datatypes v6_20_02a
 
-gallery         v1_07_02
-artdaq_core 	v3_01_06
+gallery         v1_08_02
+artdaq_core 	v3_02_03
 cetbuildtools	v7_03_02	-	only_for_build
 
 end_product_list
@@ -58,14 +58,14 @@ end_product_list
 # Make a table by adding columns before "notes". 
 # e15  - with gcc 6.3.0 and -std=c++1y
 qualifier	swtrigger	genie_xsec		larsoft		ubutil		uboonedata	uboonedaq_datatypes	larlite		larcv		gallery		artdaq_core	
-c2:debug        c2:debug        DefaultPlusMECWithNC    c2:debug        c2:debug        -nq-            c2:debug                c2:debug        c2:debug        c2:debug        c2:s65:debug
-c2:opt          c2:opt          DefaultPlusMECWithNC    c2:opt          c2:opt          -nq-            c2:opt                  c2:opt          c2:opt          c2:opt          c2:s65:opt
-c2:prof         c2:prof         DefaultPlusMECWithNC    c2:prof         c2:prof         -nq-            c2:prof                 c2:prof         c2:prof         c2:prof         c2:s65:prof
-c2:prof:fg      c2:prof         LocalFGNievesQEAndMEC   c2:prof         c2:prof         -nq-            c2:prof                 c2:prof         c2:prof         c2:prof         c2:s65:prof
-e15:debug	e15:debug	DefaultPlusMECWithNC	e15:debug	e15:debug	-nq-		e15:debug		e15:debug	e15:debug	e15:debug	e15:s65:debug
-e15:opt		e15:opt		DefaultPlusMECWithNC	e15:opt		e15:opt		-nq-		e15:opt			e15:opt		e15:opt		e15:opt		e15:s65:opt
-e15:prof	e15:prof	DefaultPlusMECWithNC	e15:prof	e15:prof	-nq-		e15:prof		e15:prof	e15:prof	e15:prof	e15:s65:prof	
-e15:prof:fg	e15:prof	LocalFGNievesQEAndMEC	e15:prof	e15:prof	-nq-		e15:prof		e15:prof	e15:prof	e15:prof	e15:s65:prof
+c2:debug        c2:debug        DefaultPlusMECWithNC    c2:debug        c2:debug        -nq-            c2:debug                c2:debug        c2:debug        c2:debug        c2:s68:debug
+c2:opt          c2:opt          DefaultPlusMECWithNC    c2:opt          c2:opt          -nq-            c2:opt                  c2:opt          c2:opt          c2:opt          c2:s68:opt
+c2:prof         c2:prof         DefaultPlusMECWithNC    c2:prof         c2:prof         -nq-            c2:prof                 c2:prof         c2:prof         c2:prof         c2:s68:prof
+c2:prof:fg      c2:prof         LocalFGNievesQEAndMEC   c2:prof         c2:prof         -nq-            c2:prof                 c2:prof         c2:prof         c2:prof         c2:s68:prof
+e15:debug	e15:debug	DefaultPlusMECWithNC	e15:debug	e15:debug	-nq-		e15:debug		e15:debug	e15:debug	e15:debug	e15:s68:debug
+e15:opt		e15:opt		DefaultPlusMECWithNC	e15:opt		e15:opt		-nq-		e15:opt			e15:opt		e15:opt		e15:opt		e15:s68:opt
+e15:prof	e15:prof	DefaultPlusMECWithNC	e15:prof	e15:prof	-nq-		e15:prof		e15:prof	e15:prof	e15:prof	e15:s68:prof	
+e15:prof:fg	e15:prof	LocalFGNievesQEAndMEC	e15:prof	e15:prof	-nq-		e15:prof		e15:prof	e15:prof	e15:prof	e15:s68:prof
 
 end_qualifier_list
 
