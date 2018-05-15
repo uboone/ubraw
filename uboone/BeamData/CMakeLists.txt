@@ -19,7 +19,7 @@ simple_plugin ( BeamDataQualityFilter "module"
                    art_Persistency_Provenance canvas
                    art_Utilities canvas
                    ${MF_MESSAGELOGGER}
-                   ${MF_UTILITIES}
+                   
 		   BASENAME_ONLY
               )
 
@@ -47,7 +47,7 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
                         art_Utilities canvas
 			ifdh
                         ${MF_MESSAGELOGGER}
-                        ${MF_UTILITIES}
+                        
                         ${FHICLCPP}
                         cetlib cetlib_except
                         ${CLHEP}

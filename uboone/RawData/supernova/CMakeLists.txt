@@ -30,7 +30,7 @@ art_make( NO_PLUGINS
                         art_Persistency_Provenance 
                         art_Utilities 
                         ${MF_MESSAGELOGGER}
-                        ${MF_UTILITIES}
+                        
                         ${FHICLCPP}
                         ${CETLIB}
                         ${ROOT_GEOM}
@@ -65,7 +65,7 @@ art_make( NO_PLUGINS
                         art_Persistency_Provenance
                         art_Utilities 
                         ${MF_MESSAGELOGGER}
-                        ${MF_UTILITIES}
+                        
                         ${FHICLCPP}
                         ${CETLIB}
                         ${ROOT_GEOM}
