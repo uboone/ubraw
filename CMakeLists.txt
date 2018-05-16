@@ -78,6 +78,7 @@ cet_find_library( UBDut NAMES ubdata_types PATHS $ENV{UBOONEDAQ_DATATYPES_LIB} )
 # macros for dictionary and simple_plugin
 include(ArtDictionary)
 include(ArtMake)
+include(CetMake)
 include(BuildPlugins)
 
 # ADD SOURCE CODE SUBDIRECTORIES HERE
