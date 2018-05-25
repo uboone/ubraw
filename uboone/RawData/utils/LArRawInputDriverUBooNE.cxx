@@ -18,7 +18,7 @@
 #include "larcoreobj/SummaryData/RunData.h"
 #include "larcore/CoreUtils/ServiceUtil.h" // lar::providerFrom<>()
 #include "lardata/DetectorInfoServices/DetectorClocksService.h"
-#include "lardata/DetectorInfo/ElecClock.h"
+#include "lardataalg/DetectorInfo/ElecClock.h"
 #include "lardataobj/OpticalDetectorData/OpticalTypes.h" // I want to move the enums we use back to UBooNE as they are UBooNE-specific
 #include "uboone/TriggerSim/UBTriggerTypes.h"
 

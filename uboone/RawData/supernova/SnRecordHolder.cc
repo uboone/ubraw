@@ -11,7 +11,7 @@
 #include "lardata/ArtDataHelper/WireCreator.h"
 #include "lardata/Utilities/DatabaseUtil.h" // lardata
 #include "lardata/DetectorInfoServices/DetectorClocksService.h"
-#include "lardata/DetectorInfo/ElecClock.h"
+#include "lardataalg/DetectorInfo/ElecClock.h"
 
 #include "art/Framework/IO/Sources/put_product_in_principal.h"
 
