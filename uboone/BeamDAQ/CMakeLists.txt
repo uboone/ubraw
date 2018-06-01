@@ -13,14 +13,14 @@ set(CURLLIB "-lcurl")
 find_library(UBDATATYPESLIB NAMES ubdata_types ubdata_share PATHS $ENV{UBOONEDAQ_DATATYPES_LIB})
 
 cet_make(LIBRARY_NAME BeamDAQ LIBRARIES ${UBDATATYPESLIB}  
-                                        ${MF_MESSAGELOGGER} ${MF_UTILITIES} ${CURLLIB} 
+                                        ${MF_MESSAGELOGGER}  ${CURLLIB} 
 					${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY}
 					${Boost_SYSTEM_LIBRARY}
 					${FHICLCPP} ${CETLIB} ${CETLIB_EXCEPT}
 					EXCLUDE bdaq_get.cpp bdaq_get.h bdaq_readraw.cpp)
 
 target_link_libraries( bdaq_get ${UBDATATYPESLIB}  
-                                ${MF_MESSAGELOGGER} ${MF_UTILITIES} ${CURLLIB} 
+                                ${MF_MESSAGELOGGER}  ${CURLLIB} 
 				${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} 
 				${Boost_SYSTEM_LIBRARY}
 				${FHICLCPP} ${CETLIB} ${CETLIB_EXCEPT} BeamDAQ)
