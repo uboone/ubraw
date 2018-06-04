@@ -34,7 +34,7 @@ create_product_variables( cetpkgsupport v1_14_01 )
 
 # these files should be copied to scisoft for each release
 CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/uboone-cfg.in
-  ${CMAKE_CURRENT_BINARY_DIR}/uboone-cfg-${LARSOFT_DOT_VERSION} @ONLY )
+  ${CMAKE_CURRENT_BINARY_DIR}/uboone-cfg-${UBOONECODE_DOT_VERSION} @ONLY )
 CONFIGURE_FILE ( ${CMAKE_CURRENT_SOURCE_DIR}/uboone.html.in
   ${CMAKE_CURRENT_BINARY_DIR}/uboone-${version}.html @ONLY )
 

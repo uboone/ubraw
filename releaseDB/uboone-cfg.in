@@ -23,6 +23,6 @@ pull_product larcv @LARCV_VERSION@ larcv-@LARCV_DOT_VERSION@-${thisplat}-${baseq
 pull_product uboonedaq_datatypes @UBOONEDAQ_DATATYPES_VERSION@ uboonedaq_datatypes-@UBOONEDAQ_DATATYPES_VERSION@-${thisplat}-${basequal}-${build_type}.tar.bz2
 build_cet_null uboonedata @UBOONEDATA_VERSION@
 build_cet ubutil @UBUTIL_VERSION@ ${basequal}
-build_cet -n uboonecode @UBOONCODE_VERSION@ ${basequal}
+build_cet -n uboonecode @UBOONECODE_VERSION@ ${basequal}
 
 return 0
