@@ -38,7 +38,7 @@ uboone_data     v01_05_00
 uboonedaq_datatypes v6_19_00a_e9
 uboone_example_data v01_00_00
 
-cetbuildtools	v4_19_04	-	only_for_build
+cetbuildtools	v5_14_04	-	only_for_build
 end_product_list
 
 
