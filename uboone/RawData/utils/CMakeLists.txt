@@ -37,7 +37,7 @@ simple_plugin( TriggerEnforcement "module"
                    art_Persistency_Provenance canvas
                    art_Utilities canvas
                    ${MF_MESSAGELOGGER}
-                   ${MF_UTILITIES}
+                   
                    ${FHICLCPP}
                    cetlib cetlib_except
                    ${ROOT_BASIC_LIB_LIST}
@@ -70,7 +70,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art_Persistency_Provenance canvas
                         art_Utilities canvas
                         ${MF_MESSAGELOGGER}
-                        ${MF_UTILITIES}
+                        
                         ${FHICLCPP}
                         cetlib cetlib_except
                         ${ROOT_GEOM}
@@ -102,7 +102,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art_Persistency_Provenance canvas
                         art_Utilities canvas
                         ${MF_MESSAGELOGGER}
-                        ${MF_UTILITIES}
+                        
                         ${FHICLCPP}
                         cetlib cetlib_except
                         ${ROOT_GEOM}
