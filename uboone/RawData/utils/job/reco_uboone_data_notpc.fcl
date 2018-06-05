@@ -116,7 +116,8 @@ microboone_reco_notpc_filters.swtrigbnbhsnc0.excludeSoftwareTriggers: [ "BNB_FEM
 microboone_reco_notpc_filters.swtrignumi.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrignumi.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrignumi.IncludeBits: [ "TriggerNuMI" ]
-microboone_reco_notpc_filters.swtrignumi.includeSoftwareTriggers: [ "NUMI_FEMBeamTriggerAlgo" ]
+microboone_reco_notpc_filters.swtrignumi.includeSoftwareTriggers: [ "NUMI_FEMBeamTriggerAlgo",
+								    "NUMI_2018May_FEMBeamTriggerAlgo" ]
 
 microboone_reco_notpc_filters.swtrignumiunbiased.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrignumiunbiased.SoftwareTriggerProducer: "daq"
@@ -132,7 +133,8 @@ microboone_reco_notpc_filters.swtrigextbnb.includeSoftwareTriggers: [ "EXT_BNBwi
 microboone_reco_notpc_filters.swtrigextnumi.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigextnumi.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigextnumi.IncludeBits: [ "TriggerEXT" ]
-microboone_reco_notpc_filters.swtrigextnumi.includeSoftwareTriggers: [ "EXT_NUMIwin_FEMBeamTriggerAlgo" ]
+microboone_reco_notpc_filters.swtrigextnumi.includeSoftwareTriggers: [ "EXT_NUMIwin_FEMBeamTriggerAlgo",
+								       "EXT_NUMIwin_2018May_FEMBeamTriggerAlgo" ]
 
 microboone_reco_notpc_filters.swtrigextunbiased.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigextunbiased.SoftwareTriggerProducer: "daq"
