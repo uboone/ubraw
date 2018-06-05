@@ -12,7 +12,7 @@ macro( create_product_variables productname productversion )
    STRING( REGEX REPLACE "_" "." VDOT "${productversion}"  )
    STRING( REGEX REPLACE "^[v]" "" ${PRODUCTNAME_UC}_DOT_VERSION "${VDOT}" )
    set( ${PRODUCTNAME_UC}_STRING ${PRODUCTNAME_LC}.${${PRODUCTNAME_UC}_DOT_VERSION} )
-   #message(STATUS "${PRODUCTNAME_UC} version is ${${PRODUCTNAME_UC}_VERSION}")
+   message(STATUS "${PRODUCTNAME_UC} version is ${${PRODUCTNAME_UC}_VERSION}")
 endmacro( create_product_variables)
 
 create_product_variables( uboonecode ${version} )
