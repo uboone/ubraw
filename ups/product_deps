@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent uboonecode v06_26_01_10
+parent uboonecode v06_26_01_13
 defaultqual e10
 
 # These optional lines define where headers, libraries, and executables go and should
@@ -38,23 +38,29 @@ swtrigger       v02_02_03
 larlite         v06_26_01_01
 larcv           v06_26_01_01
 genie_xsec      v2_12_0
-larsoft         v06_26_01_09
-ubutil          v06_26_01_10
-uboonedata 	v01_17_00_03
+larsoft         v06_26_01_10
+ubutil          v06_26_01_13
+uboonedata 	v01_17_00_04
 uboonedaq_datatypes v6_19_01_e10
+uboone_example_data v01_00_00
+artdaq_core     v1_05_09_01
+gallery         v1_03_13
 
-cetbuildtools	v5_06_07	-	only_for_build
+gallery         v1_03_13 
+artdaq_core     v1_05_09_01
+
+cetbuildtools	v7_02_01	-	only_for_build
 end_product_list
 
 
 # We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
 # Make a table by adding columns before "notes". 
 # e10  - with gcc 4.9.3 and -std=c++1y
-qualifier	larlite	    larcv	swtrigger	genie_xsec	larsoft		ubutil		uboonedata	uboonedaq_datatypes notes
-e10:debug	e10:debug   e10:debug	e10:debug	DefaultPlusMECWithNC	e10:debug	e10:debug	-nq-		e10:debug
-e10:opt		e10:opt     e10:opt	e10:opt		DefaultPlusMECWithNC	e10:opt		e10:opt		-nq-        	e10:opt
-e10:prof	e10:prof    e10:prof	e10:prof	DefaultPlusMECWithNC	e10:prof	e10:prof	-nq-        	e10:prof
-e10:prof:fg	e10:prof    e10:prof	e10:prof	LocalFGNievesQEAndMEC	e10:prof	e10:prof	-nq-        	e10:prof
+qualifier	larlite	    larcv	swtrigger	genie_xsec		larsoft		artdaq_core		gallery		ubutil		uboonedata	uboonedaq_datatypes	uboone_example_data	notes
+e10:debug	e10:debug   e10:debug	e10:debug	DefaultPlusMECWithNC	e10:debug	e10:nu:debug:s59	e10:nu:debug	e10:debug	-nq-		e10:debug		-nq-
+e10:opt		e10:opt     e10:opt	e10:opt		DefaultPlusMECWithNC	e10:opt		e10:nu:opt:s59		e10:nu:opt	e10:opt		-nq-        	e10:opt			-nq-
+e10:prof	e10:prof    e10:prof	e10:prof	DefaultPlusMECWithNC	e10:prof	e10:nu:prof:s59		e10:nu:prof	e10:prof	-nq-        	e10:prof		-nq-
+e10:prof:fg	e10:prof    e10:prof	e10:prof	LocalFGNievesQEAndMEC	e10:prof	e10:nu:prof:s59		e10:nu:prof	e10:prof	-nq-        	e10:prof		-nq-
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:

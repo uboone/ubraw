@@ -32,7 +32,6 @@ namespace bmd
 			 std::vector<double>BpmIntY);
   int NuMIProfileProjection(double &x, double &y, 
 			    double &xstdev, double &ystdev,
-			    std::vector<double> PM121,
 			    std::vector<double> PMTGT);
   double NuMIGetGaussFit(double &mean, double &sigma, std::vector<double> profile);
   double NuMIGetStats(TGraph *prof, double &mean, double &stdev);

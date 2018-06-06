@@ -9,8 +9,7 @@
 #include "seedservice_microboone.fcl"
 #include "beamdata_microboone.fcl"
 #include "triggerenforcement.fcl"
-
-
+#include "time_memory_tracker_microboone.fcl" 
 #include "reco_uboone_data_notpc.fcl"
 #include "reco_uboone_data_minimal.fcl"
 
@@ -18,24 +17,10 @@ process_name: Swizzler
 services:
 {
   TFileService: { fileName: "daq_hist.root" }
-  TimeTracker: { 
-    printSummary : true
-    dbOutput     : {
-      filename   :  "time.db"
-      overwrite  :  true
-    }
-  }
-  MemoryTracker: {
-    ignoreTotal       : 1 # no. of events to exclude - '1' by default
-    printSummaries    : ["*"] # or any combination of ["general","event","module"]
-    includeMallocInfo : true
-    dbOutput     : {
-      filename   :  "mem.db"
-      overwrite  :  true
-    }
-  }
+  TimeTracker:            @local::microboone_time_tracker
+  MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
-  NuRandomService:  @local::microboone_seedservice
+  NuRandomService:        @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
   DatabaseUtil:           @local::microboone_database
   @table::microboone_reco_notpc_services
@@ -73,6 +58,7 @@ source:
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
                      "E:TOR875, 100, 0, 5" ]
+  enforceFrameMatching: true ## quit if TPC, PMT, and TRIG stream frames don't match - should be true by default
 }
 
 outputs:
@@ -80,7 +66,7 @@ outputs:
  outbnb:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb.root"
+   fileName: "%ifb_%tc_bnb_%#.root"
    dataTier: "reconstructed"
    streamName: "outbnb"
    compressionLevel: 3
@@ -94,7 +80,7 @@ outputs:
  outnumi:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_numi.root"
+   fileName: "%ifb_%tc_numi_%#.root"
    dataTier: "reconstructed"
    streamName: "outnumi"
    compressionLevel: 3
@@ -108,7 +94,7 @@ outputs:
  outext:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext.root"
+   fileName: "%ifb_%tc_ext_%#.root"
    dataTier: "reconstructed"
    streamName: "outext"
    compressionLevel: 3
@@ -122,7 +108,7 @@ outputs:
  outmucs:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_mucs.root"
+   fileName: "%ifb_%tc_mucs_%#.root"
    dataTier: "reconstructed"
    streamName: "outmucs"
    compressionLevel: 3
@@ -141,7 +127,7 @@ outputs:
  outprescale:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_prescale.root"
+   fileName: "%ifb_%tc_prescale_%#.root"
    dataTier: "reconstructed"
    streamName: "outprescale"
    compressionLevel: 3
@@ -155,7 +141,7 @@ outputs:
  outnotpc:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_notpc.root"
+   fileName: "%ifb_%tc_notpc_%#.root"
    dataTier: "reconstructed"
    streamName: "outnotpc"
    compressionLevel: 3
@@ -224,7 +210,6 @@ services.message.destinations :
   {
      type:      "cout"      #tells the message service to output this destination to cout
      threshold: "WARNING"   #tells the message service that this destination applies to WARNING and higher level messages
-     append:     true       #says to append all messages to the output
      categories:
      {
        ChannelFilter:

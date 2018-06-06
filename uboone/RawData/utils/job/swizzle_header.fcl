@@ -17,8 +17,8 @@ services:
   FileCatalogMetadata:    @local::art_file_catalog_data
   ExptGeoHelperInterface: @local::microboone_geometry_helper
   Geometry:               @local::microboone_geo
-  UBOpReadoutMap:           @local::microboone_opreadoutmap
-  DetectorClocksService:            @local::microboone_detectorclocks
+  UBOpReadoutMap:         @local::microboone_opreadoutmap
+  DetectorClocksService:  @local::microboone_detectorclocks
   DatabaseUtil:           @local::microboone_database
 }
 services.DetectorClocksService.InheritClockConfig: false
@@ -47,10 +47,9 @@ source:
   module_type:	   LArRawInputSourceUBooNE
   maxEvents:       -1
   huffmanDecode:   true
-  swizzleTPC:      true
-  swizzlePMT:      true
+  swizzleTPC:      false
+  swizzlePMT:      false
   swizzleTrigger:  true
-#  UseGPS:	   true
 
   swizzleTriggerType: ALL ## This is the only option that works currently!
 #  swizzleTriggerType: BNB
@@ -83,19 +82,19 @@ physics:
 {
   producers: {
   ### flash finders
-  ophit            : @local::microboone_ophit_beam_highgain
+  #ophit            : @local::microboone_ophit_beam_highgain
   #ophitLow         : @local::microboone_ophit_beam_lowgain
-  ophitCosmic      : @local::microboone_ophit_cosmic_highgain
+  #ophitCosmic      : @local::microboone_ophit_cosmic_highgain
   #ophitCosmicLow   : @local::microboone_ophit_cosmic_lowgain
-  opflash          : @local::microboone_opflash_beam_highgain
+  #opflash          : @local::microboone_opflash_beam_highgain
   #opflashLow       : @local::microboone_opflash_beam_lowgain
-  opflashCosmic    : @local::microboone_opflash_cosmic_highgain
+  #opflashCosmic    : @local::microboone_opflash_cosmic_highgain
   #opflashCosmicLow : @local::microboone_opflash_cosmic_lowgain
  }
  filters: {
-  triggerEnforcement: @local::trigger_enforcement
+  #triggerEnforcement: @local::trigger_enforcement
  }
- reco: [ triggerEnforcement, ophit, opflash ]
+ reco: [ ]
  stream1:   [ out1 ]
  trigger_paths: [ reco ]
  end_paths: [ stream1 ]

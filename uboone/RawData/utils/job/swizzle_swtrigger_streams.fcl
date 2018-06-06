@@ -8,12 +8,14 @@
 #include "swtrigger_microboone.fcl"
 #include "correct_saturation.fcl"
 #include "beamdata_microboone.fcl"
+#include "time_memory_tracker_microboone.fcl" 
 
 process_name: Swizzler
 services:
 {
   TFileService: { fileName: "daq_hist.root" }
-  TimeTracker:  {}
+  TimeTracker:            @local::microboone_time_tracker
+  MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
   FileCatalogMetadata:    @local::art_file_catalog_data
   ExptGeoHelperInterface: @local::microboone_geometry_helper
@@ -63,6 +65,7 @@ source:
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
                      "E:TOR875, 100, 0, 5" ]
+  enforceFrameMatching: true ## quit if TPC, PMT, and TRIG stream frames don't match - should be true by default
 }
 
 outputs:
@@ -70,7 +73,7 @@ outputs:
  outbnb:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb.root"
+   fileName: "%ifb_%tc_bnb_%#.root"
    dataTier: "raw"
    streamName: "outbnb"
    compressionLevel: 3
@@ -84,7 +87,7 @@ outputs:
  outbnbunbiased:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb_unbiased.root"
+   fileName: "%ifb_%tc_bnb_unbiased_%#.root"
    dataTier: "raw"
    streamName: "outbnbunbiased"
    compressionLevel: 3
@@ -95,10 +98,20 @@ outputs:
      granularity: "InputFile"
     }
   }
+ outbnbhsnc0:
+  {
+   module_type: RootOutput
+   fileName: "%ifb_%tc_bnb_hsnc0_%#.root"
+   dataTier: "raw"
+   streamName: "outbnbhsnc0"
+   compressionLevel: 3
+   saveMemoryObjectThreshold: 0
+   SelectEvents: [ path_bnb_hsnc0 ]
+  }
  outnumi:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_numi.root"
+   fileName: "%ifb_%tc_numi_%#.root"
    dataTier: "raw"
    streamName: "outnumi"
    compressionLevel: 3
@@ -112,7 +125,7 @@ outputs:
  outnumiunbiased:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_numi_unbiased.root"
+   fileName: "%ifb_%tc_numi_unbiased_%#.root"
    dataTier: "raw"
    streamName: "outnumiunbiased"
    compressionLevel: 3
@@ -126,7 +139,7 @@ outputs:
  outextbnb:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext_bnb.root"
+   fileName: "%ifb_%tc_ext_bnb_%#.root"
    dataTier: "raw"
    streamName: "outextbnb"
    compressionLevel: 3
@@ -140,7 +153,7 @@ outputs:
  outextnumi:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext_numi.root"
+   fileName: "%ifb_%tc_ext_numi_%#.root"
    dataTier: "raw"
    streamName: "outextnumi"
    compressionLevel: 3
@@ -154,7 +167,7 @@ outputs:
  outextunbiased:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext_unbiased.root"
+   fileName: "%ifb_%tc_ext_unbiased_%#.root"
    dataTier: "raw"
    streamName: "outextunbiased"
    compressionLevel: 3
@@ -168,7 +181,7 @@ outputs:
  outmucs:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_mucs.root"
+   fileName: "%ifb_%tc_mucs_%#.root"
    dataTier: "raw"
    streamName: "outmucs"
    compressionLevel: 3
@@ -182,7 +195,7 @@ outputs:
  outnotpc:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_notpc.root"
+   fileName: "%ifb_%tc_notpc_%#.root"
    dataTier: "raw"
    streamName: "outnotpc"
    compressionLevel: 3
@@ -250,6 +263,7 @@ physics:
 
     swtrigbnb:          @local::trigger_enforcement
     swtrigbnbunbiased:  @local::trigger_enforcement
+    swtrigbnbhsnc0:     @local::trigger_enforcement
     swtrignumi:         @local::trigger_enforcement
     swtrignumiunbiased: @local::trigger_enforcement
     swtrigextbnb:       @local::trigger_enforcement
@@ -260,6 +274,7 @@ physics:
   path_notpc:         [ @sequence::reco ]
   path_bnb:           [ @sequence::reco, swtrigbnb ]
   path_bnb_unbiased:  [ @sequence::reco, swtrigbnbunbiased ]
+  path_bnb_hsnc0:     [ @sequence::reco, swtrigbnbhsnc0 ]
   path_numi:          [ @sequence::reco, swtrignumi ]
   path_numi_unbiased: [ @sequence::reco, swtrignumiunbiased ]
   path_ext_bnb:       [ @sequence::reco, swtrigextbnb ]
@@ -270,6 +285,7 @@ physics:
   trigger_paths: [ path_notpc,
                    path_bnb,
                    path_bnb_unbiased,
+                   path_bnb_hsnc0,
                    path_numi,
                    path_numi_unbiased,
                    path_ext_bnb,
@@ -280,6 +296,7 @@ physics:
   stream_notpc:         [ outnotpc ]
   stream_bnb:           [ outbnb ]
   stream_bnb_unbiased:  [ outbnbunbiased ]
+  stream_bnb_hsnc0:     [ outbnbhsnc0 ]
   stream_numi:          [ outnumi ]
   stream_numi_unbiased: [ outnumiunbiased ]
   stream_ext_bnb:       [ outextbnb ]
@@ -290,6 +307,7 @@ physics:
   end_paths:     [ stream_notpc,
                    stream_bnb,
                    stream_bnb_unbiased,
+                   stream_bnb_hsnc0,
                    stream_numi,
                    stream_numi_unbiased,
                    stream_ext_bnb,
@@ -325,6 +343,12 @@ physics.filters.swtrigbnbunbiased.HardwareTriggerProducer: "daq"
 physics.filters.swtrigbnbunbiased.SoftwareTriggerProducer: "swtrigger"
 physics.filters.swtrigbnbunbiased.IncludeBits: [ "TriggerBNB" ]
 physics.filters.swtrigbnbunbiased.includeSoftwareTriggers: [ "BNB_unbiased_PrescaleAlgo" ]
+
+physics.filters.swtrigbnbhsnc0.HardwareTriggerProducer: "daq"
+physics.filters.swtrigbnbhsnc0.SoftwareTriggerProducer: "swtrigger"
+physics.filters.swtrigbnbhsnc0.IncludeBits: [ "TriggerBNB" ]
+physics.filters.swtrigbnbhsnc0.includeSoftwareTriggers: [ "BNB_HSN_c0_FEMBeamTriggerAlgo" ]
+physics.filters.swtrigbnbhsnc0.excludeSoftwareTriggers: [ "BNB_FEMBeamTriggerAlgo" ]
 
 physics.filters.swtrignumi.HardwareTriggerProducer: "daq"
 physics.filters.swtrignumi.SoftwareTriggerProducer: "swtrigger"

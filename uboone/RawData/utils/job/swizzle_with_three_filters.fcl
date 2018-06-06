@@ -7,16 +7,17 @@
 #include "flashfilter_microboone.fcl"
 #include "subevent_module.fcl"
 #include "seedservice_microboone.fcl"
-#include "triggerenforcement.fcl"
 #include "beamdata_microboone.fcl"
 #include "triggerenforcement.fcl"
+#include "time_memory_tracker_microboone.fcl" 
 
 
 process_name: Swizzler
 services:
 {
   TFileService: { fileName: "daq_hist.root" }
-  TimeTracker:  {}
+  TimeTracker:            @local::microboone_time_tracker
+  MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
   NuRandomService:  @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
@@ -59,6 +60,7 @@ source:
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
                      "E:TOR875, 100, 0, 5" ]
+  enforceFrameMatching: true ## quit if TPC, PMT, and TRIG stream frames don't match - should be true by default
 }
 
 outputs:
@@ -66,7 +68,7 @@ outputs:
  rawfilter:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_rawfilter.root"
+   fileName: "%ifb_%tc_rawfilter_%#.root"
    dataTier: "raw"
    streamName: "rawfilter"
    compressionLevel: 3
@@ -79,7 +81,7 @@ outputs:
  rawprescale:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_rawprescale.root"
+   fileName: "%ifb_%tc_rawprescale_%#.root"
    dataTier: "raw"
    streamName: "rawprescale"
    compressionLevel: 3
@@ -92,7 +94,7 @@ outputs:
  rawnotpc:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_rawnotpc.root"
+   fileName: "%ifb_%tc_rawnotpc_%#.root"
    dataTier: "raw"
    streamName: "rawnotpc"
    compressionLevel: 3

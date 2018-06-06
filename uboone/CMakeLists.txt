@@ -43,9 +43,15 @@ add_subdirectory(PatternFilter)
 add_subdirectory(MicroBooNEPandora)
 
 add_subdirectory(DQMTools)
+add_subdirectory(ChargedTrackMultiplicity/MC)
+add_subdirectory(ChargedTrackMultiplicity/DataON)
+add_subdirectory(ChargedTrackMultiplicity/DataOFF)
 
+#add_subdirectory(ChargedTrackMultiplicitySinglegamma/MC)
 
 add_subdirectory(LEEPhotonAnalysis)
+
+add_subdirectory(UBXSec)
 
 # Respect the order specified in lar_build, which is:
 #
