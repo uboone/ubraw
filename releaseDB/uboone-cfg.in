@@ -16,11 +16,13 @@ fi
 
 ensure_cetbuildtools v7_03_02
 
-pull_product uboone_photon_propagation @UBOONE_PHOTON_PROPAGATION_VERSION@ uboone_photon_propagation-@UBOONE_PHOTON_PROPAGATION_DOT_VERSION@-noarch.tar.bz2
+#pull_product uboone_photon_propagation @UBOONE_PHOTON_PROPAGATION_VERSION@ uboone_photon_propagation-@UBOONE_PHOTON_PROPAGATION_DOT_VERSION@-noarch.tar.bz2
+build_noarch uboone_photon_propagation @UBOONE_PHOTON_PROPAGATION_VERSION@
 pull_product swtrigger @SWTRIGGER_VERSION@ swtrigger-@SWTRIGGER_DOT_VERSION@-${thisplat}-${basequal}-${build_type}.tar.bz2
 pull_product larlite @LARLITE_VERSION@ larlite-@LARLITE_DOT_VERSION@-${thisplat}-${basequal}-${build_type}.tar.bz2
 pull_product larcv @LARCV_VERSION@ larcv-@LARCV_DOT_VERSION@-${thisplat}-${basequal}-${build_type}.tar.bz2
-pull_product uboonedaq_datatypes @UBOONEDAQ_DATATYPES_VERSION@ uboonedaq_datatypes-@UBOONEDAQ_DATATYPES_VERSION@-${thisplat}-${basequal}-${build_type}.tar.bz2
+#pull_product uboonedaq_datatypes @UBOONEDAQ_DATATYPES_VERSION@ uboonedaq_datatypes-@UBOONEDAQ_DATATYPES_VERSION@-${thisplat}-${basequal}-${build_type}.tar.bz2
+build_cet uboonedaq_datatypes @UBOONEDAQ_DATATYPES_VERSION@ ${basequal}
 build_cet_null uboonedata @UBOONEDATA_VERSION@
 build_cet ubutil @UBUTIL_VERSION@ ${basequal}
 build_cet -n uboonecode @UBOONECODE_VERSION@ ${basequal}
