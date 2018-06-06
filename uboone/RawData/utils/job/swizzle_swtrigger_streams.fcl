@@ -80,7 +80,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_bnb ]
    fileProperties: {
-     maxSize: 2000000 # KiB = 2 GB
+     maxSize: 1500000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -146,7 +146,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_ext_bnb ]
    fileProperties: {
-     maxSize: 2000000 # KiB = 2 GB
+     maxSize: 1500000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
