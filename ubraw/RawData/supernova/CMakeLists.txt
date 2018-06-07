@@ -4,18 +4,18 @@ find_ups_product( uboonedaq_datatypes )
   
 
 art_make( NO_PLUGINS 
-          LIBRARY_NAME uboone_RawData_supernova
+          LIBRARY_NAME ubraw_RawData_supernova
           LIB_LIBRARIES lardata_Utilities_DatabaseUtil_service
                         larcorealg_Geometry
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
-                        uboone_Geometry
+                        ubcore_Geometry
                         UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         lardata_ArtDataHelper
-                        # uboone_RawData
+                        # ubraw_RawData
                         # LArRawInputSourceUBooNE_source
                         ${UBDut}
                         ${PQ}
@@ -43,15 +43,15 @@ art_make( NO_PLUGINS
                         larcorealg_Geometry
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
-                        uboone_Geometry
+                        ubcore_Geometry
                         UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         lardataobj_RecoBase
                         lardata_RecoBaseArt
                         larcoreobj_SummaryData
-                        # uboone_RawData
-                        # uboone_RawData_utils
+                        # ubraw_RawData
+                        # ubraw_RawData_utils
                         ${UBDut}
                         ${PQ}
                         ${Boost_SERIALIZATION_LIBRARY}
@@ -78,7 +78,7 @@ art_make( NO_PLUGINS
 
 simple_plugin( SnFileSource
                "source"
-               uboone_RawData_supernova
+               ubraw_RawData_supernova
                UBOpReadoutMap_service
                ${ART_FRAMEWORK_PERSISTENCY_COMMON}
                BASENAME_ONLY

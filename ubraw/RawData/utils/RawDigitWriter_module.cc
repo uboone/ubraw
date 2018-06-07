@@ -37,8 +37,8 @@
 #include "lardataobj/RawData/RawDigit.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
 // Optical Channel Maps
-#include "uboone/Geometry/UBOpChannelTypes.h"
-#include "uboone/Geometry/UBOpReadoutMap.h"
+#include "ubcore/Geometry/UBOpChannelTypes.h"
+#include "ubcore/Geometry/UBOpReadoutMap.h"
 // TPC Channel Map
 #include "lardata/Utilities/DatabaseUtil.h"
 

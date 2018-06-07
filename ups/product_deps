@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent uboonecode v06_80_01
+parent ubraw v06_80_01
 
 defaultqual e15
 
@@ -18,54 +18,30 @@ defaultqual e15
 # bindir  fq_dir       bin
 #
 fcldir  product_dir job
-gdmldir product_dir gdml
 fwdir   product_dir scripts
 
-# table fragment to set FW_SEARCH_PATH needed 
-# to find gdml files:
+# table fragment to set FW_SEARCH_PATH
 table_fragment_begin
-    pathPrepend(FW_SEARCH_PATH, ${UBOONECODE_DIR}/scripts)
-    pathPrepend(FW_SEARCH_PATH, ${UBOONECODE_DIR}/gdml)
-    pathPrepend(FHICL_FILE_PATH, .:./job)
-    envSet(UBOONE_EXAMPLE_DATA_DIR, /cvmfs/uboone.osgstorage.org/stash/uboone_example_data)
-    pathPrepend(FW_SEARCH_PATH, ${UBOONE_EXAMPLE_DATA_DIR})
 table_fragment_end
 
 # With "product  version" table below, we now define depdendencies
 
 # Add the dependent product and version
 
-product          version
-swtrigger       v02_02_05h
-larlite         v06_70_00b
-larcv           v06_70_00b
-genie_xsec      v2_12_10
-larsoft         v06_80_00
-ubutil          v06_80_00
-uboonedata      v01_18_10
-
-uboonedaq_datatypes v6_20_02a
-
-gallery         v1_08_02
-artdaq_core 	v3_02_03
-cetbuildtools	v7_03_03	-	only_for_build
-
+product                 version
+ubcore                  v06_80_01
+larevt                  v06_21_00
+uboonedaq_datatypes     v6_20_02a
+cetbuildtools	        v7_03_03	-	only_for_build
 end_product_list
 
-
-# We now define allowed qualifiers and the corresponding qualifiers for the depdencies.
-# Make a table by adding columns before "notes". 
-# e15  - with gcc 6.3.0 and -std=c++1y
-qualifier	swtrigger	genie_xsec		larsoft		ubutil		uboonedata	uboonedaq_datatypes	larlite		larcv		gallery		artdaq_core	
-c2:debug        c2:debug        DefaultPlusMECWithNC    c2:debug        c2:debug        -nq-            c2:debug                c2:debug        c2:debug        c2:debug        c2:s68:debug
-c2:opt          c2:opt          DefaultPlusMECWithNC    c2:opt          c2:opt          -nq-            c2:opt                  c2:opt          c2:opt          c2:opt          c2:s68:opt
-c2:prof         c2:prof         DefaultPlusMECWithNC    c2:prof         c2:prof         -nq-            c2:prof                 c2:prof         c2:prof         c2:prof         c2:s68:prof
-c2:prof:fg      c2:prof         LocalFGNievesQEAndMEC   c2:prof         c2:prof         -nq-            c2:prof                 c2:prof         c2:prof         c2:prof         c2:s68:prof
-e15:debug	e15:debug	DefaultPlusMECWithNC	e15:debug	e15:debug	-nq-		e15:debug		e15:debug	e15:debug	e15:debug	e15:s68:debug
-e15:opt		e15:opt		DefaultPlusMECWithNC	e15:opt		e15:opt		-nq-		e15:opt			e15:opt		e15:opt		e15:opt		e15:s68:opt
-e15:prof	e15:prof	DefaultPlusMECWithNC	e15:prof	e15:prof	-nq-		e15:prof		e15:prof	e15:prof	e15:prof	e15:s68:prof	
-e15:prof:fg	e15:prof	LocalFGNievesQEAndMEC	e15:prof	e15:prof	-nq-		e15:prof		e15:prof	e15:prof	e15:prof	e15:s68:prof
-
+qualifier      ubcore         larevt         uboonedaq_datatypes
+c2:debug       c2:debug       c2:debug       c2:debug       
+c2:opt         c2:opt         c2:opt         c2:opt         
+c2:prof        c2:prof        c2:prof        c2:prof        
+e15:debug      e15:debug      e15:debug      e15:debug      
+e15:opt        e15:opt        e15:opt        e15:opt        
+e15:prof       e15:prof       e15:prof       e15:prof       
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:

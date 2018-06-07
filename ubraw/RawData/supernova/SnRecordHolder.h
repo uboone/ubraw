@@ -11,7 +11,7 @@
 #include "datatypes/ub_EventRecord.h"
 #include "lardataobj/RecoBase/Wire.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
-#include "uboone/Geometry/UBOpChannelTypes.h"
+#include "ubcore/Geometry/UBOpChannelTypes.h"
 
 
 namespace snassembler {

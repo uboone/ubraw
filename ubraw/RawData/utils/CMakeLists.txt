@@ -2,7 +2,7 @@
 #
 simple_plugin( LArRawInputSourceUBooNE
                "source"
-               uboone_RawData
+               ubraw_RawData
                UBOpReadoutMap_service
                ${ART_FRAMEWORK_PERSISTENCY_COMMON}
                BASENAME_ONLY
@@ -28,7 +28,7 @@ simple_plugin( RawDigitWriter "module"
 simple_plugin( TriggerEnforcement "module"
                    lardata_DetectorInfoServices_DetectorClocksServiceStandard_service # BUG note that we link to a specific service implementation
                    lardataobj_RawData
-                   uboone_RawData
+                   ubraw_RawData
                    ${ART_FRAMEWORK_CORE}
                    ${ART_FRAMEWORK_PRINCIPAL}
                    ${ART_FRAMEWORK_SERVICES_REGISTRY}
@@ -47,14 +47,14 @@ simple_plugin( TriggerEnforcement "module"
 
 art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc TriggerEnforcement_module.cc
           BASENAME_ONLY
-          LIBRARY_NAME uboone_RawData
-          LIB_LIBRARIES ubooneobj_RawData
-	  		ubooneobj_Trigger
+          LIBRARY_NAME ubraw_RawData
+          LIB_LIBRARIES ubobj_RawData
+	  		ubobj_Trigger
 	  		lardata_Utilities_DatabaseUtil_service
                         larcorealg_Geometry
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
-                        uboone_Geometry
+                        ubcore_Geometry
                         UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
@@ -85,12 +85,12 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         larcorealg_Geometry
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
-                        uboone_Geometry
+                        ubcore_Geometry
                         UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
-                        uboone_RawData
+                        ubraw_RawData
                         ${UBDut}
                         ${PQ}
                         ${Boost_SERIALIZATION_LIBRARY}

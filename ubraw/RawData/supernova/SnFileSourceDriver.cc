@@ -16,9 +16,9 @@
 #include "lardataobj/RawData/OpDetWaveform.h"
 
 // uboonecode
-#include "uboone/Geometry/UBOpChannelTypes.h"
-#include "uboone/Geometry/UBOpReadoutMap.h"
-#include "uboone/Geometry/UBOpChannelTypes.h"
+#include "ubcore/Geometry/UBOpChannelTypes.h"
+#include "ubcore/Geometry/UBOpReadoutMap.h"
+#include "ubcore/Geometry/UBOpChannelTypes.h"
 // #include "uboone/RawData/utils/LArRawInputDriverUBooNE.h"
 
 // larsoft
