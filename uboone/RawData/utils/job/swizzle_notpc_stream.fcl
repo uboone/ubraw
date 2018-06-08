@@ -61,15 +61,17 @@ source:
 
 outputs:
 {
- outexthsnc0:
+ outnotpc:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext_hsnc0_%#.root"
+   fileName: "%ifb_%tc_notpc_%#.root"
    dataTier: "raw"
-   streamName: "outexthsnc0"
+   streamName: "outnotpc"
    compressionLevel: 3
    saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_ext_hsnc0 ]
+   outputCommands: ["keep *_*_*_*",
+                    "drop raw::RawDigits_*_*_*"]
+   SelectEvents: [ path_notpc ]
    fileProperties: {
      maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
@@ -87,14 +89,14 @@ physics:
  }
 
  path_notpc:         [ @sequence::microboone_reco_notpc ]
- path_ext_hsnc0:     [ swtrigexthsnc0 ]
+ path_notpc:         [ swtrignotpc ]
 
- stream_ext_hsnc0:     [ outexthsnc0 ]
+ stream_notpc:       [ outnotpc ]
 
  trigger_paths: [ path_notpc,
-                  path_ext_hsnc0 ]
+                  path_notpc ]
 
- end_paths:     [ stream_ext_hsnc0 ]
+ end_paths:     [ stream_notpc ]
 }
 
 services.DetectorClocksService.TrigModuleName: "daq"

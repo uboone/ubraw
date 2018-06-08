@@ -72,7 +72,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_bnb ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 1500000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -86,7 +86,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_bnb_unbiased ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -100,7 +100,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_bnb_hsnc0 ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -114,7 +114,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_numi ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -128,7 +128,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_numi_unbiased ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -142,7 +142,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_ext_bnb ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 1500000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -156,7 +156,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_ext_numi ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -170,7 +170,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_ext_unbiased ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -184,7 +184,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_ext_hsnc0 ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -198,7 +198,7 @@ outputs:
    saveMemoryObjectThreshold: 0
    SelectEvents: [ path_mucs ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -214,7 +214,7 @@ outputs:
                     "drop raw::RawDigits_*_*_*"]
    SelectEvents: [ path_notpc ]
    fileProperties: {
-     maxInputFiles: 1
+     maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
