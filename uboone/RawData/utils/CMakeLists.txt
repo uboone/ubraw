@@ -21,6 +21,8 @@ simple_plugin( RawDigitWriter "module"
                art_Persistency_Common canvas
                art_Persistency_Provenance canvas
                art_Utilities canvas
+               ${MF_MESSAGELOGGER}
+               ${ROOT_BASIC_LIB_LIST}
                BASENAME_ONLY
              )
 
