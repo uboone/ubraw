@@ -25,6 +25,17 @@ pull_product larcv @LARCV_VERSION@ larcv-@LARCV_DOT_VERSION@-${thisplat}-${baseq
 build_cet uboonedaq_datatypes @UBOONEDAQ_DATATYPES_VERSION@ ${basequal}
 build_cet_null uboonedata @UBOONEDATA_VERSION@
 build_cet ubutil @UBUTIL_VERSION@ ${basequal}
+build_cet ubobj @UBOBJ_VERSION@ ${basequal}
+build_cet ubcrt @UBCRT_VERSION@ ${basequal}
+build_cet ubcore @UBCORE_VERSION@ ${basequal}
+build_cet ubraw @UBRAW_VERSION@ ${basequal}
+build_cet ubevt @UBEVT_VERSION@ ${basequal}
+build_cet ubcv @UBCV_VERSION@ ${basequal}
+build_cet ubsim @UBSIM_VERSION@ ${basequal}
+build_cet ubreco @UBRECO_VERSION@ ${basequal}
+build_cet ubana @UBANA_VERSION@ ${basequal}
+build_cet ublite @UBLITE_VERSION@ ${basequal}
+build_cet ubxsec @UBXSEC_VERSION@ ${basequal}
 build_cet -n uboonecode @UBOONECODE_VERSION@ ${basequal}
 
 return 0
