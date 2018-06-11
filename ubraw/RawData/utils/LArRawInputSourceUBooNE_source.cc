@@ -6,7 +6,7 @@
 
 #include "art/Framework/Core/InputSourceMacros.h"
 #include "art/Framework/IO/Sources/Source.h"
-#include "uboone/RawData/utils/LArRawInputDriverUBooNE.h"
+#include "ubraw/RawData/utils/LArRawInputDriverUBooNE.h"
 
 namespace lris {
   typedef art::Source<LArRawInputDriverUBooNE> LArRawInputSourceUBooNE;

@@ -9,7 +9,7 @@ cet_make(LIBRARY_NAME BeamUtil LIBRARIES ${UB_DATA_TYPES} ${ROOT_SPECTRUM} ${ROO
 
 simple_plugin ( BeamDataQualityFilter "module"
                    lardataobj_RawData
-                   uboone_RawData
+                   ubraw_RawData
 		   BeamUtil
                    ${ART_FRAMEWORK_CORE}
                    ${ART_FRAMEWORK_PRINCIPAL}

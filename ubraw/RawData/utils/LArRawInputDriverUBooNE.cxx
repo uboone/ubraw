@@ -8,11 +8,11 @@
 ////////////////////////////////////////////////////////////////////////
 
 //LArSoft
-#include "uboone/RawData/utils/LArRawInputDriverUBooNE.h"
+#include "ubraw/RawData/utils/LArRawInputDriverUBooNE.h"
 #include "lardataobj/RawData/RawDigit.h"
 #include "lardataobj/RawData/TriggerData.h"
 #include "lardataobj/RawData/DAQHeader.h"
-#include "ubooneobj/RawData/DAQHeaderTimeUBooNE.h"
+#include "ubobj/RawData/DAQHeaderTimeUBooNE.h"
 #include "lardataobj/RawData/BeamInfo.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
 #include "larcoreobj/SummaryData/RunData.h"
@@ -20,7 +20,7 @@
 #include "lardata/DetectorInfoServices/DetectorClocksService.h"
 #include "lardataalg/DetectorInfo/ElecClock.h"
 #include "lardataobj/OpticalDetectorData/OpticalTypes.h" // I want to move the enums we use back to UBooNE as they are UBooNE-specific
-#include "ubooneobj/Trigger/UBTriggerTypes.h"
+#include "ubobj/Trigger/UBTriggerTypes.h"
 
 //ART, ...
 #include "art/Framework/IO/Sources/put_product_in_principal.h"
@@ -32,8 +32,8 @@
 //uboone datatypes
 
 // uboonecode
-#include "uboone/Geometry/UBOpChannelTypes.h"
-#include "uboone/Geometry/UBOpReadoutMap.h"
+#include "ubcore/Geometry/UBOpChannelTypes.h"
+#include "ubcore/Geometry/UBOpReadoutMap.h"
 
 #include "datatypes/raw_data_access.h"
 

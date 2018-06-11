@@ -11,7 +11,7 @@
 #include "datatypes/raw_data_access.h"
 #include "datatypes/ub_EventRecord.h"
 
-#include "uboone/Geometry/UBOpChannelTypes.h"
+#include "ubcore/Geometry/UBOpChannelTypes.h"
 
 
 #include <fstream>
