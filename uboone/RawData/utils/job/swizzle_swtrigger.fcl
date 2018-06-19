@@ -7,7 +7,6 @@
 #include "triggerenforcement.fcl"
 #include "swtrigger_microboone.fcl"
 #include "correct_saturation.fcl"
-#include "beamdata_microboone.fcl"
 
 process_name: Swizzler
 services:
@@ -93,7 +92,6 @@ reco: [ saturation,
         opflashLow,
         opflashCosmic,
         opflashCosmicLow,
-        beamdata,
         swtrigger ]
 
 physics:
@@ -112,7 +110,6 @@ physics:
     opflashLow       : @local::microboone_opflash_beam_lowgain
     opflashCosmic    : @local::microboone_opflash_cosmic_highgain
     opflashCosmicLow : @local::microboone_opflash_cosmic_lowgain
-    beamdata         : @local::microboone_beamdata
   }
 
   filters: {
