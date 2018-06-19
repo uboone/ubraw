@@ -7,7 +7,6 @@
 #include "flashfilter_microboone.fcl"
 #include "subevent_module.fcl"
 #include "seedservice_microboone.fcl"
-#include "beamdata_microboone.fcl"
 #include "triggerenforcement.fcl"
 #include "time_memory_tracker_microboone.fcl" 
 #include "reco_uboone_data_notpc.fcl"
