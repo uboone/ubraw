@@ -11,6 +11,7 @@
 #include "triggerenforcement.fcl"
 #include "time_memory_tracker_microboone.fcl" 
 #include "reco_uboone_data_notpc.fcl"
+#include "microboone_crt_merger.fcl"
 
 process_name: Swizzler
 services:
@@ -61,15 +62,15 @@ source:
 
 outputs:
 {
- outexthsnc0:
+ outbnbunbiased:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_ext_hsnc0_%#.root"
+   fileName: "%ifb_%tc_bnb_unbiased_%#.root"
    dataTier: "raw"
-   streamName: "outexthsnc0"
+   streamName: "outbnbunbiased"
    compressionLevel: 3
    saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_ext_hsnc0 ]
+   SelectEvents: [ path_bnb_unbiased ]
    fileProperties: {
      maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
@@ -81,20 +82,21 @@ physics:
 {
  producers: {
   @table::microboone_reco_notpc_producers
+  merger : @local::microboone_crt_merger
  }
  filters: {
   @table::microboone_reco_notpc_filters
  }
 
- path_notpc:         [ @sequence::microboone_reco_notpc ]
- path_ext_hsnc0:     [ swtrigexthsnc0 ]
+ path_notpc:         [ merger, @sequence::microboone_reco_notpc ]
+ path_bnb_unbiased:  [ swtrigbnbunbiased ]
 
- stream_ext_hsnc0:     [ outexthsnc0 ]
+ stream_bnb_unbiased:  [ outbnbunbiased ]
 
  trigger_paths: [ path_notpc,
-                  path_ext_hsnc0 ]
+                  path_bnb_unbiased ]
 
- end_paths:     [ stream_ext_hsnc0 ]
+ end_paths:     [ stream_bnb_unbiased ]
 }
 
 services.DetectorClocksService.TrigModuleName: "daq"
@@ -105,7 +107,8 @@ services.DetectorClocksService.TrigModuleName: "daq"
 #physics.filters.opflashfilternumi.OpFlashModule : "opflash"
 #physics.filters.opflashfilternumi.DisableFilter: false
 
-
+physics.producers.merger.debug: false
+physics.producers.merger.ubversion_CRTHits: prod_v06_26_01_13
 
 ### Here we try to suppress known and pointless messages
 services.message.destinations :
