@@ -1,6 +1,0 @@
-#include "standard_propagate_uboone.fcl"
-
-process_name: SimPropagate10msLt
-outputs.out1.fileName: "%ifb_%tc_prop_10msLt.root"
-
-#include "sys_var_10msLt_uboone.fcl"

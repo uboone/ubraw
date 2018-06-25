@@ -1,7 +1,0 @@
-#include "larproperties.fcl"
-
-BEGIN_PROLOG
-
-microboone_properties:                  @local::standard_properties
-
-END_PROLOG

@@ -1,7 +1,0 @@
-add_subdirectory(RawData)
-add_subdirectory(Optical)
-add_subdirectory(Trigger)
-add_subdirectory(CRT)
-add_subdirectory(DataOverlay)
-add_subdirectory(MuCS)
-add_subdirectory(UBXSec)

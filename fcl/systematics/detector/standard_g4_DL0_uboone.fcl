@@ -1,6 +1,0 @@
-#include "standard_g4_CV_uboone.fcl"
-
-process_name: G4DL0
-outputs.out1.fileName: "%ifb_%tc_g4_dl0.root"
-
-#include "sys_var_DL0_uboone.fcl"

@@ -1,3 +1,0 @@
-#include "reco_uboone_data_mcc8_driver_stage1_optfilter_ext.fcl"
-
-outputs.out1.outputCommands: ["keep *_*_*_*",  "drop raw::RawDigits_*_*_*"]

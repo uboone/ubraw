@@ -1,6 +1,0 @@
-#include "standard_propagate_uboone.fcl"
-
-process_name: SimPropagateDTDOWN
-outputs.out1.fileName: "%ifb_%tc_prop_DTDOWN.root"
-
-#include "sys_var_DT_down_uboone.fcl"

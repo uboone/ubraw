@@ -1,8 +1,0 @@
-#include "larfft.fcl"
-
-BEGIN_PROLOG
-
-microboone_larfft:         @local::standard_larfft
-microboone_larfft.FitBins: 5
-
-END_PROLOG

@@ -1,6 +1,0 @@
-#include "standard_propagate_uboone.fcl"
-
-process_name: SimPropagateDLUP
-outputs.out1.fileName: "%ifb_%tc_prop_DLUP.root"
-
-#include "sys_var_DL_up_uboone.fcl"

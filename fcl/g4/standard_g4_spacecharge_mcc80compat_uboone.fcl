@@ -1,3 +1,0 @@
-#include "standard_g4_spacecharge_uboone.fcl"
-
-services.LArG4Parameters.MCC80Compat: true

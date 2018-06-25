@@ -1,6 +1,0 @@
-#include "standard_detsim_CV_uboone.fcl"
-
-physics.producers.daq.DriftEModuleLabel:  "largeant"
-physics.producers.optdigitizer.G4ModName: "phprop"
-
-source.inputCommands: ["keep *_*_*_*", "drop *_*_*_Detsim*","drop *_*_*_McReco*", "drop sumdata::RunData_*_*_*"]

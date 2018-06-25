@@ -1,7 +1,0 @@
-#include "standard_detsim_CV_prop_uboone.fcl"
-
-process_name: DetsimDnPENoise
-
-outputs.out1.fileName: "%ifb_%tc_detsim_dnPEnoise.root"
-
-#include "sys_var_dnPEnoise_uboone.fcl"

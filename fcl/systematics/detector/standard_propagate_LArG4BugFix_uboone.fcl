@@ -1,6 +1,0 @@
-#include "standard_propagate_uboone.fcl"
-
-process_name: SimPropagateLArG4BugFix
-outputs.out1.fileName: "%ifb_%tc_prop_LArG4BugFix.root"
-
-#include "sys_var_LArG4BugFix_uboone.fcl"

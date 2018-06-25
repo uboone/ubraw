@@ -1,6 +1,0 @@
-#include "standard_g4_CV_uboone.fcl"
-
-process_name: G4BirksRecomb
-outputs.out1.fileName: "%ifb_%tc_g4_BirksRecomb.root"
-
-#include "sys_var_BirksRecomb_uboone.fcl"

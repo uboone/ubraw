@@ -1,7 +1,0 @@
-#include "dlmc_singlep_common.fcl"
-
-process_name: PiMinus
-services.TFileService.fileName: "piminus_%tc.root"
-physics.producers.generator.PDG:    [ -211   ] # piminus
-physics.producers.generator.P0:     [ 0.513 ] # corresponds to KE 30 MeV => 800 MeV
-physics.producers.generator.SigmaP: [ 0.417 ] # sqrt(pow(KE+139.6,2)-pow(139.6,2))

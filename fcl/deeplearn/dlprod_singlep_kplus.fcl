@@ -1,7 +1,0 @@
-#include "dlprod_singlep_common.fcl"
-
-process_name: KPlus
-services.TFileService.fileName: "kplus_%tc.root"
-physics.producers.generator.PDG:    [ 321   ] # kplus
-physics.producers.generator.P0:     [ 0.600 ] # corresponds to KE 30 MeV => 1000 MeV
-physics.producers.generator.SigmaP: [ 0.400 ] # sqrt(pow(KE+139.6,2)-pow(139.6,2))

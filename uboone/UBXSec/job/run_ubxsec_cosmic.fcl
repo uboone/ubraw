@@ -1,6 +1,0 @@
-#include "run_ubxsec_mc_bnbcosmic.fcl"
-
-services.TFileService.fileName: "ubxsec_output_cosmic.root"
-
-physics.producers.NeutrinoFlashMatch.UseGENIEInfo:  false
-physics.analyzers.UBXSec.UseGENIEInfo:              false

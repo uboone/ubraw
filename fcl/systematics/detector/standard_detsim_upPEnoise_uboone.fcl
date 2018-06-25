@@ -1,7 +1,0 @@
-#include "standard_detsim_CV_prop_uboone.fcl"
-
-process_name: DetsimUpPENoise
-
-outputs.out1.fileName: "%ifb_%tc_detsim_upPEnoise.root"
-
-#include "sys_var_upPEnoise_uboone.fcl"

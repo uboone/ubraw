@@ -1,7 +1,0 @@
-#include "reco_uboone_mcc8_driver_stage1_CV.fcl"
-
-process_name: McRecoStage1SqueezeResp
-
-outputs.out1.fileName: "%ifb_reco1_SqueezeResp.root"
-
-#include "sys_var_squeezeResp_uboone.fcl"

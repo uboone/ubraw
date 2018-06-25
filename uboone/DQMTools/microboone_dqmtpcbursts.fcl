@@ -1,9 +1,0 @@
-BEGIN_PROLOG
-
-microboone_dqmtpcbursts:
-{
-  module_type: DQMTPCBurstModule 
-  DigitModuleLabel: "daq"
-}
-
-END_PROLOG

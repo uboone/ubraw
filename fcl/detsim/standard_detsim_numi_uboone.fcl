@@ -1,8 +1,0 @@
-#include "standard_detsim_uboone.fcl"
-
-#fcl file manages detsim for numi MC events
-
-physics.producers.triggersim:    @local::ubtrigger_dark_numi
-physics.filters.swtrigger:       @local::microboone_swtrigger_mc_numi
-
-outputs.out1.fileName: "%ifb_%tc_detsim_numi.root"

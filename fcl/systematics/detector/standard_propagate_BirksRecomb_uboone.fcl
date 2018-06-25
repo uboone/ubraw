@@ -1,6 +1,0 @@
-#include "standard_propagate_uboone.fcl"
-
-process_name: SimPropagateBirksRecomb
-outputs.out1.fileName: "%ifb_%tc_prop_BirksRecomb.root"
-
-#include "sys_var_BirksRecomb_uboone.fcl"

@@ -1,6 +1,0 @@
-#include "reco_uboone_data_Feb2016_driver_stage1.fcl"
-
-process_name: DataApr2016RecoStage1
-
-#now use DB to get quiet wires
-services.ElectronicsCalibService.ElectronicsCalibProvider.UseDB: true

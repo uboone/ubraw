@@ -1,3 +1,0 @@
-#include "corsika_g4_intime.fcl"
-
-services.LArG4Parameters.MCC80Compat: true

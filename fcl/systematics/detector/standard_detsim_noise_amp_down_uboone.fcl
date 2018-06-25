@@ -1,7 +1,0 @@
-#include "standard_detsim_CV_prop_uboone.fcl"
-
-process_name: DetsimNoiseAmpDown
-
-outputs.out1.fileName: "%ifb_%tc_detsim_noise_amp_down.root"
-
-#include "sys_var_noise_amp_down_uboone.fcl"

@@ -1,7 +1,0 @@
-#include "dlprod_singlep_common.fcl"
-
-process_name: PiZero
-services.TFileService.fileName: "pizero_%tc.root"
-physics.producers.generator.PDG:    [ 111    ] # piminus
-physics.producers.generator.P0:     [ 0.6137 ] # corresponds to KE 30 MeV => 1000 MeV
-physics.producers.generator.SigmaP: [ 0.5173 ] # sqrt(pow(KE+139.6,2)-pow(139.6,2))

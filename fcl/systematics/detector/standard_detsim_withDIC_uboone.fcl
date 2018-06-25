@@ -1,7 +1,0 @@
-#include "standard_detsim_CV_prop_uboone.fcl"
-
-process_name: DetsimWithDIC
-
-outputs.out1.fileName: "%ifb_%tc_detsim_withDIC.root"
-
-#include "sys_var_DIC_uboone.fcl"

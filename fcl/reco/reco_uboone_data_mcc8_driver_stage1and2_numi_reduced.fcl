@@ -1,6 +1,0 @@
-#include "reco_uboone_data_mcc8_driver_stage1and2_reduced.fcl"
-
-outputs.out1.fileName: "%ifb_%tc_reco12_numi.root"
-
-physics.producers.pandoraCosmicFlashTag.FlashVetoTimeStart: 5
-physics.producers.pandoraCosmicFlashTag.FlashVetoTimeEnd: 16

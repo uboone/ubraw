@@ -1,6 +1,0 @@
-#include "standard_g4_CV_uboone.fcl"
-
-process_name: G4noSCE
-outputs.out1.fileName: "%ifb_%tc_g4_nospacecharge.root"
-
-#include "sys_var_noSCE_uboone.fcl"

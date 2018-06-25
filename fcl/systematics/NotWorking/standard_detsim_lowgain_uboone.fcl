@@ -1,8 +1,0 @@
-#include "standard_detsim_uboone.fcl"
-
-process_name: DetsimLowGain
-
-source.inputCommands: ["keep *_*_*_*","drop *_*_*_McReco*","drop *_*_*_Detsim*" ]
-# Decrease gain from nominal by 10%.
-
-services.SignalShapingServiceMicroBooNE.ASICGainInMVPerFC: [ [12.6, 12.6, 12.6], [4.23, 12.6, 12.6] ]

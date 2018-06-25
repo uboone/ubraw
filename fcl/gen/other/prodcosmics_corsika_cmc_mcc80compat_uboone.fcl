@@ -1,3 +1,0 @@
-#include "prodcosmics_corsika_cmc_uboone.fcl"
-
-physics.producers.generator.MCC80Compat: true

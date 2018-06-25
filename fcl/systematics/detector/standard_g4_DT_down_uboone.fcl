@@ -1,6 +1,0 @@
-#include "standard_g4_CV_uboone.fcl"
-
-process_name: G4DTDOWN
-outputs.out1.fileName: "%ifb_%tc_g4_dtdown.root"
-
-#include "sys_var_DT_down_uboone.fcl"

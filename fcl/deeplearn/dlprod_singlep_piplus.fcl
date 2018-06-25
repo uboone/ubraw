@@ -1,7 +1,0 @@
-#include "dlprod_singlep_common.fcl"
-
-process_name: PiMinus
-services.TFileService.fileName: "piplus_%tc.root"
-physics.producers.generator.PDG:    [ 211   ] # piminus
-physics.producers.generator.P0:     [ 0.4525 ] # 35 MeV lowest KE (mom 105 MeV)
-physics.producers.generator.SigmaP: [ 0.3475 ] # to 800 MeV flat momentum

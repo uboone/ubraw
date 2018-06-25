@@ -1,3 +1,0 @@
-#include "reco_uboone_data_mcc8_driver_pmtremap.fcl"
-
-physics.producers.trajcluster.DoRawDigitAssns: false

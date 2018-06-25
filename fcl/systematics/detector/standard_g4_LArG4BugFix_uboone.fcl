@@ -1,6 +1,0 @@
-#include "standard_g4_CV_uboone.fcl"
-
-process_name: G4LArG4BugFix
-outputs.out1.fileName: "%ifb_%tc_g4_LArG4BugFix.root"
-
-#include "sys_var_LArG4BugFix_uboone.fcl"

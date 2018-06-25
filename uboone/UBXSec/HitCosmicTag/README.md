@@ -1,3 +1,0 @@
-# HitCosmicTag
-
-This module is supposed to live inside uboonecode. More inforamtion will follow at some point...

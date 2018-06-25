@@ -1,6 +1,0 @@
-#include "standard_propagate_uboone.fcl"
-
-process_name: SimPropagatenoSCE
-outputs.out1.fileName: "%ifb_%tc_prop_noSCE.root"
-
-#include "sys_var_noSCE_uboone.fcl"

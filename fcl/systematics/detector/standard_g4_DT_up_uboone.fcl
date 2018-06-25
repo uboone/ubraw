@@ -1,6 +1,0 @@
-#include "standard_g4_CV_uboone.fcl"
-
-process_name: G4DTUP
-outputs.out1.fileName: "%ifb_%tc_g4_dtup.root"
-
-#include "sys_var_DT_up_uboone.fcl"

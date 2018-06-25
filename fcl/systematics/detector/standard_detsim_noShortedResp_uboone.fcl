@@ -1,7 +1,0 @@
-#include "standard_detsim_CV_prop_uboone.fcl"
-
-process_name: DetsimNoShortedResp
-
-outputs.out1.fileName: "%ifb_%tc_detsim_noShortedResp.root"
-
-#include "sys_var_noShortedResp_uboone.fcl"

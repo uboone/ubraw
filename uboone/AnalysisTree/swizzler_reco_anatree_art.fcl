@@ -1,5 +1,0 @@
-#include "swizzler_reco_anatree.fcl"
-
-process_name: SwizzlerRecoAnatree
-
-physics.end_paths: [ stream1, ana ]
