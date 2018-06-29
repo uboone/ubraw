@@ -22,8 +22,8 @@
 
 #include <memory>
 #include "lardataobj/RawData/TriggerData.h"
-#include "ubooneobj/Trigger/ubdaqSoftwareTriggerData.h"
-#include "ubooneobj/Trigger/UBTriggerTypes.h"
+#include "ubobj/Trigger/ubdaqSoftwareTriggerData.h"
+#include "ubobj/Trigger/UBTriggerTypes.h"
 #include <string>
 
 class TriggerEnforcement;

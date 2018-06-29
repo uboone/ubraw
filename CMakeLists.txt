@@ -11,15 +11,11 @@
 #  make install
 #  make package (builds distribution tarfile)
 # ======================================================================
-# LarSoft is an empty product
-# It sets up all of the larsoft ups products (lardata, larsim, larreco, etc.)
-# ======================================================================
-
 
 # use cmake 2.8 or later
 cmake_minimum_required (VERSION 2.8)
 
-project(uboonecode)
+project(ubraw)
 
 # cetbuildtools contains our cmake modules
 SET ( CETBUILDTOOLS_VERSION $ENV{CETBUILDTOOLS_VERSION} )
@@ -45,55 +41,30 @@ cet_set_compiler_flags(DIAGS CAUTIOUS
 cet_report_compiler_flags()
 
 # these are minimum required versions, not the actual product versions
-find_ups_product( larcore v1_00_00 )
+find_ups_product( larcorealg )
 find_ups_product( larcoreobj )
-find_ups_product( lardata v1_00_00 )
 find_ups_product( lardataobj )
-find_ups_product( larevt v1_00_00 )
-find_ups_product( larsim v1_00_00 )
-find_ups_product( larreco v1_00_00 )
-find_ups_product( larpandora v1_00_00 )
-find_ups_product( larana v1_00_00 )
-find_ups_product( larpandora v1_00_00 )
-find_ups_product( nutools v1_00_00 )
-find_ups_product( art v1_09_00 )
 find_ups_product( cetbuildtools v3_10_00 )
-find_ups_product( postgresql v9_1_5 )
 find_ups_boost( v1_53_0 )
-find_ups_product( uboonedaq_datatypes )
-find_ups_product( ifdh_art )
 find_ups_product( canvas )
-find_ups_product( gsl )
-find_ups_product( gallery )
-find_ups_product( artdaq_core v1_00_00 )
-######find_ups_product( bernfebdaq_core v00_04_00 )
-
-
-cet_find_library( GSL NAMES gsl PATHS ENV GSL_LIB NO_DEFAULT_PATH )
-cet_find_library( GSLCBLAS NAMES gslcblas PATHS ENV GSL_LIB NO_DEFAULT_PATH )
-cet_find_library( PQ NAMES pq PATHS ENV POSTGRESQL_LIBRARIES NO_DEFAULT_PATH )
+find_ups_product( ubcore v1_00_00 )
+find_ups_product( ifdh_art v1_00_00 )
+find_ups_product( larevt v1_00_00 )
+find_ups_product( lardata v1_00_00 )
+find_ups_product( uboonedaq_datatypes v1_00_00 )
+find_ups_product( art v1_00_00 )
 cet_find_library( UBDut NAMES ubdata_types PATHS $ENV{UBOONEDAQ_DATATYPES_LIB} )
 
 # macros for dictionary and simple_plugin
 include(ArtDictionary)
 include(ArtMake)
-include(CetMake)
 include(BuildPlugins)
 
 # ADD SOURCE CODE SUBDIRECTORIES HERE
-add_subdirectory(ubooneobj)
-add_subdirectory(uboone)
-# subdirectory for test code
+add_subdirectory(ubraw)
+
+# Unit tests.
 add_subdirectory(test)
-
-# Top level fcl files.
-add_subdirectory(fcl)
-
-# Stand alone compiled executables.
-add_subdirectory(tools)
-
-# release database
-add_subdirectory(releaseDB)
 
 # ups - table and config files
 add_subdirectory(ups)

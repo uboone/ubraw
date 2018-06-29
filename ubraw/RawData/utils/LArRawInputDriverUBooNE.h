@@ -21,12 +21,12 @@
 #include "datatypes/raw_data_access.h"
 #include <boost/archive/binary_iarchive.hpp>
 #include "datatypes/ub_EventRecord.h"
-#include "ubooneobj/Trigger/ubdaqSoftwareTriggerData.h"
+#include "ubobj/Trigger/ubdaqSoftwareTriggerData.h"
 
 //root
 #include "TTree.h"
 
-#include "uboone/Geometry/UBOpChannelTypes.h"
+#include "ubcore/Geometry/UBOpChannelTypes.h"
 #include "lardata/Utilities/DatabaseUtil.h" // lardata
 
 #include <fstream>
