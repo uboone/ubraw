@@ -714,6 +714,62 @@ namespace lris {
 	uint32_t seconds=global_header.getSeconds();
       	uint32_t nano_seconds=global_header.getNanoSeconds()+
 	                    	global_header.getMicroSeconds()*1000;
+
+	// Make sure Nano_seconds is less than 1000000000.
+	// This while loop shouldn't be triggered for normal data.
+
+	while(nano_seconds >= 1000000000) {
+	  seconds += 1;
+	  nano_seconds -= 1000000000;
+	}
+
+	// GPS time adjustment goes here.
+	// Don't adjust GPS time if GPS time is identically zero.
+
+	if(seconds != 0 || nano_seconds != 0) {
+
+	  // adjust to account for jitter in GPS timestamp : DAVID C
+	  auto const& gps_pps_time = global_header.getGPSTime();
+	  auto const& gps_micro = gps_pps_time.micro * 1000;  // in nano-seconds
+	  auto const& gps_nano  = gps_pps_time.nano;          // in nano-seconds
+	  auto const& remainder = gps_micro + gps_nano;
+	  //std::cout << "Before adjustment:" << std::endl;
+	  //std::cout << "seconds = " << seconds << std::endl;
+	  //std::cout << "nano_seconds = " << nano_seconds << std::endl;
+	  //std::cout << "gps_micro = " << gps_micro << std::endl;
+	  //std::cout << "gps_nano = " << gps_nano << std::endl;
+	  //std::cout << "remainder = " << remainder << std::endl;
+	  if (remainder > 500000000) {
+	    if(remainder > nano_seconds)
+	      nano_seconds += 1000000000 - remainder;
+	    else {
+	      seconds += 1;
+	      nano_seconds -= remainder;
+	    }
+	  }
+	  else {
+	    if(remainder > nano_seconds) {
+	      seconds -= 1;
+	      nano_seconds += 1000000000 - remainder;
+	    }
+	    else
+	      nano_seconds -= remainder;
+	  }
+
+	  // Make sure nano_seconds is still less than 1000000000.
+	  // If this is ever not true, adjustment calculation is messed up.
+
+	  if(nano_seconds >= 1000000000) {
+	    std::cout << "Bad nanoseconds = " << nano_seconds << std::endl;
+	    throw std::exception();
+	  }
+	}
+
+	// end of gps timestamp adjustment
+	//std::cout << "After adjustment:" << std::endl;
+	//std::cout << "seconds = " << seconds << std::endl;
+	//std::cout << "nano_seconds = " << nano_seconds << std::endl;
+
 	//std::cout << "The GPS time is..." << std::endl;
 	//std::cout << "The number of seconds is: " << seconds << std::endl;
 	//std::cout << "The number of nano seconds is: " << nano_seconds << std::endl;
