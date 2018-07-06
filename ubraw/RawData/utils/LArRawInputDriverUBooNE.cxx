@@ -139,20 +139,29 @@ namespace lris {
     fHuffmanDecode(ps.get<bool>("huffmanDecode",false)),
     fUseGPS(ps.get<bool>("UseGPS",false)),
     fUseNTP(ps.get<bool>("UseNTP",false)),
+    fUseGPSAdj(ps.get<bool>("UseGPSAdj",false)),
     fMaxEvents(-1),
     fSkipEvents(0)
   	{
+	int ntime = 0;  
+	if(fUseGPS)
+	  ++ntime;
+	if(fUseNTP)
+	  ++ntime;
+	if(fUseGPSAdj)
+	  ++ntime;
 
-	if (!fUseGPS && !fUseNTP) {
+	if (ntime == 0) {
 	  std::cout << std::endl << "YOU ARE SPECIFYING NEITHER ntp NOR gps TIME. THAT IS RATHER POOR FORM." << std::endl;
 	  std::cout << "<sigh> Fine. </sigh> Defaulting to the NTP time..." << std::endl << std::endl;
 	}
-	if (fUseGPS && fUseNTP) {
-	  std::cout << std::endl << "You are trying to specify BOTH the NTP and GPS time. That is rather poor form." << std::endl;
+	else if (ntime != 1) {
+	  std::cout << std::endl << "You are trying to specify more than one event time. That is rather poor form." << std::endl;
 	  std::cout << "Defaulting to the NTP time..." << std::endl << std::endl;
 	}
 	if (fUseGPS) std::cout << std::endl << "Using GPS time to set the DAQHeader..." << std::endl << std::endl;
 	if (fUseNTP) std::cout << std::endl << "Using NTP time to set the DAQHeader..." << std::endl << std::endl;
+	if (fUseGPSAdj) std::cout << std::endl << "Using GPS adjusted time to set the DAQHeader..." << std::endl << std::endl;
 
 
     	::peek_at_next_event<ub_TPC_CardData_v6>(false);
@@ -715,6 +724,8 @@ namespace lris {
 	uint32_t seconds=global_header.getSeconds();
       	uint32_t nano_seconds=global_header.getNanoSeconds()+
 	                    	global_header.getMicroSeconds()*1000;
+      	time_t mytime_gps = ((time_t)seconds<<32) | nano_seconds;
+	time_t mytime_gps_adj = mytime_gps;
 
 	// Make sure Nano_seconds is less than 1000000000.
 	// This while loop shouldn't be triggered for normal data.
@@ -774,13 +785,18 @@ namespace lris {
 	//std::cout << "The GPS time is..." << std::endl;
 	//std::cout << "The number of seconds is: " << seconds << std::endl;
 	//std::cout << "The number of nano seconds is: " << nano_seconds << std::endl;
-      	time_t mytime_gps = ((time_t)seconds<<32) | nano_seconds;
+      	mytime_gps_adj = ((time_t)seconds<<32) | nano_seconds;
 	//printf ("The GPS time is: %s %lu \n", ctime(&mytime_gps), uint64_t(mytime_gps));
 	time_t mytime(0);
 	if (fUseGPS) {
-	  mytime = ((time_t)seconds<<32) | nano_seconds;
+	  mytime = mytime_gps;
 	  //printf ("The DAQ Header time is: %s %lu \n", ctime(&mytime), uint64_t(mytime));
 	  //std::cout << "Using GPS time" << std::endl;
+	}
+	else if (fUseGPSAdj) {
+	  mytime = mytime_gps_adj;
+	  //printf ("The DAQ Header time is: %s %lu \n", ctime(&mytime), uint64_t(mytime));
+	  //std::cout << "Using GPS adjusted time" << std::endl;
 	}
 
 	if ( (seconds==0) && (nano_seconds==0) ) {
@@ -790,7 +806,7 @@ namespace lris {
 	//the DAQHeader time to GPS time as configured in the fcl for the swizzler
 	//this happens when the GPS sync signal hasn't yet arrived at the beginning of the run. will default back to the NTP time
 	//for the DAQHeader time while still filling the DAQHeaderTimeUBooNE with a GPS time of 0
-	if ( (seconds==0) && (nano_seconds==0) && (fUseGPS) ) {
+	if ( (seconds==0) && (nano_seconds==0) && (fUseGPS || fUseGPSAdj) ) {
 	  std::cerr << "Warning: Swizzler configured to use GPS time for DAQ Header, but the GPS time is 0 (a.k.a. Jan 1, 1970)." << std::endl;
 	  std::cerr << "Going to default to the NTP time instead and leave the DAQHeaderTimeUBooNE GPS time to 0." << std::endl;
 	  bad_GPS_default_to_NTP = true; //This is a local bool variable and reset every call four lines above.
@@ -809,11 +825,18 @@ namespace lris {
 	//std::cout << "The number of nano seconds is: " << nano_seconds << std::endl;
       	time_t mytime_ntp = ((time_t)seconds<<32) | nano_seconds;
 	//printf ("The NTP time is: %s %lu \n", ctime(&mytime_ntp), uint64_t(mytime_ntp));
-	if ((fUseNTP)  || (!fUseGPS && !fUseNTP) || (bad_GPS_default_to_NTP) ){ //the reasons to do this:
+	int ntime = 0;  
+	if(fUseGPS)
+	  ++ntime;
+	if(fUseNTP)
+	  ++ntime;
+	if(fUseGPSAdj)
+	  ++ntime;
+	if ((fUseNTP) || ntime != 1 || (bad_GPS_default_to_NTP) ){ //the reasons to do this:
 	  //configured to use the NTP time for the event time in the swizzler fcl (traditional configuration for swizzling through Aug 25,2017)
 	  //configured to use NTP time if there is nothing specified in the swizzler fcl
 	  //configured to use NTP if fcl says to use GPS time, but the GPS time is 0 for the event
-	  mytime = ((time_t)seconds<<32) | nano_seconds;
+	  mytime = mytime_ntp;
 	  //printf ("The DAQ Header time is: %s %lu \n", ctime(&mytime), uint64_t(mytime));
 	  std::cout << "Using NTP time" << std::endl;
 	}
@@ -844,6 +867,7 @@ namespace lris {
 
 	daqHeaderTimeUBooNE.SetGPSTime(mytime_gps);
 	daqHeaderTimeUBooNE.SetNTPTime(mytime_ntp);
+	daqHeaderTimeUBooNE.SetGPSAdjTime(mytime_gps_adj);
 
     	/// \todo: What is the "fixed word" ? Leaving it unset for now
     	/// \todo: What is the "spare word" ? Leaving it unset for now
@@ -1219,7 +1243,7 @@ namespace lris {
 
     	// pmt channel map is assumed to be time dependent. therefore we need event time to set correct map.
     	ubdaq::ub_GlobalHeader global_header = event_record.getGlobalHeader();
-    	if(fUseGPS)
+    	if(fUseGPS || fUseGPSAdj)
       		global_header.useGPSTime();
     	else if(fUseNTP)
       		global_header.useLocalHostTime();

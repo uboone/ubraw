@@ -121,6 +121,7 @@ namespace lris {
     bool                           fHuffmanDecode;
     bool                           fUseGPS;    // fhicl parameter force use GPS time.
     bool                           fUseNTP;    // fhicl parameter force use NTP time.
+    bool                           fUseGPSAdj; // fhicl parameter force use GPS adjusted time.
     util::UBChannelMap_t           fChannelMap;
     int                            fMaxEvents; //fhicl parameter.  Maximum number of events.
     int                            fSkipEvents; // fhicl parameter.  Number of events to skip.
