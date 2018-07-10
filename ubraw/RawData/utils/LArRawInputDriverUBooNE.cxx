@@ -146,9 +146,9 @@ namespace lris {
 	int ntime = 0;  
 	if(fUseGPS)
 	  ++ntime;
-	if(fUseNTP)
-	  ++ntime;
 	if(fUseGPSAdj)
+	  ++ntime;
+	if(fUseNTP)
 	  ++ntime;
 
 	if (ntime == 0) {
@@ -160,8 +160,8 @@ namespace lris {
 	  std::cout << "Defaulting to the NTP time..." << std::endl << std::endl;
 	}
 	if (fUseGPS) std::cout << std::endl << "Using GPS time to set the DAQHeader..." << std::endl << std::endl;
-	if (fUseNTP) std::cout << std::endl << "Using NTP time to set the DAQHeader..." << std::endl << std::endl;
 	if (fUseGPSAdj) std::cout << std::endl << "Using GPS adjusted time to set the DAQHeader..." << std::endl << std::endl;
+	if (fUseNTP) std::cout << std::endl << "Using NTP time to set the DAQHeader..." << std::endl << std::endl;
 
 
     	::peek_at_next_event<ub_TPC_CardData_v6>(false);
@@ -726,6 +726,7 @@ namespace lris {
 	                    	global_header.getMicroSeconds()*1000;
       	time_t mytime_gps = ((time_t)seconds<<32) | nano_seconds;
 	time_t mytime_gps_adj = mytime_gps;
+	auto const& gps_pps_time = global_header.getGPSTime();
 
 	// Make sure Nano_seconds is less than 1000000000.
 	// This while loop shouldn't be triggered for normal data.
@@ -741,7 +742,6 @@ namespace lris {
 	if(seconds != 0 || nano_seconds != 0) {
 
 	  // adjust to account for jitter in GPS timestamp : DAVID C
-	  auto const& gps_pps_time = global_header.getGPSTime();
 	  auto const& gps_micro = gps_pps_time.micro * 1000;  // in nano-seconds
 	  auto const& gps_nano  = gps_pps_time.nano;          // in nano-seconds
 	  auto const& remainder = gps_micro + gps_nano;
@@ -828,9 +828,9 @@ namespace lris {
 	int ntime = 0;  
 	if(fUseGPS)
 	  ++ntime;
-	if(fUseNTP)
-	  ++ntime;
 	if(fUseGPSAdj)
+	  ++ntime;
+	if(fUseNTP)
 	  ++ntime;
 	if ((fUseNTP) || ntime != 1 || (bad_GPS_default_to_NTP) ){ //the reasons to do this:
 	  //configured to use the NTP time for the event time in the swizzler fcl (traditional configuration for swizzling through Aug 25,2017)
@@ -866,8 +866,9 @@ namespace lris {
     	daqHeader.SetTimeStamp(mytime);
 
 	daqHeaderTimeUBooNE.SetGPSTime(mytime_gps);
-	daqHeaderTimeUBooNE.SetNTPTime(mytime_ntp);
 	daqHeaderTimeUBooNE.SetGPSAdjTime(mytime_gps_adj);
+	daqHeaderTimeUBooNE.SetNTPTime(mytime_ntp);
+	daqHeaderTimeUBooNE.SetPPSTime(gps_pps_time.second, gps_pps_time.micro, gps_pps_time.nano);
 
     	/// \todo: What is the "fixed word" ? Leaving it unset for now
     	/// \todo: What is the "spare word" ? Leaving it unset for now
