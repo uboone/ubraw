@@ -868,7 +868,15 @@ namespace lris {
 	daqHeaderTimeUBooNE.SetGPSTime(mytime_gps);
 	daqHeaderTimeUBooNE.SetGPSAdjTime(mytime_gps_adj);
 	daqHeaderTimeUBooNE.SetNTPTime(mytime_ntp);
-	daqHeaderTimeUBooNE.SetPPSTime(gps_pps_time.second, gps_pps_time.micro, gps_pps_time.nano);
+	daqHeaderTimeUBooNE.SetPPSTime(gps_pps_time.second,
+				       gps_pps_time.micro,
+				       gps_pps_time.nano);
+	daqHeaderTimeUBooNE.SetTrigTime(global_header.getTriggerBoardEVTClock().frame,
+					global_header.getTriggerBoardEVTClock().sample,
+					global_header.getTriggerBoardEVTClock().div);
+	daqHeaderTimeUBooNE.SetTrigPPSTime(global_header.getTriggerBoardClock().frame,
+					   global_header.getTriggerBoardClock().sample,
+					   global_header.getTriggerBoardClock().div);
 
     	/// \todo: What is the "fixed word" ? Leaving it unset for now
     	/// \todo: What is the "spare word" ? Leaving it unset for now
