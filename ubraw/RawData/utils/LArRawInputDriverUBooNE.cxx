@@ -139,6 +139,7 @@ namespace lris {
     fHuffmanDecode(ps.get<bool>("huffmanDecode",false)),
     fUseGPS(ps.get<bool>("UseGPS",false)),
     fUseNTP(ps.get<bool>("UseNTP",false)),
+    fDAQFreqAdj(ps.get<double>("DAQFreqAdj", 6.882e-6)),
     fMaxEvents(-1),
     fSkipEvents(0)
   	{
@@ -723,9 +724,9 @@ namespace lris {
 	// There is enough information in the daq time header to redo this 
 	// calculation using swizzled data, if necessary.
 
-	long double tunefac = 1.000006882L;
+	long double tunefac = 1.L + fDAQFreqAdj;
 	long double gps = 0.L;
-	if(trig_pps_time.frame != 0) {
+	if(trig_pps_time.frame != 0 && gps_pps_time.second != 0) {
 	  std::cout << "gps_pps_time.second   = " << gps_pps_time.second << std::endl;
 	  std::cout << "gps_pps_time.micro    = " << gps_pps_time.micro << std::endl;
 	  std::cout << "gps_pps_time.nano     = " << gps_pps_time.nano << std::endl;
@@ -737,7 +738,7 @@ namespace lris {
 	  std::cout << "trig_pps_time.div     = " << trig_pps_time.div << std::endl;
 	  gps = gps_pps_time.second +
 	        (gps_pps_time.micro > 500000 ? 1.L : 0.L) +
-	        tunefac * (1.6e-3L * (int64_t(trig_evt_time.frame) - int64_t(trig_pps_time.frame)) +
+	        tunefac * (1.6e-3L * (int(trig_evt_time.frame) - int(trig_pps_time.frame)) +
 		           0.5e-6L * (int(trig_evt_time.sample) - int(trig_pps_time.sample)) +
 		           0.0625e-6L * (int(trig_evt_time.div) - int(trig_pps_time.div)));
 	}
