@@ -8,6 +8,9 @@
 #include "subevent_module.fcl"
 #include "seedservice_microboone.fcl"
 #include "triggerenforcement.fcl"
+#include "correct_saturation.fcl"
+#include "ophitremapproducer.fcl"
+#include "ubflashfinder.fcl"
 
 BEGIN_PROLOG
 
@@ -22,17 +25,21 @@ microboone_reco_notpc_services:
 
 microboone_reco_notpc_producers: {
 
-  ### flash finders
-  ophit            : @local::microboone_ophit_beam_highgain
-  #ophitLow         : @local::microboone_ophit_beam_lowgain
-  ophitCosmic      : @local::microboone_ophit_cosmic_highgain
-  #ophitCosmicLow   : @local::microboone_ophit_cosmic_lowgain
-  opflash          : @local::microboone_opflash_beam_highgain
-  #opflashLow       : @local::microboone_opflash_beam_lowgain
-  opflashCosmic    : @local::microboone_opflash_cosmic_highgain
-  #opflashCosmicLow : @local::microboone_opflash_cosmic_lowgain
+  ### Saturation correction module
+  saturation : @local::correct_saturation
 
-  #hwflash : @local::microboone_subeventbuilder
+  ### OpHit finders
+  ophitBeamNoRemap         : @local::microboone_ophit_saturation_beam
+  ophitCosmicNoRemap       : @local::microboone_ophit_saturation_cosmic
+  ophitBeam         : @local::ophitremap
+  ophitCosmic       : @local::ophitremap
+
+  ### flash finders
+  simpleFlashBeam      : @local::UBFlashBeam
+  simpleFlashBeamLowPE : @local::UBFlashBeam
+  simpleFlashCosmic    : @local::UBFlashCosmic
+  opflashBeam          : @local::microboone_opflash_saturation_beam
+  opflashCosmic        : @local::microboone_opflash_saturation_cosmic
 }
 
 microboone_reco_notpc_filters: {
@@ -67,9 +74,23 @@ microboone_reco_notpc_filters: {
   }
 }
 
-microboone_reco_notpc: [ ophit, opflash ]
+microboone_reco_notpc: [ saturation,
+		         ophitCosmicNoRemap,
+                         ophitBeamNoRemap,
+                         ophitCosmic,
+                         ophitBeam,
+                         opflashCosmic,
+                         opflashBeam,
+                         simpleFlashCosmic,
+                         simpleFlashBeam,
+                         simpleFlashBeamLowPE]
 
 microboone_reco_notpc_services.DetectorClocksService.TrigModuleName: "daq"
+
+microboone_reco_notpc_producers.ophitCosmic.MapOffset: 200
+microboone_reco_notpc_producers.ophitCosmic.OpHitsInputTag: "ophitCosmicNoRemap"
+microboone_reco_notpc_producers.ophitBeam.OpHitsInputTag: "ophitBeamNoRemap"
+microboone_reco_notpc_producers.simpleFlashBeamLowPE.AlgoConfig.PEThreshold: 6
 
 microboone_reco_notpc_filters.trigbnb.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.trigbnb.SoftwareTriggerProducer: "daq"
