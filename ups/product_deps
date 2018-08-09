@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent ubraw v06_84_00
+parent ubraw v06_85_00
 
 defaultqual e15
 
@@ -29,19 +29,22 @@ table_fragment_end
 # Add the dependent product and version
 
 product                 version
-ubcore                  v06_84_00
-larevt                  v06_22_03
-uboonedaq_datatypes     v6_20_02a
-cetbuildtools	        v7_03_03	-	only_for_build
+ubcore                  v06_85_00
+larevt                  v06_22_04
+uboonedaq_datatypes     v6_22_05a
+cetbuildtools	        v7_04_00	-	only_for_build
 end_product_list
 
 qualifier      ubcore         larevt         uboonedaq_datatypes
-c2:debug       c2:debug       c2:debug       c2:debug       
-c2:opt         c2:opt         c2:opt         c2:opt         
-c2:prof        c2:prof        c2:prof        c2:prof        
-e15:debug      e15:debug      e15:debug      e15:debug      
-e15:opt        e15:opt        e15:opt        e15:opt        
-e15:prof       e15:prof       e15:prof       e15:prof       
+c2:debug       c2:debug       c2:debug       c2:offline:debug    
+c2:opt         c2:opt         c2:opt         c2:offline:opt         
+c2:prof        c2:prof        c2:prof        c2:offline:prof        
+e15:debug      e15:debug      e15:debug      e15:offline:debug      
+e15:opt        e15:opt        e15:opt        e15:offline:opt        
+e15:prof       e15:prof       e15:prof       e15:offline:prof
+e17:debug      e17:debug      e17:debug      e17:offline:debug
+e17:opt        e17:opt        e17:opt        e17:offline:opt
+e17:prof       e17:prof       e17:prof       e17:offline:prof
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
