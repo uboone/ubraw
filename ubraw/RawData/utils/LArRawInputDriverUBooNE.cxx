@@ -669,15 +669,19 @@ namespace lris {
     	//set granularity
     	//      event_record.updateIOMode(ubdaq::IO_GRANULARITY_CHANNEL);
     	_trigger_beam_window_time = std::numeric_limits<double>::max();
-    	fillTriggerData(event_record, trigInfo);
+	if(fSwizzleTrigger)
+	  fillTriggerData(event_record, trigInfo);
     	//if (skipEvent){return false;} // check that trigger data doesn't suggest we should skip event. // commented out because this doesn't work at the moment
     	fillDAQHeaderData(event_record, daqHeader, daqHeaderTimeUBooNE);
-    	fillTPCData(event_record, tpcDigitList);
+	if(fSwizzleTPC)
+	  fillTPCData(event_record, tpcDigitList);
     	//please keep fillPMTData ahead of fillSWTriggerData in cases of events without any PMT data
-    	fillPMTData(event_record, pmtDigitList);
+	if(fSwizzlePMT)
+	  fillPMTData(event_record, pmtDigitList);
     	fillBeamData(event_record, beamInfo);
     	//please keep fillPMTData ahead of fillSWTriggerData in cases of events without any PMT data
-    	fillSWTriggerData(event_record, sw_trigInfo);
+	if(fSwizzleTrigger)
+	  fillSWTriggerData(event_record, sw_trigInfo);
 
     	event_number = event_record.getGlobalHeader().getEventNumber()+1;
     	event = event_number;
@@ -686,7 +690,8 @@ namespace lris {
       		checkTimeStampConsistency();
     	}
 
-    	ValidationTree->Fill();
+	if(fSwizzleTrigger && fSwizzlePMT && fSwizzleTPC)
+	  ValidationTree->Fill();
 
     	//Note that the fSwizzlePMT value needs to be reset every event, since it can be set to false if there is no PMT data
     	//Setting it to false makes sure that the checkTimeStampConsistency() doesn't try to compare nonexistent data
@@ -1532,7 +1537,6 @@ namespace lris {
       		trig_sample_number += trig_data.getPhase();
 
       		uint64_t trig_tick = trig_sample_number + trig_header.getFrame() * trig_clock.FrameTicks();
-
 
       		auto const& crate_data = event_record.getPMTSEBMap().begin()->second;
       		uint64_t beam_ro_tick = 0;
