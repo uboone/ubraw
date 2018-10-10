@@ -146,7 +146,8 @@ bool TriggerEnforcement::filter(art::Event & e)
   bool hardware_decision=false;
   bool software_decision=false;
 
-  ts->preProcessEvent(e);
+  //FIXME: you should let the framework call preProcessEvent
+  ts->preProcessEvent(e, art::ScheduleContext::invalid());
 
   if(_hardware_trigger_producer.empty()) hardware_decision=true;
   if(_software_trigger_producer.empty()) software_decision=true;
