@@ -94,12 +94,12 @@ physics:
   opflashCosmic    : @local::microboone_opflash_cosmic_highgain
   #opflashCosmicLow : @local::microboone_opflash_cosmic_lowgain
   merger           : @local::microboone_crt_merger
-  merger_extra     : @local::microboone_crt_merger_extra
+  mergerextra      : @local::microboone_crt_merger_extra
  }
  filters: {
   triggerEnforcement: @local::trigger_enforcement
  }
- reco: [ triggerEnforcement, ophit, opflash, merger, merger_extra ]
+ reco: [ triggerEnforcement, ophit, opflash, merger, mergerextra ]
  stream1:   [ out1 ]
  trigger_paths: [ reco ]
  end_paths: [ stream1 ]
@@ -110,5 +110,5 @@ services.DetectorClocksService.TrigModuleName: "daq"
 physics.producers.merger.debug: false
 physics.producers.merger.ubversion_CRTHits: prod_v06_26_01_13
 
-physics.producers.merger_extra.debug: false
-physics.producers.merger_extra.ubversion_CRTHits: prod_v06_26_01_13
+physics.producers.mergerextra.debug: false
+physics.producers.mergerextra.ubversion_CRTHits: prod_v06_26_01_13
