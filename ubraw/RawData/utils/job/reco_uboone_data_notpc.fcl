@@ -11,6 +11,7 @@
 #include "correct_saturation.fcl"
 #include "ophitremapproducer.fcl"
 #include "ubflashfinder.fcl"
+#include "microboone_dlpmtprecuts.fcl"
 
 BEGIN_PROLOG
 
@@ -63,15 +64,19 @@ microboone_reco_notpc_filters: {
   swtrigextunbiased:  @local::trigger_enforcement
   swtrigexthsnc0:     @local::trigger_enforcement
 
+  # Optical filters.
 
-  opflashfilter:      @local::microboone_flashtrigger
-  opflashfilternumi:  @local::microboone_flashtrigger_numi
+  opfiltercommonbnb: @local::microboone_common_op_precut_bnb
+  opfiltercommonext: @local::microboone_common_op_precut_ext
+
+  #opflashfilter:      @local::microboone_flashtrigger
+  #opflashfilternumi:  @local::microboone_flashtrigger_numi
   #hwflashfilter: @local::microboone_flashtrigger
 
-  randomfilter: {
-   module_type : "RandomPrescale"
-   Probability : 0.01
-  }
+  #randomfilter: {
+  # module_type : "RandomPrescale"
+  # Probability : 0.01
+  #}
 }
 
 microboone_reco_notpc: [ saturation,
@@ -108,11 +113,11 @@ microboone_reco_notpc_filters.trigmucs.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.trigmucs.SoftwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.trigmucs.IncludeBits: [ "Spare" ]
 
-microboone_reco_notpc_filters.opflashfilter.OpFlashModule : "opflash"
-microboone_reco_notpc_filters.opflashfilter.DisableFilter: false
+#microboone_reco_notpc_filters.opflashfilter.OpFlashModule : "opflash"
+#microboone_reco_notpc_filters.opflashfilter.DisableFilter: false
 
-microboone_reco_notpc_filters.opflashfilternumi.OpFlashModule : "opflash"
-microboone_reco_notpc_filters.opflashfilternumi.DisableFilter: false
+#microboone_reco_notpc_filters.opflashfilternumi.OpFlashModule : "opflash"
+#microboone_reco_notpc_filters.opflashfilternumi.DisableFilter: false
 
 microboone_reco_notpc_filters.swtrigbnb.HardwareTriggerProducer: "daq"
 microboone_reco_notpc_filters.swtrigbnb.SoftwareTriggerProducer: "daq"
@@ -166,5 +171,8 @@ microboone_reco_notpc_filters.swtrigexthsnc0.IncludeBits: [ "TriggerEXT" ]
 microboone_reco_notpc_filters.swtrigexthsnc0.includeSoftwareTriggers: [ "EXT_HSN_c0_FEMBeamTriggerAlgo" ]
 microboone_reco_notpc_filters.swtrigexthsnc0.excludeSoftwareTriggers: [ "EXT_BNBwin_FEMBeamTriggerAlgo",
 								        "EXT_BNBwin_2017Dec_SWTrigger5PE_FEMBeamTriggerAlgo" ]
+
+microboone_reco_notpc_filters.opfiltercommonbnb.OpHitProducer: "ophitBeam"
+microboone_reco_notpc_filters.opfiltercommonext.OpHitProducer: "ophitBeam"
 
 END_PROLOG

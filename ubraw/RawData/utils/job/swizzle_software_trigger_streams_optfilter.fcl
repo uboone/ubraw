@@ -233,12 +233,12 @@ physics:
  }
 
  path_notpc:         [ @sequence::microboone_reco_notpc ]
- path_bnb:           [ swtrigbnb ]
+ path_bnb:           [ @sequence::microboone_reco_notpc, swtrigbnb, opfiltercommonbnb ]
  path_bnb_unbiased:  [ swtrigbnbunbiased ]
  path_bnb_hsnc0:     [ swtrigbnbhsnc0 ]
  path_numi:          [ swtrignumi ]
  path_numi_unbiased: [ swtrignumiunbiased ]
- path_ext_bnb:       [ swtrigextbnb ]
+ path_ext_bnb:       [ @sequence::microboone_reco_notpc, swtrigextbnb, opfiltercommonext ]
  path_ext_numi:      [ swtrigextnumi ]
  path_mucs:          [ trigmucs ]
  path_ext_unbiased:  [ swtrigextunbiased ]
