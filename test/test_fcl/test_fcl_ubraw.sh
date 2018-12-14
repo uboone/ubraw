@@ -22,13 +22,6 @@ do
     exit $stat
   fi
 
-  # Flag files that have services.user blocks.
-
-  if grep -q user: $fclout; then
-    echo "Deprecated services.user found in ${fcl}."
-    exit 1
-  fi
-
   # Check for certain kinds of diagnostic output.
 
   if egrep -iq 'deprecated|no longer supported' $larerr; then
@@ -36,11 +29,4 @@ do
     exit 1
   fi
 
-  # We consider it an error if the diagnostic output from lar has more than two lines.
-
-  if [ `cat $larerr | wc -l` -gt 2 ]; then
-    echo "Excess diagnostic output while parsing ${fcl}."
-    exit 1
-  fi
-  
 done
