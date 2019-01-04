@@ -8,6 +8,7 @@
 #include "time_memory_tracker_microboone.fcl" 
 #include "microboone_crt_merger.fcl"
 #include "microboone_crt_merger_extra.fcl"
+#include "microboone_crt_file_manager.fcl"
 
 process_name: Swizzler
 services:
@@ -22,6 +23,7 @@ services:
   UBOpReadoutMap:           @local::microboone_opreadoutmap
   DetectorClocksService:            @local::microboone_detectorclocks
   DatabaseUtil:           @local::microboone_database
+  CRTFileManager:         @local::microboone_crt_file_manager
 }
 services.DetectorClocksService.InheritClockConfig: false
 
@@ -107,8 +109,7 @@ physics:
 
 services.DetectorClocksService.TrigModuleName: "daq"
 
-physics.producers.merger.debug: false
-physics.producers.merger.ubversion_CRTHits: prod_v06_26_01_13
+services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_13
 
+physics.producers.merger.debug: false
 physics.producers.mergerextra.debug: false
-physics.producers.mergerextra.ubversion_CRTHits: prod_v06_26_01_13

@@ -104,6 +104,8 @@ physics:
 
 services.DetectorClocksService.TrigModuleName: "daq"
 
+services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_13
+
 #physics.filters.opflashfilter.OpFlashModule : "opflash"
 #physics.filters.opflashfilter.DisableFilter: false
 
@@ -111,10 +113,8 @@ services.DetectorClocksService.TrigModuleName: "daq"
 #physics.filters.opflashfilternumi.DisableFilter: false
 
 physics.producers.merger.debug: false
-physics.producers.merger.ubversion_CRTHits: prod_v06_26_01_13
 
 physics.producers.mergerextra.debug: false
-physics.producers.mergerextra.ubversion_CRTHits: prod_v06_26_01_13
 
 ### Here we try to suppress known and pointless messages
 services.message.destinations :
