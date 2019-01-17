@@ -89,7 +89,7 @@ physics:
   @table::microboone_reco_notpc_filters
  }
 
- path_notpc:         [ swtrignotpc ]
+ path_notpc:         [ @sequence::microboone_reco_notpc, swtrignotpc ]
 
  stream_notpc:       [ outnotpc ]
 

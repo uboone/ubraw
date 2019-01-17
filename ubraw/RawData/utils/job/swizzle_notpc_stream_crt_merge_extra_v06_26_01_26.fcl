@@ -90,13 +90,11 @@ physics:
   @table::microboone_reco_notpc_filters
  }
 
- path_notpc:         [ merger, mergerextra, @sequence::microboone_reco_notpc ]
- path_notpc:         [ swtrignotpc ]
+ path_notpc:         [ @sequence::microboone_reco_notpc, swtrignotpc ]
 
  stream_notpc:       [ outnotpc ]
 
- trigger_paths: [ path_notpc,
-                  path_notpc ]
+ trigger_paths: [ path_notpc ]
 
  end_paths:     [ stream_notpc ]
 }
