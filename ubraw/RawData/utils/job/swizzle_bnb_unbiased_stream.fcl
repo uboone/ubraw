@@ -10,6 +10,7 @@
 #include "triggerenforcement.fcl"
 #include "time_memory_tracker_microboone.fcl" 
 #include "reco_uboone_data_notpc.fcl"
+#include "nearline_swtrigger_monitor.fcl"
 
 process_name: Swizzler
 services:
@@ -83,15 +84,24 @@ physics:
  }
  filters: {
   @table::microboone_reco_notpc_filters
+  swtrigBNB:  @local::swtriggerBNB
+  swtrigNUMI: @local::swtriggerNUMI
+  swtrigEXT:  @local::swtriggerEXT
  }
 
- path_notpc:         [ @sequence::microboone_reco_notpc ]
- path_bnb_unbiased:  [ swtrigbnbunbiased ]
+ path_bnb_unbiased:  [ @sequence::microboone_reco_notpc, swtrigbnbunbiased ]
+
+ # paths for software trigger rate monitoring
+ path_ext_unbiased_swtrig:  [ swtrigextunbiased,  swtrigEXT  ]
+ path_bnb_unbiased_swtrig:  [ swtrigbnbunbiased,  swtrigBNB  ]
+ path_numi_unbiased_swtrig: [ swtrignumiunbiased, swtrigNUMI ]
 
  stream_bnb_unbiased:  [ outbnbunbiased ]
 
- trigger_paths: [ path_notpc,
-                  path_bnb_unbiased ]
+ trigger_paths: [ path_bnb_unbiased,
+                  path_ext_unbiased_swtrig,
+                  path_bnb_unbiased_swtrig,
+                  path_numi_unbiased_swtrig ]
 
  end_paths:     [ stream_bnb_unbiased ]
 }

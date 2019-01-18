@@ -62,17 +62,17 @@ source:
 
 outputs:
 {
- outbnbhsnc0:
+ outextbnb:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_bnb_hsnc0_%#.root"
+   fileName: "%ifb_%tc_ext_bnb_%#.root"
    dataTier: "raw"
-   streamName: "outbnbhsnc0"
+   streamName: "outextbnb"
    compressionLevel: 3
    saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_bnb_hsnc0 ]
+   SelectEvents: [ path_ext_bnb ]
    fileProperties: {
-     maxSize: 2000000 # KiB = 2 GB
+     maxSize: 1500000 # KiB = 2 GB
      granularity: "InputFile"
     }
   }
@@ -83,7 +83,6 @@ physics:
  producers: {
   @table::microboone_reco_notpc_producers
   merger : @local::microboone_crt_merger
-  mergerextra : @local::microboone_crt_merger_extra
  }
  filters: {
   @table::microboone_reco_notpc_filters
@@ -92,26 +91,28 @@ physics:
   swtrigEXT:  @local::swtriggerEXT
  }
 
- path_bnb_hsnc0:     [ merger, mergerextra, @sequence::microboone_reco_notpc, swtrigbnbhsnc0 ]
+ path_bnb:           [ merger, @sequence::microboone_reco_notpc, swtrigbnb, opfiltercommonbnb ]
+ path_ext_bnb:       [ merger, @sequence::microboone_reco_notpc, swtrigextbnb, opfiltercommonext ]
 
  # paths for software trigger rate monitoring
  path_ext_unbiased_swtrig:  [ swtrigextunbiased,  swtrigEXT  ]
  path_bnb_unbiased_swtrig:  [ swtrigbnbunbiased,  swtrigBNB  ]
  path_numi_unbiased_swtrig: [ swtrignumiunbiased, swtrigNUMI ]
 
- stream_bnb_hsnc0:     [ outbnbhsnc0 ]
+ stream_ext_bnb:     [ outextbnb ]
 
- trigger_paths: [ path_bnb_hsnc0,
+ trigger_paths: [ path_bnb,
+                  path_ext_bnb,
                   path_ext_unbiased_swtrig,
                   path_bnb_unbiased_swtrig,
                   path_numi_unbiased_swtrig ]
 
- end_paths:     [ stream_bnb_hsnc0 ]
+ end_paths:     [ stream_ext_bnb ]
 }
 
 services.DetectorClocksService.TrigModuleName: "daq"
 
-services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_26
+services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_13
 
 #physics.filters.opflashfilter.OpFlashModule : "opflash"
 #physics.filters.opflashfilter.DisableFilter: false
@@ -120,7 +121,6 @@ services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_26
 #physics.filters.opflashfilternumi.DisableFilter: false
 
 physics.producers.merger.debug: false
-physics.producers.mergerextra.debug: false
 
 ### Here we try to suppress known and pointless messages
 services.message.destinations :
