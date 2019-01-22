@@ -100,7 +100,7 @@ physics:
 
 services.DetectorClocksService.TrigModuleName: "daq"
 
-services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_13
+services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_26
 
 #physics.filters.opflashfilter.OpFlashModule : "opflash"
 #physics.filters.opflashfilter.DisableFilter: false

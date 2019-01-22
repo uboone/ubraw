@@ -227,6 +227,7 @@ physics:
  producers: {
   @table::microboone_reco_notpc_producers
   merger : @local::microboone_crt_merger
+  mergerextra : @local::microboone_crt_merger_extra
  }
  filters: {
   @table::microboone_reco_notpc_filters
@@ -238,7 +239,7 @@ physics:
   crtflash: @local::crtflashana
  }
 
- path_notpc:         [ merger, @sequence::microboone_reco_notpc ]
+ path_notpc:         [ merger, mergerextra, @sequence::microboone_reco_notpc ]
  path_bnb:           [ @sequence::microboone_reco_notpc, swtrigbnb, opfiltercommonbnb ]
  path_bnb_unbiased:  [ swtrigbnbunbiased ]
  path_bnb_hsnc0:     [ swtrigbnbhsnc0 ]
@@ -309,6 +310,7 @@ services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_13
 #physics.filters.opflashfilternumi.DisableFilter: false
 
 physics.producers.merger.debug: false
+physics.producers.mergerextra.debug: false
 
 ### Here we try to suppress known and pointless messages
 services.message.destinations :

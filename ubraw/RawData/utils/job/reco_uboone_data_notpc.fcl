@@ -12,6 +12,7 @@
 #include "ophitremapproducer.fcl"
 #include "ubflashfinder.fcl"
 #include "microboone_dlpmtprecuts.fcl"
+#include "microboone_crt_file_manager.fcl"
 
 BEGIN_PROLOG
 
@@ -22,6 +23,7 @@ microboone_reco_notpc_services:
   UBOpReadoutMap:           @local::microboone_opreadoutmap
   DetectorClocksService:            @local::microboone_detectorclocks
   IFDH:                   {}
+  CRTFileManager:         @local::microboone_crt_file_manager
 }
 
 microboone_reco_notpc_producers: {

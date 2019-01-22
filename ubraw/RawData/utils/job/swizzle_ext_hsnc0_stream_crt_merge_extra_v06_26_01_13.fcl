@@ -61,15 +61,15 @@ source:
 
 outputs:
 {
- outnumiunbiased:
+ outexthsnc0:
   {
    module_type: RootOutput
-   fileName: "%ifb_%tc_numi_unbiased_%#.root"
+   fileName: "%ifb_%tc_ext_hsnc0_%#.root"
    dataTier: "raw"
-   streamName: "outnumiunbiased"
+   streamName: "outexthsnc0"
    compressionLevel: 3
    saveMemoryObjectThreshold: 0
-   SelectEvents: [ path_numi_unbiased ]
+   SelectEvents: [ path_ext_hsnc0 ]
    fileProperties: {
      maxSize: 2000000 # KiB = 2 GB
      granularity: "InputFile"
@@ -82,20 +82,21 @@ physics:
  producers: {
   @table::microboone_reco_notpc_producers
   merger : @local::microboone_crt_merger
+  mergerextra : @local::microboone_crt_merger_extra
  }
  filters: {
   @table::microboone_reco_notpc_filters
  }
 
- path_notpc:         [ merger, @sequence::microboone_reco_notpc ]
- path_numi_unbiased: [ swtrignumiunbiased ]
+ path_notpc:         [ merger, mergerextra, @sequence::microboone_reco_notpc ]
+ path_ext_hsnc0:     [ swtrigexthsnc0 ]
 
- stream_numi_unbiased: [ outnumiunbiased ]
+ stream_ext_hsnc0:     [ outexthsnc0 ]
 
  trigger_paths: [ path_notpc,
-                  path_numi_unbiased ]
+                  path_ext_hsnc0 ]
 
- end_paths:     [ stream_numi_unbiased ]
+ end_paths:     [ stream_ext_hsnc0 ]
 }
 
 services.DetectorClocksService.TrigModuleName: "daq"
@@ -109,6 +110,7 @@ services.CRTFileManager.ubversion_CRTHits: prod_v06_26_01_13
 #physics.filters.opflashfilternumi.DisableFilter: false
 
 physics.producers.merger.debug: false
+physics.producers.mergerextra.debug: false
 
 ### Here we try to suppress known and pointless messages
 services.message.destinations :
