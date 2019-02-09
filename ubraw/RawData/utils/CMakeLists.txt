@@ -61,9 +61,8 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
-                        ${UBDut}
-                        ${PQ}
-                        ${Boost_SERIALIZATION_LIBRARY}
+			${UBDut}
+			${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
                         ${ART_FRAMEWORK_IO_SOURCES}
                         ${ART_FRAMEWORK_PRINCIPAL}
@@ -73,6 +72,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art_Persistency_Common canvas
                         art_Persistency_Provenance canvas
                         art_Utilities canvas
+			libwda
                         ${MF_MESSAGELOGGER}
                         
                         ${FHICLCPP}
@@ -92,10 +92,9 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
-                        ubraw_RawData
-                        ${UBDut}
-                        ${PQ}
-                        ${Boost_SERIALIZATION_LIBRARY}
+			ubraw_RawData
+			${UBDut}
+			${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
                         ${ART_FRAMEWORK_IO_SOURCES}
                         ${ART_FRAMEWORK_PRINCIPAL}

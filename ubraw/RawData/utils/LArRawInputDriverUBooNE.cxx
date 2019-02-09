@@ -7,6 +7,8 @@
 /// \MicroBooNE Author: jasaadi@fnal.gov, zarko@fnal.gov (with much help from Wes and Eric)
 ////////////////////////////////////////////////////////////////////////
 
+#include <sstream>
+
 //LArSoft
 #include "ubraw/RawData/utils/LArRawInputDriverUBooNE.h"
 #include "lardataobj/RawData/RawDigit.h"
@@ -29,6 +31,10 @@
 #include "art/Framework/Services/Optional/TFileService.h"
 #include "messagefacility/MessageLogger/MessageLogger.h"
 
+// libwda
+
+#include "wda.h"
+
 //uboone datatypes
 
 // uboonecode
@@ -44,9 +50,6 @@
 //root
 #include "TH1D.h"
 #include "TTree.h"
-
-//other
-#include <libpq-fe.h>
 
 extern "C" {
 #include <sys/types.h>
@@ -849,10 +852,122 @@ namespace lris {
     	//Channel map has changed each time the detector has been re-cabled.
     	//Provide data-taking time as first argument. (integer epoch seconds)
     	//Optionally recover outdated mappings with 'swizzling time' second arg. (also integer epoch seconds)
-    	if (fDataTakingTime == -1)
-      		fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(event_record.LocalHostTime().seb_time_sec, fSwizzlingTime);
-    	else
-      		fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(fDataTakingTime, fSwizzlingTime);
+    	//if (fDataTakingTime == -1)
+      	//	fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(event_record.LocalHostTime().seb_time_sec, fSwizzlingTime);
+    	//else
+      	//	fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(fDataTakingTime, fSwizzlingTime);
+
+        // Read channel map from hoot gibson database server.
+        // Do this once per job.
+
+        if(fChannelMap.size() == 0) {
+
+	  // Construct url.
+
+	  int data_taking_time = 0;
+	  if (fDataTakingTime == -1)
+	    data_taking_time = event_record.LocalHostTime().seb_time_sec;
+	  else
+	    data_taking_time = fDataTakingTime;
+
+	  std::ostringstream ostr;
+	  ostr << "http://dbdata0vm.fnal.gov:8187/QE/uboone/query?F=get_map_double_sec&a="
+	       << data_taking_time << "&a=" << fSwizzlingTime;
+	  std::cout << "Fetching channel map from database." << std::endl;
+	  std::cout << "Url = " << ostr.str() << std::endl;
+
+	  // Fetch data from database.
+
+	  int err = 0;
+	  void* data = getDataWithTimeout(ostr.str().c_str(), 0, 240, &err);
+	  int status = getHTTPstatus(data);
+
+	  // Throw an exception if the status is anything except 200.
+
+	  if(status != 200 || err != 0) {
+	    std::cerr << "Database fetch returned status = " << status << std::endl;
+	    throw std::exception();
+	  }
+
+	  // Database read was successful.
+	  // Parse the data.
+
+	  int nrows = getNtuples(data);
+	  std::cout << "Number of database rows = " << nrows << std::endl;
+	  if(nrows != 8257) {
+	    std::cerr << "Failed to read channels from database." << std::endl;
+	    throw std::exception();
+	  }
+
+	  // Dump header row (for information).
+
+	  char buf[100];
+	  void* header = getFirstTuple(data);
+	  int nfields = getNfields(header);
+	  std::cout << "Header row fields: " << nfields << std::endl;
+	  for(int i=0; i<nfields; ++i) {
+	    getStringValue(header, i, buf, sizeof(buf), &err);
+	    if(err != 0) {
+	      std::cerr << "Error parsing header row, err = " << err << std::endl;
+	      throw std::exception();
+	    }
+	    std::cout << i << ": " << buf << std::endl;
+	  }
+	  releaseTuple(header);
+
+	  // Loop over data rows.
+
+	  for(int irow=1; irow<nrows; ++irow) {
+	    //std::cout << "Row " << irow << std::endl;
+	    void* row = getTuple(data, irow);
+	    if(row == 0) {
+	      std::cerr << "Failed to fetch row " << irow << std::endl;
+	      throw std::exception();
+	    }
+	    int nfields = getNfields(row);
+	    if(nfields != 4) {
+	      std::cerr << "Row " << irow << " has wrong number of fields = " << nfields << std::endl;
+	      throw std::exception();
+	    }
+	    int crate = -1;
+	    int slot = -1;
+	    int fem_channel = -1;
+	    int larsoft_channel = -1;
+	    crate = getLongValue(row, 0, &err);
+	    if(err == 0)
+	      slot = getLongValue(row, 1, &err);
+	    if(err == 0)
+	      fem_channel = getLongValue(row, 2, &err);
+	    if(err == 0)
+	      larsoft_channel = getLongValue(row, 3, &err);
+	    if(err != 0 || crate < 0 || slot < 0 || fem_channel < 0 || larsoft_channel < 0) {
+	      std::cerr << "Error parsing row " << irow << ", err = " << err << std::endl;
+	      throw std::exception();
+	    }
+	    //std::cout << "crate = " << crate << std::endl;
+	    //std::cout << "slot = " << slot << std::endl;
+	    //std::cout << "fem channel = " << fem_channel << std::endl;
+	    //std::cout << "larsoft channel = " << larsoft_channel << std::endl;
+
+	    // Fill map.
+
+	    util::UBDaqID daqid(crate, slot, fem_channel);
+	    fChannelMap[daqid] = larsoft_channel;
+
+	    // Done with row.
+
+	    releaseTuple(row);
+	  }
+
+	  // Done with map.
+
+	  releaseDataset(data);
+	}
+        
+	if(fChannelMap.size()  != 8256) {
+	  std::cerr << "Channel map has wrong number of channels = " << fChannelMap.size() << std::endl;
+	  throw std::exception();
+	}
 
 
     	// ### Swizzling to get the number of channels...trying the method used in write_read.cpp
