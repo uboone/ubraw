@@ -871,7 +871,7 @@ namespace lris {
 	    data_taking_time = fDataTakingTime;
 
 	  std::ostringstream ostr;
-	  ostr << "http://dbdata0vm.fnal.gov:8187/QE/uboone/query?F=get_map_double_sec&a="
+	  ostr << "http://dbdata0vm.fnal.gov:8188/QE/uboone/query?F=get_map_double_sec&a="
 	       << data_taking_time << "&a=" << fSwizzlingTime;
 	  std::cout << "Fetching channel map from database." << std::endl;
 	  std::cout << "Url = " << ostr.str() << std::endl;
