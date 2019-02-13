@@ -1,7 +1,6 @@
 #include "geometry_microboone.fcl"
 #include "detectorclocks_microboone.fcl"
 #include "pmtconfig_microboone.fcl"
-#include "databaseutil_microboone.fcl"
 #include "sam_microboone.fcl"
 #include "opticaldetectormodules_microboone.fcl"
 #include "flashfilter_microboone.fcl"
@@ -21,7 +20,6 @@ services:
   RandomNumberGenerator: {} 
   NuRandomService:        @local::microboone_seedservice
   FileCatalogMetadata:    @local::art_file_catalog_data
-  DatabaseUtil:           @local::microboone_database
   @table::microboone_reco_notpc_services
 }
 services.DetectorClocksService.InheritClockConfig: false
@@ -33,16 +31,6 @@ microboone_tfile_metadata:
   dataTier:              "root-tuple"
   fileFormat:            "root"
 }
-
-# Database settings
-services.DatabaseUtil.DBHostName:    "ifdbprod2.fnal.gov"
-services.DatabaseUtil.DBName:        "hootgibson_prod"
-services.DatabaseUtil.DBUser:        "uboonedaq_web"
-services.DatabaseUtil.Port:          5444
-services.DatabaseUtil.PassFileName:  "uboonedb_passwd"  # name of password file. searched for using env var FW_SEARCH_PATH
-services.DatabaseUtil.ToughErrorTreatment: false
-services.DatabaseUtil.ShouldConnect: true
-services.DatabaseUtil.TableName: "main_run"
 
 source:
 {

@@ -1,7 +1,6 @@
 #include "geometry_microboone.fcl"
 #include "detectorclocks_microboone.fcl"
 #include "pmtconfig_microboone.fcl"
-#include "databaseutil_microboone.fcl"
 #include "time_memory_tracker_microboone.fcl" 
 
 process_name: Swizzler
@@ -15,7 +14,6 @@ services:
   Geometry:               @local::microboone_geo
   UBOpReadoutMap:           @local::microboone_opreadoutmap
   DetectorClocksService:            @local::microboone_detectorclocks
-  DatabaseUtil:           @local::microboone_database
 
   FileCatalogMetadata: { applicationFamily: "art"
                          applicationVersion: "v04_16_00"
@@ -33,17 +31,6 @@ services:
             			 }
 
 }
-
-# Database settings
-services.DatabaseUtil.DBHostName:    "fnalpgsdev.fnal.gov"
-services.DatabaseUtil.DBName:        "uboonedaq_dev"
-services.DatabaseUtil.DBUser:        "uboonedaq_web"
-services.DatabaseUtil.Port:          5436
-services.DatabaseUtil.PassFileName:  "uboonedb_passwd"  # name of password file. searched for using env var FW_SEARCH_PATH
-services.DatabaseUtil.ToughErrorTreatment: true
-services.DatabaseUtil.ShouldConnect: true
-services.DatabaseUtil.TableName: "main_run"
-
 
 source:
 {

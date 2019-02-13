@@ -1,7 +1,6 @@
 #include "geometry_microboone.fcl"
 #include "detectorclocks_microboone.fcl"
 #include "pmtconfig_microboone.fcl"
-#include "databaseutil_microboone.fcl"
 #include "sam_microboone.fcl"
 #include "opticaldetectormodules_microboone.fcl"
 #include "flashfilter_microboone.fcl"
