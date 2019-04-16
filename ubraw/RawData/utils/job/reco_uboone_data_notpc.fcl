@@ -23,6 +23,10 @@ microboone_reco_notpc_services:
   DetectorClocksService:            @local::microboone_detectorclocks
   IFDH:                   {}
   CRTFileManager:         @local::microboone_crt_file_manager
+  PMTRemapService:
+  {
+    PMTRemapProvider: {}
+  } 
 }
 
 microboone_reco_notpc_producers: {
