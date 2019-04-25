@@ -68,7 +68,10 @@ void beamRun::StartRun(beamRunHeader& rh, boost::posix_time::ptime tstart)
 		    <<ss.str();
     fOut[i].open(ss.str().c_str(), ios::out | ios::binary);
     // fOA[fBeamLine[i]]=new boost::archive::binary_oarchive(fOut[i]);
-    tstart=tstart-microseconds(fTimeOffsetMap[fBeamLine[i]]*1000.)-microseconds(fTimePaddingMap[fBeamLine[i]]*1000.);
+    // Assume that if the unit is microseconds, then we do not need greater precision than 1 in 1 million.
+    tstart=tstart
+      - microseconds(static_cast<int>(fTimeOffsetMap[fBeamLine[i]]*1000.))
+      - microseconds(static_cast<int>(fTimePaddingMap[fBeamLine[i]]*1000.));
     mf::LogInfo("") <<"Added padding ("<<fTimePaddingMap[fBeamLine[i]]<<"ms) and offset ("<<fTimeOffsetMap[fBeamLine[i]]<<"ms) to start time "<<fBeamLine[i]<<" "<<tstart;
     fLastQueryTime[fBeamLine[i]]=tstart;
   }
@@ -84,7 +87,9 @@ void beamRun::Update(boost::posix_time::ptime tend)
     beamdatamap_t data_map;
     ptime last_proc_time=orgtend-hours(10000);
     //now get data from db 10min at the time
-    tend=orgtend-microseconds(fTimeOffsetMap[fBeamLine[ibeam]]*1000.)+microseconds(fTimePaddingMap[fBeamLine[ibeam]]*1000.);
+    tend=orgtend
+      - microseconds(static_cast<int>(fTimeOffsetMap[fBeamLine[ibeam]]*1000.))
+      + microseconds(static_cast<int>(fTimePaddingMap[fBeamLine[ibeam]]*1000.));
     ptime t1 = (fLastQueryTime[fBeamLine[ibeam]]+minutes(10)<tend) ? 
 	(fLastQueryTime[fBeamLine[ibeam]]+minutes(10)) : tend;
 
@@ -354,10 +359,12 @@ void beamRun::WriteData(std::string beamline, map<ub_BeamHeader, std::vector<ub_
   int ibeamline=0;
   while (beamline!=fBeamLine[ibeamline]) ibeamline++;
 
+  // Assume that if the unit is microseconds, then we do not need
+  // greater precision than 1 in 1 million.
   while (it != data_map.end()) {
     if ( ( fLastBeamHeader.find(beamline) == fLastBeamHeader.end() ||
 	  !(it->first <= fLastBeamHeader[beamline])) &&
-	 (ToPtime(it->first) <= fRunHeader.fRunEnd-microseconds(fTimeOffsetMap[beamline]*1000.)+microseconds(fTimePaddingMap[beamline]*1000.))) {
+         (ToPtime(it->first) <= fRunHeader.fRunEnd-microseconds(static_cast<int>(fTimeOffsetMap[beamline]*1000.))+microseconds(static_cast<int>(fTimePaddingMap[beamline]*1000.)))) {
       fRunHeader.fCounter[beamline]=fRunHeader.fCounter[beamline]+1;
       //    (*fOA[beamline]) << it->first;
       boost::archive::binary_oarchive oa(fOut[ibeamline]);
