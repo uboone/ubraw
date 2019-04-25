@@ -16,8 +16,8 @@
 #include "art/Framework/Principal/SubRun.h"
 #include "canvas/Utilities/InputTag.h"
 #include "art/Framework/Services/Registry/ServiceHandle.h"
-#include "art/Framework/Services/Optional/TFileService.h"
-#include "art/Framework/Services/Optional/TFileDirectory.h"
+#include "art_root_io/TFileService.h"
+#include "art_root_io/TFileDirectory.h"
 
 #include "IFDH_service.h"
 
@@ -164,8 +164,7 @@ private:
 };
 
 BeamData::BeamData(fhicl::ParameterSet const & p)
-//  :
-// Initialize member data here.
+  : EDProducer{p}
 {
   std::cout<<"Init BeamData"<<std::endl;
   // Set timezone to Fermilab.
@@ -384,7 +383,10 @@ void BeamData::endSubRun(art::SubRun & sr)
       std::vector<ub_BeamData> bd;
       if (nextBeamEvent(it->first,bh,bd)) {
 	boost::posix_time::time_duration zoneOffset = boost::posix_time::second_clock::local_time()-boost::posix_time::second_clock::universal_time();
-	boost::posix_time::ptime tevnt= boost::posix_time::from_time_t(bh.getSeconds())+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(bh.getMilliSeconds()*1000)+ boost::posix_time::microseconds(fBeamConf[it->first].fOffsetT*1000);
+        boost::posix_time::ptime tevnt= boost::posix_time::from_time_t(bh.getSeconds())
+          + boost::posix_time::hours(zoneOffset.hours())
+          + boost::posix_time::microseconds(bh.getMilliSeconds()*1000)
+          + boost::posix_time::microseconds(static_cast<int>(fBeamConf[it->first].fOffsetT*1000));
 	//calculate FOM
 	if (fBeamConf[it->first].fFOMversion==1) {
 	  fFOM=bmd::getFOM(it->first,bh,bd);
@@ -560,7 +562,10 @@ void BeamData::produce(art::Event & e)
     if (nextBeamEvent(beam_name,bh,bd)) {
       int comp=compareTime(bh,e,fBeamConf[beam_name].fDt, fBeamConf[beam_name].fOffsetT);
       boost::posix_time::time_duration zoneOffset = boost::posix_time::second_clock::local_time()-boost::posix_time::second_clock::universal_time();
-      boost::posix_time::ptime tevnt= boost::posix_time::from_time_t(bh.getSeconds())+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(bh.getMilliSeconds()*1000)+ boost::posix_time::microseconds(fBeamConf[beam_name].fOffsetT*1000);
+      boost::posix_time::ptime tevnt = boost::posix_time::from_time_t(bh.getSeconds())
+        + boost::posix_time::hours(zoneOffset.hours())
+        + boost::posix_time::microseconds(bh.getMilliSeconds()*1000)
+        + boost::posix_time::microseconds(static_cast<int>(fBeamConf[beam_name].fOffsetT*1000));
 
       if (tevnt<fSubrunT0 || tevnt>fSubrunT1) {
 	mf::LogInfo(__FUNCTION__)<<"Event time not consistent with subrun begin/end "

@@ -34,7 +34,6 @@ cet_cmake_env()
 cet_set_compiler_flags(DIAGS CAUTIOUS
   WERROR
   NO_UNDEFINED
-  ALLOW_DEPRECATIONS
   EXTRA_FLAGS -pedantic -Wno-unused-local-typedefs
 )
 
@@ -54,6 +53,7 @@ find_ups_product( larevt v1_00_00 )
 find_ups_product( lardata v1_00_00 )
 find_ups_product( uboonedaq_datatypes v1_00_00 )
 find_ups_product( art v1_00_00 )
+find_ups_product(art_root_io)
 find_ups_product( larcore )
 find_ups_product( nutools )
 cet_find_library( UBDut NAMES ubdata_types PATHS $ENV{UBOONEDAQ_DATATYPES_LIB} )
