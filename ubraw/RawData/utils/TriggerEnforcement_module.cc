@@ -60,7 +60,7 @@ private:
 
 
 TriggerEnforcement::TriggerEnforcement(fhicl::ParameterSet const & p)
-: _bit_v_size(32)
+: EDFilter{p}, _bit_v_size(32)
 {
 
   _hardware_trigger_producer = p.get<std::string>("HardwareTriggerProducer");
