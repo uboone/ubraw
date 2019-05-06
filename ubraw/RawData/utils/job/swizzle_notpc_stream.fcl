@@ -91,7 +91,7 @@ physics:
   swtrigEXT:  @local::swtriggerEXT
  }
 
- path_notpc:         [ @sequence::microboone_reco_notpc, swtrignotpc ]
+ path_notpc:         [ @sequence::microboone_reco_notpc ]
 
  # paths for software trigger rate monitoring
  path_ext_unbiased_swtrig:  [ swtrigextunbiased,  swtrigEXT  ]
