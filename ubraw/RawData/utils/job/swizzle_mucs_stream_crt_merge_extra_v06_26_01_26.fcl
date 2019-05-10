@@ -92,7 +92,7 @@ physics:
   swtrigEXT:  @local::swtriggerEXT
  }
 
- path_mucs:          [ merger, mergerextra, @sequence::microboone_reco_notpc, swtrigmucs ]
+ path_mucs:          [ merger, mergerextra, @sequence::microboone_reco_notpc, trigmucs ]
 
  # paths for software trigger rate monitoring
  path_ext_unbiased_swtrig:  [ swtrigextunbiased,  swtrigEXT  ]
