@@ -29,7 +29,7 @@ table_fragment_end
 # Add the dependent product and version
 
 product                 version
-ubcore                  v08_23_00
+ubcore                  v08_24_00
 larevt                  v08_06_01
 uboonedaq_datatypes     v6_22_05b
 ifdh_art		v2_08_05
