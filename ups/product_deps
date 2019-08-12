@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent ubraw v08_27_02
+parent ubraw v08_28_00
 
 defaultqual e17
 
@@ -29,22 +29,21 @@ table_fragment_end
 # Add the dependent product and version
 
 product                 version
-ubcore                  v08_27_02
-larevt                  v08_06_04
+ubcore                  v08_28_00
+larevt                  v08_06_05
 uboonedaq_datatypes     v6_22_05b
-ifdh_art		v2_08_05
+ifdh_art		v2_08_06
 cetbuildtools	        v7_12_01	-	only_for_build
 end_product_list
 
 qualifier      ubcore         larevt         uboonedaq_datatypes	ifdh_art
+c2:py3:debug   c2:py3:debug   c2:py3:debug   c2:debug:offline       	c2:py3:s86:debug
+c2:py3:prof    c2:py3:prof    c2:py3:prof    c2:prof:offline        	c2:py3:s86:prof
+e17:py3:debug  e17:py3:debug  e17:py3:debug  e17:debug:offline		e17:py3:s86:debug
+e17:py3:prof   e17:py3:prof   e17:py3:prof   e17:prof:offline		e17:py3:s86:prof
 c2:debug       c2:debug       c2:debug       c2:debug:offline       	c2:s86:debug
-c2:opt         c2:opt         c2:opt         c2:opt:offline         	c2:s86:opt
 c2:prof        c2:prof        c2:prof        c2:prof:offline        	c2:s86:prof
-e15:debug      e15:debug      e15:debug      e15:debug:offline      	e15:s86:debug
-e15:opt        e15:opt        e15:opt        e15:opt:offline        	e15:s86:opt
-e15:prof       e15:prof       e15:prof       e15:prof:offline       	e15:s86:prof
 e17:debug      e17:debug      e17:debug      e17:debug:offline		e17:s86:debug
-e17:opt        e17:opt        e17:opt        e17:opt:offline		e17:s86:opt
 e17:prof       e17:prof       e17:prof       e17:prof:offline		e17:s86:prof
 end_qualifier_list
 
