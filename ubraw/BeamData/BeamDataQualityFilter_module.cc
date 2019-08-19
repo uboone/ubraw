@@ -197,6 +197,11 @@ bool BeamDataQualityFilter::filter(art::Event & e)
     else if (bc->fBeamName=="bnb" && datamap["E:TOR875"].size()>0) fTor=datamap["E:TOR875"][0];
     else if (bc->fBeamName=="numi" && datamap["E:TORTGT"].size()>0) fTor=datamap["E:TORTGT"][0];
     else if (bc->fBeamName=="numi" && datamap["E:TOR101"].size()>0) fTor=datamap["E:TOR101"][0];
+    if (fRun<3700 && (datamap["E:TOR860"][0]>6 || fabs(datamap["E:TOR860"][0]-datamap["E:TOR875"][0])>0.3 || ((datamap["E:TOR860"][0]<0.3 || datamap["E:TOR875"][0]<0.3))) && datamap["E:HI860"].size()>0 && datamap["E:HI860"][0]>0) {
+      fTor=1.613e-4*datamap["E:HI860"][0]-0.003852;
+      //tor860[0]=1.613e-4*hi860[0]-0.003852
+      //tor875[0]=1.806e-4*hitg2[0]+0.02174
+    }
     if ( fTor<bc->fIntensityRange[0] || fTor>bc->fIntensityRange[1]) {
       fResult=false;
       bc->fNIntensityCut+=1;

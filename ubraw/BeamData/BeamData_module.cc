@@ -167,7 +167,6 @@ BeamData::BeamData(fhicl::ParameterSet const & p)
 //  :
 // Initialize member data here.
 {
-  std::cout<<"Init BeamData"<<std::endl;
   // Set timezone to Fermilab.
   setenv("TZ", "CST+6CDT", 1);
   tzset();
@@ -618,6 +617,7 @@ void BeamData::produce(art::Event & e)
   }
   }
   e.put(std::move(beam_info));
+
 }
 
 
@@ -744,13 +744,41 @@ void BeamData::fillTreeData(std::string beam, const ub_BeamHeader& bh, const std
   for (int i=0;i<bh.getNumberOfDevices();i++) {
     std::string varname=bd[i].getDeviceName();
     varname.erase(std::remove(varname.begin(), varname.end(), ':'), varname.end());
-    if (bd[i].getData().size()==1) {
-      fBeamConf[beam].fTreeVar[varname]=bd[i].getData()[0];
-    } else {
-      for (unsigned int j=0;j<bd[i].getData().size();j++) {
-	fBeamConf[beam].fTreeArr[varname][j]=bd[i].getData()[j];
+    if (!(fBeamConf[beam].fTreeVar.find(varname)==fBeamConf[beam].fTreeVar.end() &&
+	  fBeamConf[beam].fTreeArr.find(varname)==fBeamConf[beam].fTreeArr.end())) {
+      if (bd[i].getData().size()==1) {
+
+	fBeamConf[beam].fTreeVar[varname]=bd[i].getData()[0];
+      } else {
+	for (unsigned int j=0;j<bd[i].getData().size();j++) {
+	  fBeamConf[beam].fTreeArr[varname][j]=bd[i].getData()[j];
+	}
       }
+    } else {
+      std::stringstream ss;
+      if (bd[i].getData().size()==1) {
+	fBeamConf[beam].fTreeVar[varname]=-999;
+	ss <<"Adding scalar branch while filling for device "<<varname<<" and filling first "<<fBeamConf[beam].fTree->GetEntries()<<" entries with -999"<<std::endl;
+	fBeamConf[beam].fTree->Branch(varname.c_str(),&fBeamConf[beam].fTreeVar[varname],
+				      (varname+"/D").c_str());
+	for (int ientry=0;ientry<fBeamConf[beam].fTree->GetEntries();ientry++) 
+	  fBeamConf[beam].fTree->GetBranch(varname.c_str())->Fill();
+	fBeamConf[beam].fTreeVar[varname]=bd[i].getData()[0];
+      } else {
+	double* x=new double[bd[i].getData().size()];
+	for (unsigned int ii=0;ii<bd[i].getData().size();ii++) x[ii]=-999;
+	fBeamConf[beam].fTreeArr[varname]=x;
+	ss <<"Adding vector branch while filling for device "<<varname<<" and filling first "<<fBeamConf[beam].fTree->GetEntries()<<" entries with -999"<<std::endl;
+	fBeamConf[beam].fTree->Branch(varname.c_str(),fBeamConf[beam].fTreeArr[varname],
+				      (varname+"["+std::to_string(bd[i].getData().size())+"]/D").c_str());
+	for (int ientry=0;ientry<fBeamConf[beam].fTree->GetEntries();ientry++) {
+	  fBeamConf[beam].fTree->GetBranch(varname.c_str())->Fill();
+	}
+	for (unsigned int ii=0;ii<bd[i].getData().size();ii++) x[ii]=bd[i].getData()[ii];;
+      }
+      mf::LogDebug(__FUNCTION__)<<ss.str();
     }
+
   }
   fBeamConf[beam].fTree->Fill();
   fTLast[beam]=tevnt;
