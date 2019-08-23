@@ -12,6 +12,8 @@
 #include "ubflashfinder.fcl"
 #include "microboone_dlpmtprecuts.fcl"
 #include "microboone_crt_file_manager.fcl"
+#include "ophitcorrection.fcl"
+#include "database_microboone.fcl"
 
 BEGIN_PROLOG
 
@@ -19,8 +21,10 @@ microboone_reco_notpc_services:
 {
   ExptGeoHelperInterface: @local::microboone_geometry_helper
   Geometry:               @local::microboone_geo
-  UBOpReadoutMap:           @local::microboone_opreadoutmap
-  DetectorClocksService:            @local::microboone_detectorclocks
+  UBOpReadoutMap:         @local::microboone_opreadoutmap
+  DetectorClocksService:  @local::microboone_detectorclocks
+  PmtGainService:         @local::microboone_pmtgain_service
+  LightYieldService:      @local::microboone_lightyield_service
   IFDH:                   {}
   CRTFileManager:         @local::microboone_crt_file_manager
   PMTRemapService:
@@ -39,6 +43,9 @@ microboone_reco_notpc_producers: {
   ophitCosmicNoRemap       : @local::microboone_ophit_saturation_cosmic
   ophitBeam         : @local::ophitremap
   ophitCosmic       : @local::ophitremap
+  ophitBeamCalib           : @local::ophitcorrection
+  ophitCosmicCalib         : @local::ophitcorrection
+
 
   ### flash finders
   simpleFlashBeam      : @local::UBFlashBeam
@@ -89,17 +96,24 @@ microboone_reco_notpc: [ saturation,
                          ophitBeamNoRemap,
                          ophitCosmic,
                          ophitBeam,
-                         opflashCosmic,
-                         opflashBeam,
+			 ophitCosmicCalib,
+			 ophitBeamCalib,
                          simpleFlashCosmic,
                          simpleFlashBeam,
                          simpleFlashBeamLowPE]
 
 microboone_reco_notpc_services.DetectorClocksService.TrigModuleName: "daq"
+microboone_reco_notpc_services.PmtGainService.PmtGainProvider.UseDB: true
+microboone_reco_notpc_services.LightYieldService.LightYieldProvider.UseDB: true
 
 microboone_reco_notpc_producers.ophitCosmic.MapOffset: 200
 microboone_reco_notpc_producers.ophitCosmic.OpHitsInputTag: "ophitCosmicNoRemap"
 microboone_reco_notpc_producers.ophitBeam.OpHitsInputTag: "ophitBeamNoRemap"
+microboone_reco_notpc_producers.ophitCosmicCalib.OpHitsInputTag: "ophitCosmic"
+microboone_reco_notpc_producers.ophitBeamCalib.OpHitsInputTag: "ophitBeam"
+microboone_reco_notpc_producers.simpleFlashBeam.DoCalibration:   true
+microboone_reco_notpc_producers.simpleFlashBeamLowPE.DoCalibration:   true
+microboone_reco_notpc_producers.simpleFlashCosmic.DoCalibration: true
 microboone_reco_notpc_producers.simpleFlashBeamLowPE.AlgoConfig.PEThreshold: 6
 
 microboone_reco_notpc_filters.trigbnb.HardwareTriggerProducer: "daq"
@@ -178,6 +192,8 @@ microboone_reco_notpc_filters.swtrigexthsnc0.excludeSoftwareTriggers: [ "EXT_BNB
 								        "EXT_BNBwin_2017Dec_SWTrigger5PE_FEMBeamTriggerAlgo" ]
 
 microboone_reco_notpc_filters.opfiltercommonbnb.OpHitProducer: "ophitBeam"
+microboone_reco_notpc_filters.opfiltercommonbnb.ScaleLY: "true"
 microboone_reco_notpc_filters.opfiltercommonext.OpHitProducer: "ophitBeam"
+microboone_reco_notpc_filters.opfiltercommonext.ScaleLY: "true"
 
 END_PROLOG
