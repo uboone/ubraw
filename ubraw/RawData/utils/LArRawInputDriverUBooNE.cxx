@@ -346,7 +346,7 @@ namespace lris {
   void LArRawInputDriverUBooNE::closeCurrentFile()
   {
     mf::LogInfo(__FUNCTION__)<<"File boundary (processed "<<fEventCounter<<" events)"<<std::endl;
-    fCurrentSubRunID.flushSubRun();
+    fCurrentSubRunID = art::SubRunID();
     fEventCounter=0;
     fNumberEventsInFile=0;
     fInputStream.close();
