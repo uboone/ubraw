@@ -36,4 +36,11 @@ do
     exit 1
   fi
 
+  # Check for plain http: urls.
+
+  if egrep -q http: $fclout; then
+    echo "Found plain http: url."
+    exit 1
+  fi
+
 done
