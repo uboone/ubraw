@@ -32,19 +32,19 @@ product                 version
 ubcore                  v08_30_02
 larevt                  v08_06_09
 uboonedaq_datatypes     v6_22_05b
-ifdh_art		v2_08_07
+ifdh_art		v2_08_09
 cetbuildtools	        v7_12_01	-	only_for_build
 end_product_list
 
 qualifier      ubcore         larevt         uboonedaq_datatypes	ifdh_art
-c2:py3:debug   c2:py3:debug   c2:py3:debug   c2:debug:offline       	c2:py3:s86:debug
-c2:py3:prof    c2:py3:prof    c2:py3:prof    c2:prof:offline        	c2:py3:s86:prof
-e17:py3:debug  e17:py3:debug  e17:py3:debug  e17:debug:offline		e17:py3:s86:debug
-e17:py3:prof   e17:py3:prof   e17:py3:prof   e17:prof:offline		e17:py3:s86:prof
-c2:debug       c2:debug       c2:debug       c2:debug:offline       	c2:s86:debug
-c2:prof        c2:prof        c2:prof        c2:prof:offline        	c2:s86:prof
-e17:debug      e17:debug      e17:debug      e17:debug:offline		e17:s86:debug
-e17:prof       e17:prof       e17:prof       e17:prof:offline		e17:s86:prof
+c2:py3:debug   c2:py3:debug   c2:py3:debug   c2:debug:offline       	c2:py3:debug
+c2:py3:prof    c2:py3:prof    c2:py3:prof    c2:prof:offline        	c2:py3:prof
+e17:py3:debug  e17:py3:debug  e17:py3:debug  e17:debug:offline		e17:py3:debug
+e17:py3:prof   e17:py3:prof   e17:py3:prof   e17:prof:offline		e17:py3:prof
+c2:debug       c2:debug       c2:debug       c2:debug:offline       	c2:debug
+c2:prof        c2:prof        c2:prof        c2:prof:offline        	c2:prof
+e17:debug      e17:debug      e17:debug      e17:debug:offline		e17:debug
+e17:prof       e17:prof       e17:prof       e17:prof:offline		e17:prof
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
