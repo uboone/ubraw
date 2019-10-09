@@ -7,6 +7,9 @@
 #include <fstream>
 #include <stdlib.h>
 
+#include <ctime>  
+#include <cstdlib>
+
 #include <messagefacility/MessageLogger/MessageLogger.h>
 
 #include "boost/date_time/posix_time/posix_time.hpp"
@@ -76,6 +79,8 @@ void beamRun::StartRun(beamRunHeader& rh, boost::posix_time::ptime tstart)
 
 void beamRun::Update(boost::posix_time::ptime tend)
 {
+  //seed random generator for random wait time when trying to query IFBEAM
+  srand(time(0));
   static char sbuf[1024];
 
   boost::posix_time::ptime orgtend=tend;
@@ -110,19 +115,22 @@ void beamRun::Update(boost::posix_time::ptime tend)
 	mf::LogInfo("") <<"Query server:\n"<<sbuf;
 	int itry=0;
 	bool got_data=false;
-	while (itry<10 && !got_data) {
+ 	int wait_time=rand()%30; // sleep up to 30s after first try and increase time after each try
+ 	cout<<"Wait time set to "<<wait_time<<" try "<<itry<<endl;
+	while (itry<20 && !got_data) {
 	  try {
 	    fIFDB.GetData(sbuf,locresponse);
 	    got_data=true;
 	  } catch (...) {
-	    mf::LogError("")<<"Failed to get data. Will need to try again "<<itry;
+	    mf::LogError("")<<"Failed to get data. Will need to try again "<<itry<<". Sleeping for "<<wait_time*(itry+1)<<" seconds";
 	    mf::LogError("")<<locresponse->memory;
 	    itry++;
 	    locresponse->memory="";
+	    sleep(wait_time*itry);
 	  }
 	}
 	if (!got_data)
-	  throw cet::exception(__PRETTY_FUNCTION__) << "Failed to get beam data from IFBEAM. Giving up after trying 10 times...\n";
+	  throw cet::exception(__PRETTY_FUNCTION__) << "Failed to get beam data from IFBEAM. Giving up after trying 20 times...\n";
 
 	response->memory+=locresponse->memory;
 	delete locresponse;

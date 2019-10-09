@@ -159,7 +159,8 @@ bool BeamDataQualityFilter::filter(art::Event & e)
   if (e.getByLabel("beamdata",beam)){
     std::map<std::string, std::vector<double>> datamap = beam->GetDataMap();
     if (datamap.size()==0) {
-      mf::LogWarning(__FUNCTION__)<<"Event missing beam data";
+      mf::LogWarning(__FUNCTION__)<<"Event missing beam data, but this was beam event. Fail beam data quality";
+      fResult=false;
       fTree->Fill();
       return fResult;
     }
