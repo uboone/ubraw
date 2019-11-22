@@ -283,8 +283,8 @@ physics:
                   stream_ext_bnb,
                   stream_ext_numi,
                   stream_ext_unbiased,
-                  stream_ext_hsnc0,
-		  stream_mucs ]
+                  stream_ext_hsnc0 ]
+		  #stream_mucs ]
 }
 
 services.DetectorClocksService.TrigModuleName: "daq"
