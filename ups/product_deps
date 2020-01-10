@@ -31,24 +31,24 @@ table_fragment_end
 product                 version
 ubcore                  v08_39_00
 larevt                  v08_09_00
-uboonedaq_datatypes     v6_22_05c
+uboonedaq_datatypes     v6_22_05d
 ifdh_art		v2_09_03
 cetbuildtools	        v7_14_00	-	only_for_build
 end_product_list
 
 qualifier      ubcore         larevt         uboonedaq_datatypes	ifdh_art
+c2:py3:debug   c2:py3:debug   c2:py3:debug   c2:debug:offline       	c2:py3:debug
+c2:py3:prof    c2:py3:prof    c2:py3:prof    c2:prof:offline        	c2:py3:prof
+c2:debug       c2:debug       c2:debug       c2:debug:offline       	c2:debug
+c2:prof        c2:prof        c2:prof        c2:prof:offline        	c2:prof
 c7:py3:debug   c7:py3:debug   c7:py3:debug   c7:debug:offline       	c7:py3:debug
 c7:py3:prof    c7:py3:prof    c7:py3:prof    c7:prof:offline        	c7:py3:prof
 c7:debug       c7:debug       c7:debug       c7:debug:offline       	c7:debug
 c7:prof        c7:prof        c7:prof        c7:prof:offline        	c7:prof
-c7:py3:debug   c7:py3:debug   c7:py3:debug   c7:debug:offline       	c7:py3:debug
-c7:py3:prof    c7:py3:prof    c7:py3:prof    c7:prof:offline        	c7:py3:prof
-c7:debug       c7:debug       c7:debug       c7:debug:offline       	c7:debug
-c7:prof        c7:prof        c7:prof        c7:prof:offline        	c7:prof
-e19:py3:debug  e19:py3:debug  e19:py3:debug  e19:debug:offline		e19:py3:debug
-e19:py3:prof   e19:py3:prof   e19:py3:prof   e19:prof:offline		e19:py3:prof
-e19:debug      e19:debug      e19:debug      e19:debug:offline		e19:debug
-e19:prof       e19:prof       e19:prof       e19:prof:offline		e19:prof
+e17:py3:debug  e17:py3:debug  e17:py3:debug  e17:debug:offline		e17:py3:debug
+e17:py3:prof   e17:py3:prof   e17:py3:prof   e17:prof:offline		e17:py3:prof
+e17:debug      e17:debug      e17:debug      e17:debug:offline		e17:debug
+e17:prof       e17:prof       e17:prof       e17:prof:offline		e17:prof
 e19:py3:debug  e19:py3:debug  e19:py3:debug  e19:debug:offline		e19:py3:debug
 e19:py3:prof   e19:py3:prof   e19:py3:prof   e19:prof:offline		e19:py3:prof
 e19:debug      e19:debug      e19:debug      e19:debug:offline		e19:debug
