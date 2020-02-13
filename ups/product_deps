@@ -39,9 +39,6 @@ qualifier      ubcore         larevt         uboonedaq_datatypes
 c2:debug       c2:debug       c2:debug       c2:debug:offline       
 c2:opt         c2:opt         c2:opt         c2:opt:offline         
 c2:prof        c2:prof        c2:prof        c2:prof:offline        
-e15:debug      e15:debug      e15:debug      e15:debug:offline      
-e15:opt        e15:opt        e15:opt        e15:opt:offline        
-e15:prof       e15:prof       e15:prof       e15:prof:offline       
 e17:debug      e17:debug      e17:debug      e17:debug:offline
 e17:opt        e17:opt        e17:opt        e17:opt:offline
 e17:prof       e17:prof       e17:prof       e17:prof:offline
