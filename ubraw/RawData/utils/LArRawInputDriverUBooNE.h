@@ -122,6 +122,8 @@ namespace lris {
     bool                           fUseGPS;     // fhicl parameter force use GPS time.
     bool                           fUseNTP;     // fhicl parameter force use NTP time.
     double                         fDAQFreqAdj; // DAQ frequency adjustment.
+    bool                           fUseSQLite;  // Read channel map from sqlite if true.
+    bool                           fTestMode;   // Read channap map from both server and sqlite.
     util::UBChannelMap_t           fChannelMap;
     int                            fMaxEvents; //fhicl parameter.  Maximum number of events.
     int                            fSkipEvents; // fhicl parameter.  Number of events to skip.
