@@ -16,8 +16,6 @@
 #include "canvas/Utilities/InputTag.h"
 #include "fhiclcpp/ParameterSet.h"
 // #include "larcore/CoreUtils/ServiceUtil.h" // lar::providerFrom<>()
-// #include "lardata/DetectorInfoServices/DetectorClocksService.h"
-#include "lardata/DetectorInfoServices/DetectorClocksServiceStandard.h" // FIXME: not portable
 #include "messagefacility/MessageLogger/MessageLogger.h"
 
 #include <memory>
@@ -139,15 +137,8 @@ TriggerEnforcement::TriggerEnforcement(fhicl::ParameterSet const & p)
 
 bool TriggerEnforcement::filter(art::Event & e)
 {
-  
-  /// @bug This code is not portable and requires redesign
-  ::art::ServiceHandle< detinfo::DetectorClocksServiceStandard > ts;
-
   bool hardware_decision=false;
   bool software_decision=false;
-
-  //FIXME: you should let the framework call preProcessEvent
-  ts->preProcessEvent(e, art::ScheduleContext::invalid());
 
   if(_hardware_trigger_producer.empty()) hardware_decision=true;
   if(_software_trigger_producer.empty()) software_decision=true;
