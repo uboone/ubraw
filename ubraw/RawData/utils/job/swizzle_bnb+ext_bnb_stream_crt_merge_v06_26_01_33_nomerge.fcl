@@ -41,6 +41,7 @@ source:
   swizzleTPC:      true
   swizzlePMT:      true
   swizzleTriggerType: ALL
+  UseSQLite:       true
   beam_histograms: [ "E:TOR101, 100, 0, 50",
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",

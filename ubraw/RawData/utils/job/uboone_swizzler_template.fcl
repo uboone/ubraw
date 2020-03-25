@@ -43,7 +43,8 @@ source:
                      "E:TOR860, 100, 0, 5",
                      "E:TOR875, 100, 0, 5" ]
   swizzleTriggerType: ALL
-}	
+  UseSQLite:       true
+}
 
 outputs:
 {

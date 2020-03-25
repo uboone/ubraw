@@ -45,6 +45,7 @@ source:
 #  swizzleTriggerType: EXT
 #  swizzleTriggerType: NuMI
 #  swizzleTriggerType: CALIB
+  UseSQLite:       true
   beam_histograms: [ "E:TOR101, 100, 0, 50",
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
