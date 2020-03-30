@@ -40,6 +40,9 @@ void beamIFDBInterface::GetData(const char *url,httpResponse* response)
   /* specify URL to get */
   curl_easy_setopt(fCURLHandle, CURLOPT_URL, url);
 
+  /* setup cert */
+  curl_easy_setopt(fCURLHandle, CURLOPT_CAPATH, "/cvmfs/oasis.opensciencegrid.org/mis/certificates");
+
   /* make sure it fails on any problem */
   curl_easy_setopt(fCURLHandle, CURLOPT_FAILONERROR, 1L);
 
