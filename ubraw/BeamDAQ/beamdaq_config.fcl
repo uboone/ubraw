@@ -41,7 +41,7 @@ time_offset  : { bnb: 35.9
 
 
 //IF beam database
-ifdb_url : "http://ifb-data.fnal.gov:8100/ifbeam/data"
+ifdb_url : "https://dbdata0vm.fnal.gov:8104/ifbeam/data"
 
 //log file setings:
 message_facility : {
