@@ -30,7 +30,7 @@ table_fragment_end
 
 product                 version
 ubcore                  v08_00_00_13l
-larevt                  v08_01_00_05b
+larevt                  v08_01_00_05c
 uboonedaq_datatypes     v6_22_05a
 cetbuildtools	        v7_11_00	-	only_for_build
 end_product_list
