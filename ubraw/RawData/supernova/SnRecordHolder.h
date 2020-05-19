@@ -12,7 +12,9 @@
 #include "lardataobj/RecoBase/Wire.h"
 #include "lardataobj/RawData/OpDetWaveform.h"
 #include "ubcore/Geometry/UBOpChannelTypes.h"
-
+namespace detinfo {
+  class DetectorClocksData;
+}
 
 namespace snassembler {
 
@@ -49,7 +51,8 @@ struct SnRecordHolder {
                             
   typedef std::map< opdet::UBOpticalChannelCategory_t, std::unique_ptr< std::vector<raw::OpDetWaveform> > >  pmtmap_t;
                             
-  bool addSupernovaPmtData( pmtmap_t& pmt_map );
+  bool addSupernovaPmtData(detinfo::DetectorClocksData const& clockData,
+                           pmtmap_t& pmt_map );
 
 };
   
