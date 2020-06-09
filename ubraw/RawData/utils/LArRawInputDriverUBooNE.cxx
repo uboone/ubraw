@@ -1204,7 +1204,7 @@ namespace lris {
 
     	//crate -> card -> channel -> window
 
-    	auto const* timeService = lar::providerFrom<detinfo::DetectorClocksService>();
+        auto const clockData = art::ServiceHandle<detinfo::DetectorClocksService>()->DataForJob();;
     	::art::ServiceHandle<geo::UBOpReadoutMap> ub_pmt_channel_map;
 
     	// pmt channel map is assumed to be time dependent. therefore we need event time to set correct map.
@@ -1290,19 +1290,19 @@ namespace lris {
           			PMTFEM4triggerFrame = trigFrame;
           			PMTFEM4eventFrame = eventFrame;
           			PMTFEM4triggerSample = trigSample;
-					//PMTFEM4triggerTime = timeService->OpticalClock().Time( trigSample, trigFrame );
+                                        //PMTFEM4triggerTime = clockData.OpticalClock().Time( trigSample, trigFrame );
         		}
         		if (card_number == 5){
           			PMTFEM5triggerFrame = trigFrame;
           			PMTFEM4eventFrame = eventFrame;
           			PMTFEM5triggerSample = trigSample;
-					//PMTFEM5triggerTime = timeService->OpticalClock().Time( trigSample, trigFrame );
+                                        //PMTFEM5triggerTime = clockData.OpticalClock().Time( trigSample, trigFrame );
 				}
 				if (card_number == 6){
           			PMTFEM6triggerFrame = trigFrame;
           			PMTFEM4eventFrame = eventFrame;
           			PMTFEM6triggerSample = trigSample;
-					//PMTFEM6triggerTime = timeService->OpticalClock().Time( trigSample, trigFrame );
+                                        //PMTFEM6triggerTime = clockData.OpticalClock().Time( trigSample, trigFrame );
         		}
 
         		// nathaniel's version of datatypes:
@@ -1343,7 +1343,7 @@ namespace lris {
 	    				// here we translate crate/card/daq channel to data product channel number
 	    				// also need to go from clock time to time stamp
 	    				opdet::UBOpticalChannelCategory_t ch_category = ub_pmt_channel_map->GetChannelCategory( data_product_ch_num );
-	    				double window_timestamp = timeService->OpticalClock().Time( sample, frame );
+                                        double window_timestamp = clockData.OpticalClock().Time( sample, frame );
 
             			raw::OpDetWaveform rd( window_timestamp, data_product_ch_num, win_data_size);
             			rd.reserve(win_data_size); // Don't know if this compiles, but it is more efficient. push_back is terrible without it.
@@ -1386,7 +1386,7 @@ namespace lris {
 	      					if (channel_number == 39 && card_number == 4 && RO_RWMtriggerSample == -999){
 								RO_RWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_RWMtriggerSample = window_header.getSample() + adc_edge_sample;
-                				RO_RWMtriggerTime = timeService->OpticalClock().Time( RO_RWMtriggerSample, RO_RWMtriggerFrame);
+                                                RO_RWMtriggerTime = clockData.OpticalClock().Time( RO_RWMtriggerSample, RO_RWMtriggerFrame);
 						//std::cout << "RWM signal channel 39 card 4" << std::endl;
 						//std::cout << "window sample, frame = " << window_header.getSample() << ", " << RO_RWMtriggerFrame << std::endl;
 	      					}
@@ -1394,31 +1394,31 @@ namespace lris {
 								//	std::cout << "EXT signal card 4" << std::endl;
 								RO_EXTtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_EXTtriggerSample = window_header.getSample() + adc_edge_sample;
-                				RO_EXTtriggerTime = timeService->OpticalClock().Time( RO_EXTtriggerSample, RO_EXTtriggerFrame);
+                                                RO_EXTtriggerTime = clockData.OpticalClock().Time( RO_EXTtriggerSample, RO_EXTtriggerFrame);
 	      					}
 	      					else if (channel_number == 37 && card_number == 4 && RO_NuMItriggerSample == -999){
 								//	std::cout << "NuMI signal card 4" << std::endl;
 								RO_NuMItriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_NuMItriggerSample = window_header.getSample() + adc_edge_sample;
-                				RO_NuMItriggerTime = timeService->OpticalClock().Time( RO_NuMItriggerSample, RO_NuMItriggerFrame);
+                                                RO_NuMItriggerTime = clockData.OpticalClock().Time( RO_NuMItriggerSample, RO_NuMItriggerFrame);
  	      					}
           					else if (channel_number == 36 && card_number == 4 && RO_BNBtriggerSample == -999){
 								//	std::cout << "BNB signal card 4" << std::endl;
 								RO_BNBtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_BNBtriggerSample = window_header.getSample() + adc_edge_sample;
-                				RO_BNBtriggerTime = timeService->OpticalClock().Time( RO_BNBtriggerSample, RO_BNBtriggerFrame);
+                                                RO_BNBtriggerTime = clockData.OpticalClock().Time( RO_BNBtriggerSample, RO_BNBtriggerFrame);
 	      					}
 	      					else if (channel_number == 39 && card_number == 5 && RO_LEDFlashTriggerSample == -999){
 								//	std::cout << "LED flash signal card 5" << std::endl;
 								RO_LEDFlashTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_LEDFlashTriggerSample = window_header.getSample() + adc_edge_sample;
-                				RO_LEDFlashTriggerTime = timeService->OpticalClock().Time( RO_LEDFlashTriggerSample, RO_LEDFlashTriggerFrame);
+                                                RO_LEDFlashTriggerTime = clockData.OpticalClock().Time( RO_LEDFlashTriggerSample, RO_LEDFlashTriggerFrame);
   	      					}
           					else if (channel_number == 38 && card_number == 5 && RO_HVtriggerSample == -999){
 								//	std::cout << "HV signal card 5" << std::endl;
 								RO_NuMIRWMtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_NuMIRWMtriggerSample = window_header.getSample() + adc_edge_sample;
-                				RO_NuMIRWMtriggerTime = timeService->OpticalClock().Time( RO_NuMIRWMtriggerSample, RO_NuMIRWMtriggerFrame);
+                                                RO_NuMIRWMtriggerTime = clockData.OpticalClock().Time( RO_NuMIRWMtriggerSample, RO_NuMIRWMtriggerFrame);
 						//std::cout << "NuMI RWM signal channel 38 card 5" << std::endl;
 						//std::cout << "window sample, frame = " << window_header.getSample() << ", " << RO_NuMIRWMtriggerFrame << std::endl;
 	      					}
@@ -1426,13 +1426,13 @@ namespace lris {
 								//	std::cout << "Paddle signal card 5" << std::endl;
 								RO_PaddleTriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_PaddleTriggerSample = window_header.getSample() + adc_edge_sample;
-                				RO_PaddleTriggerTime = timeService->OpticalClock().Time( RO_PaddleTriggerSample, RO_PaddleTriggerFrame);
+                                                RO_PaddleTriggerTime = clockData.OpticalClock().Time( RO_PaddleTriggerSample, RO_PaddleTriggerFrame);
 	      					}
           					else if (channel_number == 36 && card_number == 5 && RO_LEDtriggerSample == -999){
 								//	std::cout << "LED signal card 5" << std::endl;
 								RO_LEDtriggerFrame = RollOver(card_data.getFrame(),window_header.getFrame(),3);
                 				RO_LEDtriggerSample = window_header.getSample() + adc_edge_sample;
-                				RO_LEDtriggerTime = timeService->OpticalClock().Time( RO_LEDtriggerSample, RO_LEDtriggerFrame);
+                                                RO_LEDtriggerTime = clockData.OpticalClock().Time( RO_LEDtriggerSample, RO_LEDtriggerFrame);
  	      					}
 						}
 
@@ -1474,9 +1474,7 @@ namespace lris {
   	void LArRawInputDriverUBooNE::fillTriggerData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record,
 						std::vector<raw::Trigger>& trigInfo)
   	{
-
-    	auto const* timeService = lar::providerFrom<detinfo::DetectorClocksService>();
-
+        auto const clockData = art::ServiceHandle<detinfo::DetectorClocksService>()->DataForJob();
     	for(auto const& it_trig_map : event_record.getTRIGSEBMap()){
 
       		//int seb_num = it_trig_map.first;
@@ -1511,7 +1509,8 @@ namespace lris {
       		unsigned int sample_64MHz = (trig_header.get2MHzSampleNumber() * 32) + (trig_header.get16MHzRemainderNumber() * 4) + trig_data.getPhase();
       		unsigned int frame = trig_header.getFrame();
       		//std::cout << "Trigger frame: " << frame << " ... sample : " << sample_64MHz << std::endl;
-      		detinfo::ElecClock trig_clock = timeService->OpticalClock( sample_64MHz, frame);
+                auto const time = clockData.OpticalClock().Time( sample_64MHz, frame);
+                detinfo::ElecClock trig_clock = clockData.OpticalClock().WithTime(time);
 
       		double trigger_time = trig_clock.Time();
 			//	double beam_time = -1;
@@ -1616,8 +1615,6 @@ namespace lris {
   	void LArRawInputDriverUBooNE::fillSWTriggerData(gov::fnal::uboone::datatypes::ub_EventRecord &event_record,
 						raw::ubdaqSoftwareTriggerData& trigInfo)
 	{
-    	auto const* timeService = lar::providerFrom<detinfo::DetectorClocksService>();
-
     	std::vector<ub_FEMBeamTriggerOutput> swTrig_vect;
     	try {
       		// Software trigger data pulled from DAQ software trigger
@@ -1633,7 +1630,8 @@ namespace lris {
         	return;
     	}
 
-    	auto const& opt_clock = timeService->OpticalClock();
+        auto const clockData = art::ServiceHandle<detinfo::DetectorClocksService>()->DataForJob();
+        auto const& opt_clock = clockData.OpticalClock();
 
     	//NOTE that if there's no PMT Data, there isn't gonna be any SW Trigger information.
     	//need to make this more complicated if there are ever triggers based on things other than PMTS
@@ -1772,6 +1770,3 @@ namespace lris {
 
 
 }//<---Endlris
-
-
-
