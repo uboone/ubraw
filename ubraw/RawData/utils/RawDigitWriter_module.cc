@@ -248,10 +248,10 @@ namespace zmqds {
 
     art::ServiceHandle<geo::UBOpReadoutMap> ub_pmt_channel_map;
     art::Handle< std::vector< raw::OpDetWaveform > > wfHandle;
-    auto const* ts = lar::providerFrom<detinfo::DetectorClocksService>();
-    fTrigTimeStamp = ts->TriggerTime();
-    fBeamTimeStamp = ts->BeamGateTime();
-    std::cout << "OpticalDRAM: Trigger time=" << ts->TriggerTime() << " Beam gate time=" << ts->BeamGateTime() << std::endl;
+    auto const clockData = art::ServiceHandle<detinfo::DetectorClocksService>()->DataFor(evt);
+    fTrigTimeStamp = clockData.TriggerTime();
+    fBeamTimeStamp = clockData.BeamGateTime();
+    std::cout << "OpticalDRAM: Trigger time=" << clockData.TriggerTime() << " Beam gate time=" << clockData.BeamGateTime() << std::endl;
     
     for ( unsigned int cat=0; cat<(unsigned int)opdet::NumUBOpticalChannelCategories; cat++ ) {
       //std::stringstream ss;
@@ -281,8 +281,8 @@ namespace zmqds {
 	fOpSlot = (int)s;
 	fOpFemCH = (int)f;
 	fTimeStamp = wfm.TimeStamp();
-	fFrame = ts->OpticalClock().Frame( fTimeStamp );
-	fSample = ts->OpticalClock().Sample( fTimeStamp );
+        fFrame = clockData.OpticalClock().Frame( fTimeStamp );
+        fSample = clockData.OpticalClock().Sample( fTimeStamp );
 
 	opdetwaveforms.clear();
 	opdetwaveforms.reserve( wfm.size() );
@@ -296,4 +296,3 @@ namespace zmqds {
   DEFINE_ART_MODULE(RawDigitWriter)
 
 } // namespace zmqds
- 

@@ -394,7 +394,7 @@ namespace snassembler {
   
   
 
-  bool SnRecordHolder::addSupernovaPmtData( pmtmap_t& pmt_map )
+  bool SnRecordHolder::addSupernovaPmtData(detinfo::DetectorClocksData const& clockData, pmtmap_t& pmt_map )
   {
     // PMT data is just like as in regular swizzling:
     // lris::PMT_tracking_data_t dummy_tracking; // Maybe do some stats on this later.
@@ -407,7 +407,6 @@ namespace snassembler {
     //fill PMT data
     //crate -> card -> channel -> window
 
-    auto const* timeService = lar::providerFrom<detinfo::DetectorClocksService>();
     ::art::ServiceHandle<geo::UBOpReadoutMap> ub_pmt_channel_map;
     
     // pmt channel map is assumed to be time dependent. therefore we need event time to set correct map.
@@ -454,7 +453,7 @@ namespace snassembler {
             // here we translate crate/card/daq channel to data product channel number
             // also need to go from clock time to time stamp
             opdet::UBOpticalChannelCategory_t ch_category = ub_pmt_channel_map->GetChannelCategory( data_product_ch_num );
-            double window_timestamp = timeService->OpticalClock().Time( sample, frame );
+            double window_timestamp = clockData.OpticalClock().Time( sample, frame );
 
             raw::OpDetWaveform rd( window_timestamp, data_product_ch_num, win_data_size);
             rd.reserve(win_data_size); // More efficient. push_back is terrible without it.

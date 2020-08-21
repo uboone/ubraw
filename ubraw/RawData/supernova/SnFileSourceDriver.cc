@@ -218,8 +218,8 @@ bool SnFileSourceDriver::readNext(
   // Fake up a trigger.
   std::unique_ptr<std::vector<raw::Trigger>> trig_info( new std::vector<raw::Trigger> );
 
-  auto const* timeService = lar::providerFrom<detinfo::DetectorClocksService>();
-  double trigger_time = timeService->OpticalClock().Time(0,fCurrRecord->fTpcFrame+do_subframe);
+  auto const clockData = art::ServiceHandle<detinfo::DetectorClocksService>()->DataForJob();
+  double trigger_time = clockData.OpticalClock().Time(0,fCurrRecord->fTpcFrame+do_subframe);
   raw::Trigger trigger( 0,  // trigger number
                           trigger_time, // Trigger time
                           trigger_time, // Beam time. Not sure if this should be blank or not...
@@ -241,13 +241,13 @@ bool SnFileSourceDriver::readNext(
 
   /// PMT          
   SnRecordHolder::pmtmap_t pmt_map;
-  fCurrRecord->addSupernovaPmtData( pmt_map );
+  fCurrRecord->addSupernovaPmtData( clockData, pmt_map );
 
   if(fSamplesOverlapPre>0  && fPrevRecord && do_subframe==0) {
-    fPrevRecord->addSupernovaPmtData( pmt_map );    // Add PMT hits from previous frame.
+    fPrevRecord->addSupernovaPmtData( clockData, pmt_map );    // Add PMT hits from previous frame.
   }
   if(fSamplesOverlapPost>0 && fNextRecord && ((fCurrRecord->fNumFrames - do_subframe)==1)) {
-    fNextRecord->addSupernovaPmtData( pmt_map );    // Add PMT hits from next frame.
+    fNextRecord->addSupernovaPmtData( clockData, pmt_map );    // Add PMT hits from next frame.
   }
   
   // Store.
