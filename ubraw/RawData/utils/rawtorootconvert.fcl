@@ -10,6 +10,7 @@ services:
   RandomNumberGenerator: {} 
   ExptGeoHelperInterface: @local::microboone_geometry_helper
   Geometry:               @local::microboone_geo
+  GeometryConfigurationWriter: {}
   UBOpReadoutMap:           @local::microboone_opreadoutmap
   DetectorClocksService:            @local::microboone_detectorclocks
   DatabaseUtil:           @local::microboone_database

@@ -16,6 +16,7 @@ services:
   
   ExptGeoHelperInterface: @local::microboone_geometry_helper
   Geometry:               @local::microboone_geo
+  GeometryConfigurationWriter: {}
   UBOpReadoutMap:         @local::microboone_opreadoutmap
   DetectorClocksService:  @local::microboone_detectorclocks
 } # services
