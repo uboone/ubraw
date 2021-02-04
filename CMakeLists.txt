@@ -12,21 +12,14 @@
 #  make package (builds distribution tarfile)
 # ======================================================================
 
-# use cmake 2.8 or later
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.12...3.18 FATAL_ERROR)
 
-project(ubraw)
+project(ubraw LANGUAGES CXX)
 
 # cetbuildtools contains our cmake modules
-SET ( CETBUILDTOOLS_VERSION $ENV{CETBUILDTOOLS_VERSION} )
-IF (NOT CETBUILDTOOLS_VERSION)
-    MESSAGE (FATAL_ERROR "ERROR: setup cetbuildtools to get the cmake modules")
-ENDIF()
+find_package(cetbuildtools REQUIRED)
 
-
-set(CMAKE_MODULE_PATH $ENV{CANVAS_ROOT_IO_DIR}/Modules
-		      $ENV{CETBUILDTOOLS_DIR}/Modules
-		      ${CMAKE_MODULE_PATH})
+list(APPEND CMAKE_MODULE_PATH $ENV{CANVAS_ROOT_IO_DIR}/Modules $ENV{ART_DIR}/Modules)
 
 include(CetCMakeEnv)
 cet_cmake_env()
@@ -44,7 +37,6 @@ find_ups_product( larcorealg )
 find_ups_product( larcoreobj )
 find_ups_product( lardataobj )
 find_ups_product( lardataalg )
-find_ups_product( cetbuildtools )
 find_ups_boost( v1_53_0 )
 find_ups_product( canvas )
 find_ups_product( ubcore v1_00_00 )
@@ -57,6 +49,7 @@ find_ups_product(art_root_io)
 find_ups_product( larcore )
 find_ups_product( nutools )
 find_ups_product( nurandom )
+find_ups_root()
 cet_find_library( UBDut NAMES ubdata_types PATHS $ENV{UBOONEDAQ_DATATYPES_LIB} )
 
 # macros for dictionary and simple_plugin
