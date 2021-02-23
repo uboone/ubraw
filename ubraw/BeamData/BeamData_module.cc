@@ -166,7 +166,6 @@ private:
 BeamData::BeamData(fhicl::ParameterSet const & p)
   : EDProducer{p}
 {
-  std::cout<<"Init BeamData"<<std::endl;
   // Set timezone to Fermilab.
   setenv("TZ", "CST+6CDT", 1);
   tzset();
@@ -303,7 +302,6 @@ void BeamData::beginSubRun(art::SubRun & sr)
 
     fSubrunT0= boost::posix_time::from_time_t(tstart)+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(tstart_us);
     fSubrunT1= boost::posix_time::from_time_t(tend)+ boost::posix_time::hours(zoneOffset.hours())+ boost::posix_time::microseconds(tend_us);
-
     gov::fnal::uboone::beam::beamRun brm;
     gov::fnal::uboone::beam::beamRunHeader rh;
     rh.fRun=fRun;
@@ -382,11 +380,13 @@ void BeamData::endSubRun(art::SubRun & sr)
       ub_BeamHeader bh;
       std::vector<ub_BeamData> bd;
       if (nextBeamEvent(it->first,bh,bd)) {
+	/*
 	boost::posix_time::time_duration zoneOffset = boost::posix_time::second_clock::local_time()-boost::posix_time::second_clock::universal_time();
         boost::posix_time::ptime tevnt= boost::posix_time::from_time_t(bh.getSeconds())
           + boost::posix_time::hours(zoneOffset.hours())
           + boost::posix_time::microseconds(bh.getMilliSeconds()*1000)
           + boost::posix_time::microseconds(static_cast<int>(fBeamConf[it->first].fOffsetT*1000));
+	*/
 	//calculate FOM
 	if (fBeamConf[it->first].fFOMversion==1) {
 	  fFOM=bmd::getFOM(it->first,bh,bd);
@@ -395,11 +395,14 @@ void BeamData::endSubRun(art::SubRun & sr)
 	} else {
 	  mf::LogError(__FUNCTION__)<<"Unkown FOM version!";
 	}
-	if (tevnt>fSubrunT0 && tevnt<=fSubrunT1) {
-	  if (fBeamConf[it->first].fWriteBeamData) 
-	    fillTreeData(it->first,bh,bd);
-	  addPOT(it->first,bh,bd);
-	}
+	//no need to check for subrun boundaries since pot count comes from
+	//offline counting
+	//the boundary check may not work correctly for runs where gps drifted
+	//	if (tevnt>fSubrunT0 && tevnt<=fSubrunT1) {
+	if (fBeamConf[it->first].fWriteBeamData) 
+	  fillTreeData(it->first,bh,bd);
+	addPOT(it->first,bh,bd);
+	//}
       } else {
 	break;
       }
@@ -561,17 +564,22 @@ void BeamData::produce(art::Event & e)
     std::vector<ub_BeamData> bd;
     if (nextBeamEvent(beam_name,bh,bd)) {
       int comp=compareTime(bh,e,fBeamConf[beam_name].fDt, fBeamConf[beam_name].fOffsetT);
+      //no need to check for subrun boundaries since pot count comes from
+      //offline counting. 
+      //when gps drifted away these boundaries are off
+      /*
       boost::posix_time::time_duration zoneOffset = boost::posix_time::second_clock::local_time()-boost::posix_time::second_clock::universal_time();
       boost::posix_time::ptime tevnt = boost::posix_time::from_time_t(bh.getSeconds())
         + boost::posix_time::hours(zoneOffset.hours())
         + boost::posix_time::microseconds(bh.getMilliSeconds()*1000)
         + boost::posix_time::microseconds(static_cast<int>(fBeamConf[beam_name].fOffsetT*1000));
-
+      
       if (tevnt<fSubrunT0 || tevnt>fSubrunT1) {
 	mf::LogInfo(__FUNCTION__)<<"Event time not consistent with subrun begin/end "
 				 <<tevnt<<"\t"<<fSubrunT0<<"\t"<<fSubrunT1;
 	continue;
       }
+      */
       //calculate FOM
       if (fBeamConf[beam_name].fFOMversion==1) {
 	fFOM=bmd::getFOM(beam_name,bh,bd);
@@ -623,6 +631,7 @@ void BeamData::produce(art::Event & e)
   }
   }
   e.put(std::move(beam_info));
+
 }
 
 
@@ -749,13 +758,41 @@ void BeamData::fillTreeData(std::string beam, const ub_BeamHeader& bh, const std
   for (int i=0;i<bh.getNumberOfDevices();i++) {
     std::string varname=bd[i].getDeviceName();
     varname.erase(std::remove(varname.begin(), varname.end(), ':'), varname.end());
-    if (bd[i].getData().size()==1) {
-      fBeamConf[beam].fTreeVar[varname]=bd[i].getData()[0];
-    } else {
-      for (unsigned int j=0;j<bd[i].getData().size();j++) {
-	fBeamConf[beam].fTreeArr[varname][j]=bd[i].getData()[j];
+    if (!(fBeamConf[beam].fTreeVar.find(varname)==fBeamConf[beam].fTreeVar.end() &&
+	  fBeamConf[beam].fTreeArr.find(varname)==fBeamConf[beam].fTreeArr.end())) {
+      if (bd[i].getData().size()==1) {
+
+	fBeamConf[beam].fTreeVar[varname]=bd[i].getData()[0];
+      } else {
+	for (unsigned int j=0;j<bd[i].getData().size();j++) {
+	  fBeamConf[beam].fTreeArr[varname][j]=bd[i].getData()[j];
+	}
       }
+    } else {
+      std::stringstream ss;
+      if (bd[i].getData().size()==1) {
+	fBeamConf[beam].fTreeVar[varname]=-999;
+	ss <<"Adding scalar branch while filling for device "<<varname<<" and filling first "<<fBeamConf[beam].fTree->GetEntries()<<" entries with -999"<<std::endl;
+	fBeamConf[beam].fTree->Branch(varname.c_str(),&fBeamConf[beam].fTreeVar[varname],
+				      (varname+"/D").c_str());
+	for (int ientry=0;ientry<fBeamConf[beam].fTree->GetEntries();ientry++) 
+	  fBeamConf[beam].fTree->GetBranch(varname.c_str())->Fill();
+	fBeamConf[beam].fTreeVar[varname]=bd[i].getData()[0];
+      } else {
+	double* x=new double[bd[i].getData().size()];
+	for (unsigned int ii=0;ii<bd[i].getData().size();ii++) x[ii]=-999;
+	fBeamConf[beam].fTreeArr[varname]=x;
+	ss <<"Adding vector branch while filling for device "<<varname<<" and filling first "<<fBeamConf[beam].fTree->GetEntries()<<" entries with -999"<<std::endl;
+	fBeamConf[beam].fTree->Branch(varname.c_str(),fBeamConf[beam].fTreeArr[varname],
+				      (varname+"["+std::to_string(bd[i].getData().size())+"]/D").c_str());
+	for (int ientry=0;ientry<fBeamConf[beam].fTree->GetEntries();ientry++) {
+	  fBeamConf[beam].fTree->GetBranch(varname.c_str())->Fill();
+	}
+	for (unsigned int ii=0;ii<bd[i].getData().size();ii++) x[ii]=bd[i].getData()[ii];;
+      }
+      mf::LogDebug(__FUNCTION__)<<ss.str();
     }
+
   }
   fBeamConf[beam].fTree->Fill();
   fTLast[beam]=tevnt;

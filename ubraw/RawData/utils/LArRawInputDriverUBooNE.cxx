@@ -7,6 +7,8 @@
 /// \MicroBooNE Author: jasaadi@fnal.gov, zarko@fnal.gov (with much help from Wes and Eric)
 ////////////////////////////////////////////////////////////////////////
 
+#include <sstream>
+
 //LArSoft
 #include "ubraw/RawData/utils/LArRawInputDriverUBooNE.h"
 #include "lardataobj/RawData/RawDigit.h"
@@ -28,6 +30,11 @@
 #include "canvas/Utilities/Exception.h"
 #include "art_root_io/TFileService.h"
 #include "messagefacility/MessageLogger/MessageLogger.h"
+#include "sqlite3.h"
+
+// libwda
+
+#include "wda.h"
 
 //uboone datatypes
 
@@ -44,9 +51,6 @@
 //root
 #include "TH1D.h"
 #include "TTree.h"
-
-//other
-#include <libpq-fe.h>
 
 extern "C" {
 #include <sys/types.h>
@@ -140,6 +144,8 @@ namespace lris {
     fUseGPS(ps.get<bool>("UseGPS",false)),
     fUseNTP(ps.get<bool>("UseNTP",false)),
     fDAQFreqAdj(ps.get<double>("DAQFreqAdj", 6.882e-6)),
+    fUseSQLite(ps.get<bool>("UseSQLite",false)),
+    fTestMode(ps.get<bool>("TestMode",false)),
     fMaxEvents(-1),
     fSkipEvents(0)
   	{
@@ -343,7 +349,7 @@ namespace lris {
   void LArRawInputDriverUBooNE::closeCurrentFile()
   {
     mf::LogInfo(__FUNCTION__)<<"File boundary (processed "<<fEventCounter<<" events)"<<std::endl;
-    fCurrentSubRunID.flushSubRun();
+    fCurrentSubRunID = art::SubRunID();
     fEventCounter=0;
     fNumberEventsInFile=0;
     fInputStream.close();
@@ -730,7 +736,8 @@ namespace lris {
 	// calculation using swizzled data, if necessary.
 
 	long double tunefac = 1.L + fDAQFreqAdj;
-	long double gps = 0.L;
+	long double gps_high = 0.L;
+	long double gps_low = 0.L;
 	if(trig_pps_time.frame != 0 && gps_pps_time.second != 0) {
 	  std::cout << "gps_pps_time.second   = " << gps_pps_time.second << std::endl;
 	  std::cout << "gps_pps_time.micro    = " << gps_pps_time.micro << std::endl;
@@ -741,14 +748,25 @@ namespace lris {
 	  std::cout << "trig_pps_time.frame   = " << trig_pps_time.frame << std::endl;
 	  std::cout << "trig_pps_time.sample  = " << trig_pps_time.sample << std::endl;
 	  std::cout << "trig_pps_time.div     = " << trig_pps_time.div << std::endl;
-	  gps = gps_pps_time.second +
-	        (gps_pps_time.micro > 500000 ? 1.L : 0.L) +
+	  gps_high = gps_pps_time.second;
+	  gps_low = (gps_pps_time.micro > 500000 ? 1.L : 0.L) +
 	        tunefac * (1.6e-3L * (int(trig_evt_time.frame) - int(trig_pps_time.frame)) +
 		           0.5e-6L * (int(trig_evt_time.sample) - int(trig_pps_time.sample)) +
 		           0.0625e-6L * (int(trig_evt_time.div) - int(trig_pps_time.div)));
 	}
-	uint64_t gps_sec = gps;
-	uint64_t gps_nsec = 1.e9L * (gps - gps_sec);
+
+	// Shift gps_low into range [0, 1.).
+
+	while(gps_low < 0.L) {
+	  gps_low += 1.L;
+	  gps_high -= 1.L;
+	}
+	while(gps_low >= 1.L) {
+	  gps_low -= 1.L;
+	  gps_high += 1.L;
+	}
+	uint64_t gps_sec = gps_high;
+	uint64_t gps_nsec = 1.e9L * gps_low;
 	time_t mytime_gps = (gps_sec << 32) | gps_nsec;
 
 	// Mytime is the time stamp stored in the art event header.
@@ -849,10 +867,287 @@ namespace lris {
     	//Channel map has changed each time the detector has been re-cabled.
     	//Provide data-taking time as first argument. (integer epoch seconds)
     	//Optionally recover outdated mappings with 'swizzling time' second arg. (also integer epoch seconds)
-    	if (fDataTakingTime == -1)
-      		fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(event_record.LocalHostTime().seb_time_sec, fSwizzlingTime);
-    	else
-      		fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(fDataTakingTime, fSwizzlingTime);
+    	//if (fDataTakingTime == -1)
+      	//	fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(event_record.LocalHostTime().seb_time_sec, fSwizzlingTime);
+    	//else
+      	//	fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(fDataTakingTime, fSwizzlingTime);
+
+        // Read channel map from hoot gibson database server or sqlite database.
+        // Do this once per job.
+
+        if(fChannelMap.size() == 0) {
+	  util::UBChannelMap_t test_map;   // Second map, for comparison.
+
+	  // Get data taking time stamp.
+
+	  int data_taking_time = 0;
+	  if (fDataTakingTime == -1)
+	    data_taking_time = event_record.LocalHostTime().seb_time_sec;
+	  else
+	    data_taking_time = fDataTakingTime;
+
+	  if(!fUseSQLite || fTestMode) {
+
+	    // Construct url.
+
+	    std::ostringstream ostr;
+	    ostr << "https://dbdata0vm.fnal.gov:8444/QE/uboone/query?F=get_map_double_sec&a="
+		 << data_taking_time << "&a=" << fSwizzlingTime;
+	    std::cout << "Fetching channel map from database." << std::endl;
+	    std::cout << "Url = " << ostr.str() << std::endl;
+
+	    // Fetch data from database.
+
+	    int err = 0;
+	    void* data = getDataWithTimeout(ostr.str().c_str(), 0, 240, &err);
+	    int status = getHTTPstatus(data);
+
+	    // Throw an exception if the status is anything except 200.
+
+	    if(status != 200 || err != 0) {
+	      std::cerr << "Database fetch returned status = " << status << std::endl;
+	      throw std::exception();
+	    }
+
+	    // Database read was successful.
+	    // Parse the data.
+
+	    int nrows = getNtuples(data);
+	    std::cout << "Number of database rows = " << nrows << std::endl;
+	    if(nrows != 8257) {
+	      std::cerr << "Failed to read channels from database." << std::endl;
+	      throw std::exception();
+	    }
+
+	    // Dump header row (for information).
+
+	    char buf[100];
+	    void* header = getFirstTuple(data);
+	    int nfields = getNfields(header);
+	    std::cout << "Header row fields: " << nfields << std::endl;
+	    for(int i=0; i<nfields; ++i) {
+	      getStringValue(header, i, buf, sizeof(buf), &err);
+	      if(err != 0) {
+		std::cerr << "Error parsing header row, err = " << err << std::endl;
+		throw std::exception();
+	      }
+	      std::cout << i << ": " << buf << std::endl;
+	    }
+	    releaseTuple(header);
+
+	    // Loop over data rows.
+
+	    for(int irow=1; irow<nrows; ++irow) {
+	      //std::cout << "Row " << irow << std::endl;
+	      void* row = getTuple(data, irow);
+	      if(row == 0) {
+		std::cerr << "Failed to fetch row " << irow << std::endl;
+		throw std::exception();
+	      }
+	      int nfields = getNfields(row);
+	      if(nfields != 4) {
+		std::cerr << "Row " << irow << " has wrong number of fields = " << nfields << std::endl;
+		throw std::exception();
+	      }
+	      int crate = -1;
+	      int slot = -1;
+	      int fem_channel = -1;
+	      int larsoft_channel = -1;
+	      crate = getLongValue(row, 0, &err);
+	      if(err == 0)
+		slot = getLongValue(row, 1, &err);
+	      if(err == 0)
+		fem_channel = getLongValue(row, 2, &err);
+	      if(err == 0)
+		larsoft_channel = getLongValue(row, 3, &err);
+	      if(err != 0 || crate < 0 || slot < 0 || fem_channel < 0 || larsoft_channel < 0) {
+		std::cerr << "Error parsing row " << irow << ", err = " << err << std::endl;
+		throw std::exception();
+	      }
+	      //std::cout << "crate = " << crate << std::endl;
+	      //std::cout << "slot = " << slot << std::endl;
+	      //std::cout << "fem channel = " << fem_channel << std::endl;
+	      //std::cout << "larsoft channel = " << larsoft_channel << std::endl;
+
+	      // Fill map.
+
+	      util::UBDaqID daqid(crate, slot, fem_channel);
+	      if(!fUseSQLite)
+		fChannelMap[daqid] = larsoft_channel;
+	      else
+		test_map[daqid] = larsoft_channel;
+
+	      // Done with row.
+
+	      releaseTuple(row);
+	    }
+
+	    // Done with map.
+
+	    releaseDataset(data);
+	  }
+	  if(fUseSQLite || fTestMode) {
+
+	    std::cout << "Fetching channel map from sqlite." << std::endl;
+
+	    // Find hoot gibson database.
+
+	    cet::search_path sp("FW_SEARCH_PATH");
+	    std::string dbpath = sp.find_file("hootgibson.db");   // Throws exception if not found.
+
+	    // Open sqlite database.
+
+	    std::cout << "Opening sqlite database " << dbpath << std::endl;
+	    sqlite3* db;
+	    int rc = sqlite3_open(dbpath.c_str(), &db);
+	    if(rc != SQLITE_OK) {
+	      std::cout << "Failed to open sqlite database " << dbpath << std::endl;
+	      throw cet::exception("LArRawInputDriver") << "Failed to open sqlite database " << dbpath;
+	    }
+
+	    // Query version set.
+
+	    std::ostringstream sql;
+	    sql << "SELECT version_set FROM HootVersion"
+		<< " WHERE begin_validity_timestamp <= " << data_taking_time
+		<< " AND " << data_taking_time << " < end_validity_timestamp";
+	    if(fSwizzlingTime >= 0)
+	      sql << " AND " << fSwizzlingTime << " >= history_version_born_on";
+	    sql << " ORDER BY history_version_born_on DESC;";
+	    //std::cout << "sql = " << sql.str() << std::endl;
+
+	    // Prepare query.
+
+	    sqlite3_stmt* stmt;
+	    rc = sqlite3_prepare_v2(db, sql.str().c_str(), -1, &stmt, 0);
+	    if(rc != SQLITE_OK) {
+	      std::cout << "sqlite3_prepare_v2 failed." << dbpath << std::endl;
+	      std::cout << "Failed sql = " << sql.str() << std::endl;
+	      throw cet::exception("LArRawInputDriver") << "sqlite3_prepare_v2 error.";
+	    }
+
+	    // Execute query.
+	    // It is an error if we don't get at least one row.
+
+	    std::string version_set;
+	    rc = sqlite3_step(stmt);
+	    if(rc == SQLITE_ROW) {
+	      version_set = std::string((const char*)sqlite3_column_text(stmt, 0));
+	      //std::cout << "version_set = " << version_set << std::endl;
+	    }
+	    else {
+	      std::cout << "sqlite3_step returned error result = " << rc << std::endl;
+	      throw cet::exception("LArRawInputDriverUBooNE") << "sqlite3_step error.";
+	    }
+
+	    // Delete query.
+
+	    sqlite3_finalize(stmt);
+
+	    // Query channel map.
+
+	    sql.str("");
+	    sql << "SELECT crate_id, daq_slot, fem_channel, larsoft_channel"
+		<< " FROM HootVersion"
+		<< " NATURAL JOIN versioned_channels"
+		<< " NATURAL JOIN versioned_asics"
+		<< " NATURAL JOIN versioned_motherboards"
+		<< " NATURAL JOIN versioned_servicecables"
+		<< " NATURAL JOIN versioned_servicecards"
+		<< " NATURAL JOIN versioned_coldcables"
+		<< " NATURAL JOIN versioned_intermediateamplifiers"
+		<< " NATURAL JOIN versioned_warmcables"
+		<< " NATURAL JOIN versioned_adcreceivers"
+		<< " NATURAL JOIN versioned_fecards"
+		<< " NATURAL JOIN versioned_crates"
+		<< " NATURAL JOIN versioned_motherboard_mapping"
+		<< " NATURAL JOIN versioned_fem_mapping"
+		<< " NATURAL JOIN versioned_fem_map_ranges"
+		<< " NATURAL JOIN versioned_fem_crate_ranges"
+		<< " NATURAL JOIN versioned_fem_slot_ranges"
+		<< " WHERE version_set LIKE '" << version_set << "'"
+		<< " ORDER BY crate_id, daq_slot, fem_channel;";
+
+	    // Prepare query.
+
+	    rc = sqlite3_prepare_v2(db, sql.str().c_str(), -1, &stmt, 0);
+	    if(rc != SQLITE_OK) {
+	      std::cout << "sqlite3_prepare_v2 failed." << dbpath << std::endl;
+	      std::cout << "Failed sql = " << sql.str() << std::endl;
+	      throw cet::exception("LArRawInputDriver") << "sqlite3_prepare_v2 error.";
+	    }
+
+	    // Execute query.
+	    // It is an error if we don't get at least one row.
+
+	    int crate = -1;
+	    int slot = -1;
+	    int fem_channel = -1;
+	    int larsoft_channel = -1;
+	    while((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+	      crate = sqlite3_column_int(stmt, 0);
+	      slot = sqlite3_column_int(stmt, 1);
+	      fem_channel = sqlite3_column_int(stmt, 2);
+	      larsoft_channel = sqlite3_column_int(stmt, 3);
+	      //std::cout << crate << ", " << slot << ", " 
+	      //	<< fem_channel << ", " << larsoft_channel << std::endl;
+	      util::UBDaqID daqid(crate, slot, fem_channel);
+	      if(fUseSQLite)
+		fChannelMap[daqid] = larsoft_channel;
+	      else
+		test_map[daqid] = larsoft_channel;
+
+	    }
+
+	    // Delete query.
+
+	    sqlite3_finalize(stmt);
+
+	  }
+	  if(fTestMode) {
+	    std::cout << "Comparing database server and sqlite channel maps." << std::endl;
+
+	    // Compare map sizes.
+
+	    if(test_map.size() == fChannelMap.size())
+	      std::cout << "Both maps have " << fChannelMap.size() << " entries." << std::endl;
+	    else {
+	      std::cerr << "Map size mismatch: " << fChannelMap.size() 
+			<< ", " << test_map.size() << std::endl;
+	      throw std::exception();
+	    }
+
+	    // Compare map contents.
+
+	    for(auto i=fChannelMap.begin(); i!=fChannelMap.end(); ++i) {
+	      auto const& key = (*i).first;
+	      auto const& value = (*i).second;
+	      //std::cout << value << std::endl;
+	      if(test_map.count(key) >= 1) {
+		auto const& value2 = test_map[key];
+		//std::cout << value << ", " << value2 << std::endl;
+		if(value != value2) {
+		  std::cerr << "Test value mismatch:" << value << ", " << value2 << std::endl;
+		  throw std::exception();
+		}
+	      }
+	      else {
+		std::cerr << "Test map missing key." << std::endl;
+		throw std::exception();
+	      }
+	    }
+
+	    // If we get here, contents comared OK.
+
+	    std::cout << "Map contents comparison OK." << std::endl;
+
+	  }
+	}
+        
+	if(fChannelMap.size()  != 8256) {
+	  std::cerr << "Channel map has wrong number of channels = " << fChannelMap.size() << std::endl;
+	  throw std::exception();
+	}
 
 
     	// ### Swizzling to get the number of channels...trying the method used in write_read.cpp

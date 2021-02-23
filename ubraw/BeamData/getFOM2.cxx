@@ -45,6 +45,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     std::vector<double> mwtgt;
 
     for(auto& bdata : bd) {	// get toroid, BPM, and multiwire data
+     
       if(bdata.getDeviceName().find("E:TOR860") != std::string::npos) {	// get E:TOR860 reading	
 	tor860 = bdata.getData();
 	continue;
@@ -86,6 +87,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 	continue;    
       }
     }
+
     double tor;
     if (tor860.size()>0) 
       tor=tor860[0];
@@ -93,6 +95,17 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
       tor=tor875[0];
     else
       return -1;
+
+    //when creating ntuples for pot counting script the variables are filled with -999
+    //this could create a difference when passing events with FOM>1 since 
+    //events with missing BPM data would get FOM=2, while events with BPM set to -999 will get FOM=0
+    //bad or missing MWR data gets FOM 4 in either case
+    if (hptg2.size()==0) hptg2.push_back(-999);
+    if (hptg1.size()==0) hptg1.push_back(-999);
+    if (hp875.size()==0) hp875.push_back(-999);
+    if (vptg2.size()==0) vptg2.push_back(-999);
+    if (vptg1.size()==0) vptg1.push_back(-999);
+    if (vp875.size()==0) vp875.push_back(-999);
 
     double horang,horpos;
     if (hptg1.size()>0 && hp875.size()>0) {
