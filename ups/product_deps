@@ -2,7 +2,7 @@
 
 # The *parent* line must the first non-commented line and defines this product and version
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
-parent ubraw v09_22_01
+parent ubraw v09_22_02
 
 defaultqual e19
 
@@ -30,7 +30,7 @@ table_fragment_end
 
 product                 version
 ubcore                  v09_22_01
-larevt                  v09_02_04
+larevt                  v09_02_05
 uboonedaq_datatypes     v6_22_05e
 ifdh_art		v2_11_05
 cetbuildtools	        v7_17_01	-	only_for_build
