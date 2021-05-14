@@ -4,7 +4,7 @@
 # The version must be of the form vxx_yy_zz (e.g. v01_02_03)
 parent ubraw v09_22_02
 
-defaultqual e19
+defaultqual e20
 
 # These optional lines define where headers, libraries, and executables go and should
 # be used only if your product does not conform to the defaults.
@@ -31,20 +31,18 @@ table_fragment_end
 product                 version
 ubcore                  v09_22_01
 larevt                  v09_02_05
-uboonedaq_datatypes     v6_22_05e
+uboonedaq_datatypes     v6_22_05f
 ifdh_art		v2_11_05
 cetbuildtools	        v7_17_01	-	only_for_build
 end_product_list
 
 qualifier      ubcore         larevt         uboonedaq_datatypes	ifdh_art
-c7:py2:debug   c7:py2:debug   c7:py2:debug   c7:debug:offline       	c7:py2:debug
-c7:py2:prof    c7:py2:prof    c7:py2:prof    c7:prof:offline        	c7:py2:prof
 c7:debug       c7:debug       c7:debug       c7:debug:offline       	c7:debug
 c7:prof        c7:prof        c7:prof        c7:prof:offline        	c7:prof
-e19:py2:debug  e19:py2:debug  e19:py2:debug  e19:debug:offline		e19:py2:debug
-e19:py2:prof   e19:py2:prof   e19:py2:prof   e19:prof:offline		e19:py2:prof
 e19:debug      e19:debug      e19:debug      e19:debug:offline		e19:debug
 e19:prof       e19:prof       e19:prof       e19:prof:offline		e19:prof
+e20:debug      e20:debug      e20:debug      e20:debug:offline		e20:debug
+e20:prof       e20:prof       e20:prof       e20:prof:offline		e20:prof
 end_qualifier_list
 
 # Preserve tabs and formatting in emacs and vi / vim:
