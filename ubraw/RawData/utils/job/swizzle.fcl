@@ -1,7 +1,6 @@
 #include "geometry_microboone.fcl"
 #include "detectorclocks_microboone.fcl"
 #include "pmtconfig_microboone.fcl"
-#include "databaseutil_microboone.fcl"
 #include "sam_microboone.fcl"
 #include "opticaldetectormodules_microboone.fcl"
 #include "triggerenforcement.fcl"
@@ -20,7 +19,6 @@ services:
   Geometry:               @local::microboone_geo
   UBOpReadoutMap:           @local::microboone_opreadoutmap
   DetectorClocksService:            @local::microboone_detectorclocks
-  DatabaseUtil:           @local::microboone_database
 }
 services.DetectorClocksService.InheritClockConfig: false
 
@@ -31,16 +29,6 @@ microboone_tfile_metadata:
   dataTier:              "root-tuple"
   fileFormat:            "root"
 }
-
-# Database settings
-services.DatabaseUtil.DBHostName:    "ifdbprod2.fnal.gov"
-services.DatabaseUtil.DBName:        "hootgibson_prod"
-services.DatabaseUtil.DBUser:        "uboonedaq_web"
-services.DatabaseUtil.Port:          5444
-services.DatabaseUtil.PassFileName:  "uboonedb_passwd"  # name of password file. searched for using env var FW_SEARCH_PATH
-services.DatabaseUtil.ToughErrorTreatment: true
-services.DatabaseUtil.ShouldConnect: true
-services.DatabaseUtil.TableName: "main_run"
 
 source:
 {
@@ -58,6 +46,7 @@ source:
 #  swizzleTriggerType: EXT
 #  swizzleTriggerType: NuMI
 #  swizzleTriggerType: CALIB
+  UseSQLite:       true
   beam_histograms: [ "E:TOR101, 100, 0, 50",
                      "E:TORTGT, 100, 0, 50",
                      "E:TOR860, 100, 0, 5",
