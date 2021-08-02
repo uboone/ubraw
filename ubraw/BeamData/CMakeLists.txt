@@ -5,7 +5,11 @@ endif()
 include_directories ( $ENV{IFDHC_FQ_DIR}/inc )
 
 find_library( UB_DATA_TYPES NAMES ubdata_types PATHS $ENV{UBOONEDAQ_DATATYPES_LIB} )
-cet_make(LIBRARY_NAME BeamUtil LIBRARIES ${UB_DATA_TYPES} ${ROOT_SPECTRUM} ${ROOT_BASIC_LIB_LIST} EXCLUDE BeamData_module.cc BeamDataQualityFilter_module.cc)
+
+cet_make(LIBRARY_NAME BeamUtil
+  LIBRARIES ${UB_DATA_TYPES}
+            ROOT::MathCore ROOT::Hist ROOT::Spectrum
+  EXCLUDE BeamData_module.cc BeamDataQualityFilter_module.cc)
 
 simple_plugin ( BeamDataQualityFilter "module"
                    lardataobj_RawData
@@ -19,7 +23,6 @@ simple_plugin ( BeamDataQualityFilter "module"
                    art_Persistency_Provenance canvas
                    art_Utilities canvas
                    ${MF_MESSAGELOGGER}
-                   
 		   BASENAME_ONLY
               )
 
@@ -47,15 +50,13 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
                         art_Utilities canvas
 			ifdh
                         ${MF_MESSAGELOGGER}
-                        
                         ${FHICLCPP}
                         cetlib cetlib_except
                         ${CLHEP}
-                        ${ROOT_BASIC_LIB_LIST}
+                        ROOT::Tree
 		LIB_LIBRARIES
 			${UB_DATA_TYPES}
 			${ROOT_SPECTRUM}
-                        ${ROOT_BASIC_LIB_LIST}
         )
 
 

@@ -1,4 +1,3 @@
-
 #
 simple_plugin( LArRawInputSourceUBooNE
                "source"
@@ -22,7 +21,7 @@ simple_plugin( RawDigitWriter "module"
                art_Persistency_Provenance canvas
                art_Utilities canvas
                ${MF_MESSAGELOGGER}
-               ${ROOT_BASIC_LIB_LIST}
+               ROOT::Tree
                BASENAME_ONLY
              )
 
@@ -39,10 +38,8 @@ simple_plugin( TriggerEnforcement "module"
                    art_Persistency_Provenance canvas
                    art_Utilities canvas
                    ${MF_MESSAGELOGGER}
-                   
                    ${FHICLCPP}
                    cetlib cetlib_except
-                   ${ROOT_BASIC_LIB_LIST}
                    BASENAME_ONLY
              )
 
@@ -74,15 +71,12 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art_Persistency_Provenance canvas
                         art_Utilities canvas
                         ${MF_MESSAGELOGGER}
-                        
+                        ROOT::Tree
                         ${FHICLCPP}
                         cetlib cetlib_except
                         ${ROOT_GEOM}
                         ${ROOT_XMLIO}
                         ${ROOT_GDML}
-                        ${Boost_SYSTEM_LIBRARY}
-                        ${ROOT_BASIC_LIB_LIST}
-
           MODULE_LIBRARIES lardata_Utilities_DatabaseUtil_service
                         larcorealg_Geometry
                         larcore_Geometry_Geometry_service
@@ -106,14 +100,11 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art_Persistency_Provenance canvas
                         art_Utilities canvas
                         ${MF_MESSAGELOGGER}
-                        
                         ${FHICLCPP}
                         cetlib cetlib_except
                         ${ROOT_GEOM}
                         ${ROOT_XMLIO}
                         ${ROOT_GDML}
-                        ${Boost_SYSTEM_LIBRARY}
-                        ${ROOT_BASIC_LIB_LIST}
         )                                                           
 
 install_headers()

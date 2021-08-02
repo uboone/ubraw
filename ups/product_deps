@@ -31,9 +31,9 @@ table_fragment_end
 product                 version
 ubcore                  v09_26_01
 larevt                  v09_02_08
-uboonedaq_datatypes     v6_22_05f
-ifdh_art		v2_11_06
-cetbuildtools	        v7_17_01	-	only_for_build
+uboonedaq_datatypes     v6_22_05g
+ifdh_art		v2_12_04
+cetbuildtools	        v8_12_00	-	only_for_build
 end_product_list
 
 qualifier      ubcore         larevt         uboonedaq_datatypes	ifdh_art

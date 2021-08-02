@@ -36,8 +36,8 @@ art_make( NO_PLUGINS
                         ${ROOT_GEOM}
                         ${ROOT_XMLIO}
                         ${ROOT_GDML}
-                        ${Boost_SYSTEM_LIBRARY}
-                        ${ROOT_BASIC_LIB_LIST}
+
+
 
           MODULE_LIBRARIES lardata_Utilities_DatabaseUtil_service
                         larcorealg_Geometry
@@ -71,8 +71,8 @@ art_make( NO_PLUGINS
                         ${ROOT_GEOM}
                         ${ROOT_XMLIO}
                         ${ROOT_GDML}
-                        ${Boost_SYSTEM_LIBRARY}
-                        ${ROOT_BASIC_LIB_LIST}
+
+
         )		
 
 

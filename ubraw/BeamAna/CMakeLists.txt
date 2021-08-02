@@ -21,7 +21,7 @@ art_make( BASENAME_ONLY
                         ${FHICLCPP}
                         cetlib cetlib_except
                         ${CLHEP}
-                        ${ROOT_BASIC_LIB_LIST}
+
         )
 
 # install_headers()
