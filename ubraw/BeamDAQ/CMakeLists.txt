@@ -10,7 +10,7 @@ add_executable(bdaq_readraw bdaq_readraw.cpp)
 include_directories ( $ENV{UBOONEDAQ_DATATYPES_INC} )
 set(CURLLIB "-lcurl")
 
-find_library(UBDATATYPESLIB NAMES ubdata_types ubdata_share PATHS $ENV{UBOONEDAQ_DATATYPES_LIB})
+find_library(UBDATATYPESLIB NAMES ubdata_types ubdata_share PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH)
 
 cet_make(LIBRARY_NAME BeamDAQ LIBRARIES ${UBDATATYPESLIB}  
                                         ${MF_MESSAGELOGGER}  ${CURLLIB} 

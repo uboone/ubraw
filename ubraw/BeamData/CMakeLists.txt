@@ -4,7 +4,7 @@ endif()
 
 include_directories ( $ENV{IFDHC_FQ_DIR}/inc )
 
-find_library( UB_DATA_TYPES NAMES ubdata_types PATHS $ENV{UBOONEDAQ_DATATYPES_LIB} )
+find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
 
 cet_make(LIBRARY_NAME BeamUtil
   LIBRARIES ${UB_DATA_TYPES}
