@@ -59,7 +59,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         UB_DATA_TYPES
-                        ${PQ}
+                        PQ
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
                         ${ART_FRAMEWORK_IO_SOURCES}
@@ -88,7 +88,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         larcoreobj_SummaryData
                         ubraw_RawData
                         UB_DATA_TYPES
-                        ${PQ}
+                        PQ
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
                         ${ART_FRAMEWORK_IO_SOURCES}

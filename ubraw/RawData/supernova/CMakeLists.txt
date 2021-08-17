@@ -18,7 +18,7 @@ art_make( NO_PLUGINS
                         # ubraw_RawData
                         # LArRawInputSourceUBooNE_source
                         UB_DATA_TYPES
-                        ${PQ}
+                        PQ
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
                         ${ART_FRAMEWORK_IO_SOURCES}
@@ -53,7 +53,7 @@ art_make( NO_PLUGINS
                         # ubraw_RawData
                         # ubraw_RawData_utils
                         UB_DATA_TYPES
-                        ${PQ}
+                        PQ
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
                         ${ART_FRAMEWORK_IO_SOURCES}
