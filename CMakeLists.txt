@@ -50,7 +50,7 @@ find_ups_product( larcore )
 find_ups_product( nutools )
 find_ups_product( nurandom )
 find_ups_root()
-cet_find_library( UBDut NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
+cet_find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
 
 # macros for dictionary and simple_plugin
 include(ArtDictionary)

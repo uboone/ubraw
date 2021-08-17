@@ -4,10 +4,8 @@ endif()
 
 include_directories ( $ENV{IFDHC_FQ_DIR}/inc )
 
-find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
-
 cet_make(LIBRARY_NAME BeamUtil
-  LIBRARIES ${UB_DATA_TYPES}
+  LIBRARIES UB_DATA_TYPES
             ROOT::MathCore ROOT::Hist ROOT::Spectrum
   EXCLUDE BeamData_module.cc BeamDataQualityFilter_module.cc)
 
@@ -35,7 +33,7 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
 			larcoreobj_SummaryData
 			BeamUtil
 			BeamDAQ
-			${UB_DATA_TYPES}
+			UB_DATA_TYPES
 			${Boost_SERIALIZATION_LIBRARY}
                         nurandom_RandomUtils_NuRandomService_service
                         ${ART_FRAMEWORK_CORE}
@@ -55,7 +53,7 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
                         ${CLHEP}
                         ROOT::Tree
 		LIB_LIBRARIES
-			${UB_DATA_TYPES}
+			UB_DATA_TYPES
 			${ROOT_SPECTRUM}
         )
 

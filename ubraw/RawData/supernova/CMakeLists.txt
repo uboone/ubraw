@@ -17,7 +17,7 @@ art_make( NO_PLUGINS
                         lardata_ArtDataHelper
                         # ubraw_RawData
                         # LArRawInputSourceUBooNE_source
-                        ${UBDut}
+                        UB_DATA_TYPES
                         ${PQ}
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
@@ -52,7 +52,7 @@ art_make( NO_PLUGINS
                         larcoreobj_SummaryData
                         # ubraw_RawData
                         # ubraw_RawData_utils
-                        ${UBDut}
+                        UB_DATA_TYPES
                         ${PQ}
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}

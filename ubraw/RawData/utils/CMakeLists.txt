@@ -58,7 +58,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
-                        ${UBDut}
+                        UB_DATA_TYPES
                         ${PQ}
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
@@ -87,7 +87,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         ubraw_RawData
-                        ${UBDut}
+                        UB_DATA_TYPES
                         ${PQ}
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}

@@ -4,29 +4,25 @@ project(beamdaq)
 # ----------------------------------------------------------------------
 # Build this project's executables:
 
-add_executable(bdaq_get bdaq_get.cpp)
-add_executable(bdaq_readraw bdaq_readraw.cpp)
-
 include_directories ( $ENV{UBOONEDAQ_DATATYPES_INC} )
 set(CURLLIB "-lcurl")
 
-find_library(UBDATATYPESLIB NAMES ubdata_types ubdata_share PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH)
-
-cet_make(LIBRARY_NAME BeamDAQ LIBRARIES ${UBDATATYPESLIB}  
+cet_make(LIBRARY_NAME BeamDAQ LIBRARIES UB_DATA_TYPES
                                         ${MF_MESSAGELOGGER}  ${CURLLIB} 
 					${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY}
 
 					${FHICLCPP} ${CETLIB} ${CETLIB_EXCEPT}
 					EXCLUDE bdaq_get.cpp bdaq_get.h bdaq_readraw.cpp)
 
-target_link_libraries( bdaq_get ${UBDATATYPESLIB}  
+cet_make_exec( bdaq_get SOURCE bdaq_get.cpp LIBRARIES UB_DATA_TYPES
                                 ${MF_MESSAGELOGGER}  ${CURLLIB} 
-				${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} 
+				${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY}
 
 				${FHICLCPP} ${CETLIB} ${CETLIB_EXCEPT} BeamDAQ)
-target_link_libraries( bdaq_readraw ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY} 
+cet_make_exec( bdaq_readraw SOURCE bdaq_readraw.cpp LIBRARIES
+               ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_SERIALIZATION_LIBRARY}
 
-                                    ${UBDATATYPESLIB} BeamDAQ )
+                                    UB_DATA_TYPES BeamDAQ )
 
 
 # ----------------------------------------------------------------------
