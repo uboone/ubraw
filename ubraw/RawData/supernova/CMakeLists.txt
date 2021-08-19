@@ -10,7 +10,7 @@ art_make( NO_PLUGINS
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
                         ubcore_Geometry
-                        UBOpReadoutMap_service
+                        ubcore::UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
@@ -44,7 +44,7 @@ art_make( NO_PLUGINS
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
                         ubcore_Geometry
-                        UBOpReadoutMap_service
+                        ubcore::UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         lardataobj_RecoBase
@@ -79,7 +79,7 @@ art_make( NO_PLUGINS
 simple_plugin( SnFileSource
                "source"
                ubraw_RawData_supernova
-               UBOpReadoutMap_service
+               ubcore::UBOpReadoutMap_service
                ${ART_FRAMEWORK_PERSISTENCY_COMMON}
                BASENAME_ONLY
              )

@@ -2,13 +2,13 @@
 simple_plugin( LArRawInputSourceUBooNE
                "source"
                ubraw_RawData
-               UBOpReadoutMap_service
+               ubcore::UBOpReadoutMap_service
                ${ART_FRAMEWORK_PERSISTENCY_COMMON}
                BASENAME_ONLY
              )
 
 simple_plugin( RawDigitWriter "module"
-               UBOpReadoutMap_service
+               ubcore::UBOpReadoutMap_service
                lardata_Utilities_DatabaseUtil_service
                lardataobj_RawData
                ${ART_FRAMEWORK_CORE}
@@ -54,7 +54,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
                         ubcore_Geometry
-                        UBOpReadoutMap_service
+                        ubcore::UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
@@ -82,7 +82,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
                         ubcore_Geometry
-                        UBOpReadoutMap_service
+                        ubcore::UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
