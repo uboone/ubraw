@@ -39,8 +39,6 @@ end_product_list
 qualifier      ubcore         larevt         uboonedaq_datatypes	ifdh_art
 c7:debug       c7:debug       c7:debug       c7:debug:offline       	c7:debug
 c7:prof        c7:prof        c7:prof        c7:prof:offline        	c7:prof
-e19:debug      e19:debug      e19:debug      e19:debug:offline		e19:debug
-e19:prof       e19:prof       e19:prof       e19:prof:offline		e19:prof
 e20:debug      e20:debug      e20:debug      e20:debug:offline		e20:debug
 e20:prof       e20:prof       e20:prof       e20:prof:offline		e20:prof
 end_qualifier_list
