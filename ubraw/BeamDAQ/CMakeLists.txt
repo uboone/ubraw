@@ -5,7 +5,9 @@ project(beamdaq)
 # Build this project's executables:
 
 include_directories ( $ENV{UBOONEDAQ_DATATYPES_INC} )
-set(CURLLIB "-lcurl")
+#set(CURLLIB "-lcurl")
+find_library( CURLLIB NAMES curl )
+message(STATUS "found CURLLIB ${CURLLIB}")
 
 cet_make(LIBRARY_NAME BeamDAQ LIBRARIES UB_DATA_TYPES
                                         ${MF_MESSAGELOGGER}  ${CURLLIB} 
