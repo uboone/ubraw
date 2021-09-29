@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <exception>
 
-#include "fhiclcpp/make_ParameterSet.h"
 #include "cetlib/filepath_maker.h"
 
 using namespace gov::fnal::uboone::beam;
@@ -21,7 +20,7 @@ beamDAQConfig::beamDAQConfig()
      fcfgname=getenv("BEAMDAQ_CONFIG_FILE");
 
    try {
-    fhicl::make_ParameterSet(fcfgname, fpath, fPSet);
+     fPSet = fhicl::ParameterSet::make(fcfgname, fpath);
   } catch ( std::exception& e ) {
     std::cerr<<"Unable to locate "<<fcfgname<<" in "
 	     <<"$FHICL_FILE_PATH"<<std::endl
