@@ -12,9 +12,9 @@
 #  make package (builds distribution tarfile)
 # ======================================================================
 
-cmake_minimum_required (VERSION 3.12...3.18 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 
-project(ubraw LANGUAGES CXX)
+project(ubraw VERSION 09.28.02.01 LANGUAGES CXX)
 
 # cetbuildtools contains our cmake modules
 find_package(cetbuildtools REQUIRED)
@@ -39,7 +39,7 @@ find_ups_product( lardataobj )
 find_ups_product( lardataalg )
 find_ups_boost( v1_53_0 )
 find_ups_product( canvas )
-find_ups_product( ubcore v1_00_00 )
+find_ups_product( ubcore )
 find_ups_product( ifdh_art v1_00_00 )
 find_ups_product( larevt v1_00_00 )
 find_ups_product( lardata v1_00_00 )
@@ -50,7 +50,7 @@ find_ups_product( larcore )
 find_ups_product( nutools )
 find_ups_product( nurandom )
 find_ups_root()
-cet_find_library( UBDut NAMES ubdata_types PATHS $ENV{UBOONEDAQ_DATATYPES_LIB} )
+cet_find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
 
 # macros for dictionary and simple_plugin
 include(ArtDictionary)
