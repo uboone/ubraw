@@ -33,7 +33,7 @@ ubcore                  v09_32_00
 larevt                  v09_03_01
 uboonedaq_datatypes     v6_22_05g
 ifdh_art		v2_12_04
-cetbuildtools	        v8_18_03	-	only_for_build
+cetbuildtools	        v8_18_04	-	only_for_build
 end_product_list
 
 qualifier      ubcore         larevt         uboonedaq_datatypes	ifdh_art
