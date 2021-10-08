@@ -67,9 +67,7 @@ void BeamAna::beginSubRun(art::SubRun const & sr)
 
 void BeamAna::endSubRun(art::SubRun const & sr)
 {
-  // Implementation of optional member function here.
-  std::vector<art::Handle<sumdata::POTSummary> > potSummaryHandle;
-  sr.getManyByType(potSummaryHandle);
+  auto const potSummaryHandle = sr.getMany<sumdata::POTSummary>();
  
   for(auto const& potsumh : potSummaryHandle) {
     mf::LogInfo(__FUNCTION__) << "Tota POT "<<potsumh->totpot;

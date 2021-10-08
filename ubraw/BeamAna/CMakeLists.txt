@@ -4,7 +4,7 @@ art_make( BASENAME_ONLY
                         larevt_Filters
                         lardataobj_RawData
 			larcoreobj_SummaryData
-			${UB_DATA_TYPES}
+			UB_DATA_TYPES
 			${Boost_SERIALIZATION_LIBRARY}
                         nurandom_RandomUtils_NuRandomService_service
                         ${ART_FRAMEWORK_CORE}
@@ -21,7 +21,7 @@ art_make( BASENAME_ONLY
                         ${FHICLCPP}
                         cetlib cetlib_except
                         ${CLHEP}
-                        ${ROOT_BASIC_LIB_LIST}
+
         )
 
 # install_headers()

@@ -10,15 +10,15 @@ art_make( NO_PLUGINS
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
                         ubcore_Geometry
-                        UBOpReadoutMap_service
+                        ubcore::UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         lardata_ArtDataHelper
                         # ubraw_RawData
                         # LArRawInputSourceUBooNE_source
-                        ${UBDut}
-                        ${PQ}
+                        UB_DATA_TYPES
+                        PQ
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
                         ${ART_FRAMEWORK_IO_SOURCES}
@@ -36,15 +36,15 @@ art_make( NO_PLUGINS
                         ${ROOT_GEOM}
                         ${ROOT_XMLIO}
                         ${ROOT_GDML}
-                        ${Boost_SYSTEM_LIBRARY}
-                        ${ROOT_BASIC_LIB_LIST}
+
+
 
           MODULE_LIBRARIES lardata_Utilities_DatabaseUtil_service
                         larcorealg_Geometry
                         larcore_Geometry_Geometry_service
                         lardata_Utilities
                         ubcore_Geometry
-                        UBOpReadoutMap_service
+                        ubcore::UBOpReadoutMap_service
                         lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         lardataobj_RecoBase
@@ -52,8 +52,8 @@ art_make( NO_PLUGINS
                         larcoreobj_SummaryData
                         # ubraw_RawData
                         # ubraw_RawData_utils
-                        ${UBDut}
-                        ${PQ}
+                        UB_DATA_TYPES
+                        PQ
                         ${Boost_SERIALIZATION_LIBRARY}
                         ${ART_FRAMEWORK_CORE}
                         ${ART_FRAMEWORK_IO_SOURCES}
@@ -71,15 +71,15 @@ art_make( NO_PLUGINS
                         ${ROOT_GEOM}
                         ${ROOT_XMLIO}
                         ${ROOT_GDML}
-                        ${Boost_SYSTEM_LIBRARY}
-                        ${ROOT_BASIC_LIB_LIST}
+
+
         )		
 
 
 simple_plugin( SnFileSource
                "source"
                ubraw_RawData_supernova
-               UBOpReadoutMap_service
+               ubcore::UBOpReadoutMap_service
                ${ART_FRAMEWORK_PERSISTENCY_COMMON}
                BASENAME_ONLY
              )
