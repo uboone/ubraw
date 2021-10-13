@@ -20,7 +20,7 @@ art_make( BASENAME_ONLY
                         
                         ${FHICLCPP}
                         cetlib cetlib_except
-                        ${CLHEP}
+                        CLHEP::CLHEP
 
         )
 

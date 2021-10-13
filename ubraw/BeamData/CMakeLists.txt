@@ -50,7 +50,7 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
                         ${MF_MESSAGELOGGER}
                         ${FHICLCPP}
                         cetlib cetlib_except
-                        ${CLHEP}
+                        CLHEP::CLHEP
                         ROOT::Tree
 		LIB_LIBRARIES
 			UB_DATA_TYPES
