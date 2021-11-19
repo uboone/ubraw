@@ -29,8 +29,8 @@ table_fragment_end
 # Add the dependent product and version
 
 product                 version
-ubcore                  v09_36_00
-larevt                  v09_03_04
+ubcore                  v09_37_00
+larevt                  v09_03_05
 uboonedaq_datatypes     v6_22_05g
 ifdh_art		v2_12_05
 cetbuildtools	        v8_18_04	-	only_for_build
