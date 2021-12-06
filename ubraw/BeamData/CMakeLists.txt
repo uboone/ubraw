@@ -13,14 +13,14 @@ simple_plugin ( BeamDataQualityFilter "module"
                    lardataobj_RawData
                    ubraw_RawData
 		   BeamUtil
-                   ${ART_FRAMEWORK_CORE}
-                   ${ART_FRAMEWORK_PRINCIPAL}
-                   ${ART_FRAMEWORK_SERVICES_REGISTRY}
-                   ${ART_ROOT_IO_TFILE_SUPPORT} ${ROOT_CORE}
-                   art_Persistency_Common canvas
-                   art_Persistency_Provenance canvas
-                   art_Utilities canvas
-                   ${MF_MESSAGELOGGER}
+                   art::Framework_Core
+                   art::Framework_Principal
+                   art::Framework_Services_Registry
+                   art_root_io::tfile_support ROOT::Core
+                   art::Persistency_Common canvas::canvas
+                   art::Persistency_Provenance canvas::canvas
+                   art::Utilities canvas::canvas
+                   messagefacility::MF_MessageLogger
 		   BASENAME_ONLY
               )
 
@@ -34,23 +34,23 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
 			BeamUtil
 			BeamDAQ
 			UB_DATA_TYPES
-			${Boost_SERIALIZATION_LIBRARY}
-                        nurandom_RandomUtils_NuRandomService_service
-                        ${ART_FRAMEWORK_CORE}
-                        ${ART_FRAMEWORK_PRINCIPAL}
-                        ${ART_FRAMEWORK_SERVICES_REGISTRY}
-                        ${ART_ROOT_IO_TFILE_SUPPORT} ${ROOT_CORE}
-                        ${ART_FRAMEWORK_SERVICES_OPTIONAL_RANDOMNUMBERGENERATOR_SERVICE}
-                        ${ART_ROOT_IO_TFILESERVICE_SERVICE}
+			Boost::serialization
+                        nurandom::RandomUtils_NuRandomService_service
+                        art::Framework_Core
+                        art::Framework_Principal
+                        art::Framework_Services_Registry
+                        art_root_io::tfile_support ROOT::Core
+                        art::Framework_Services_Optional_RandomNumberGenerator_service
+                        art_root_io::TFileService_service
                         ${ART_FRAMEWORK_SERVICES_SYSTEM_FILECATALOGMETADATA_SERVICE}
-                        art_Persistency_Common canvas
-                        art_Persistency_Provenance canvas
-                        art_Utilities canvas
+                        art::Persistency_Common canvas::canvas
+                        art::Persistency_Provenance canvas::canvas
+                        art::Utilities canvas::canvas
 			ifdh
-                        ${MF_MESSAGELOGGER}
-                        ${FHICLCPP}
-                        cetlib cetlib_except
-                        ${CLHEP}
+                        messagefacility::MF_MessageLogger
+                        fhiclcpp::fhiclcpp
+                        cetlib::cetlib cetlib_except
+                        CLHEP::CLHEP
                         ROOT::Tree
 		LIB_LIBRARIES
 			UB_DATA_TYPES
