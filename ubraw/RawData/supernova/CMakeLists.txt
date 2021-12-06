@@ -18,7 +18,7 @@ art_make( NO_PLUGINS
                         # ubraw_RawData
                         # LArRawInputSourceUBooNE_source
                         UB_DATA_TYPES
-                        PQ
+                        PostgreSQL::PostgreSQL
                         Boost::serialization
                         art::Framework_Core
                         art::Framework_IO_Sources
@@ -53,7 +53,7 @@ art_make( NO_PLUGINS
                         # ubraw_RawData
                         # ubraw_RawData_utils
                         UB_DATA_TYPES
-                        PQ
+                        PostgreSQL::PostgreSQL
                         Boost::serialization
                         art::Framework_Core
                         art::Framework_IO_Sources

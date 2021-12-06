@@ -59,7 +59,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         UB_DATA_TYPES
-                        PQ
+                        PostgreSQL::PostgreSQL
                         Boost::serialization
                         art::Framework_Core
                         art::Framework_IO_Sources
@@ -88,7 +88,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         larcoreobj_SummaryData
                         ubraw_RawData
                         UB_DATA_TYPES
-                        PQ
+                        PostgreSQL::PostgreSQL
                         Boost::serialization
                         art::Framework_Core
                         art::Framework_IO_Sources
