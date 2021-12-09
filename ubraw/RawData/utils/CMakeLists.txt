@@ -11,16 +11,16 @@ simple_plugin( RawDigitWriter "module"
                ubcore::UBOpReadoutMap_service
                lardata_Utilities_DatabaseUtil_service
                lardataobj_RawData
-               ${ART_FRAMEWORK_CORE}
-               ${ART_FRAMEWORK_IO_SOURCES}
-               ${ART_FRAMEWORK_PRINCIPAL}
-               ${ART_FRAMEWORK_SERVICES_REGISTRY}
-               ${ART_ROOT_IO_TFILE_SUPPORT} ${ROOT_CORE}
-               ${ART_ROOT_IO_TFILESERVICE_SERVICE}
-               art_Persistency_Common canvas
-               art_Persistency_Provenance canvas
-               art_Utilities canvas
-               ${MF_MESSAGELOGGER}
+               art::Framework_Core
+               art::Framework_IO_Sources
+               art::Framework_Principal
+               art::Framework_Services_Registry
+               art_root_io::tfile_support ROOT::Core
+               art_root_io::TFileService_service
+               art::Persistency_Common canvas::canvas
+               art::Persistency_Provenance canvas::canvas
+               art::Utilities canvas::canvas
+               messagefacility::MF_MessageLogger
                ROOT::Tree
                BASENAME_ONLY
              )
@@ -30,16 +30,16 @@ simple_plugin( TriggerEnforcement "module"
                    lardata_DetectorInfoServices_DetectorClocksServiceStandard_service # BUG note that we link to a specific service implementation
                    lardataobj_RawData
                    ubraw_RawData
-                   ${ART_FRAMEWORK_CORE}
-                   ${ART_FRAMEWORK_PRINCIPAL}
-                   ${ART_FRAMEWORK_SERVICES_REGISTRY}
-                   ${ART_ROOT_IO_TFILE_SUPPORT} ${ROOT_CORE}
-                   art_Persistency_Common canvas
-                   art_Persistency_Provenance canvas
-                   art_Utilities canvas
-                   ${MF_MESSAGELOGGER}
-                   ${FHICLCPP}
-                   cetlib cetlib_except
+                   art::Framework_Core
+                   art::Framework_Principal
+                   art::Framework_Services_Registry
+                   art_root_io::tfile_support ROOT::Core
+                   art::Persistency_Common canvas::canvas
+                   art::Persistency_Provenance canvas::canvas
+                   art::Utilities canvas::canvas
+                   messagefacility::MF_MessageLogger
+                   fhiclcpp::fhiclcpp
+                   cetlib::cetlib cetlib_except
                    BASENAME_ONLY
              )
 
@@ -59,24 +59,24 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         UB_DATA_TYPES
-                        PQ
-                        ${Boost_SERIALIZATION_LIBRARY}
-                        ${ART_FRAMEWORK_CORE}
-                        ${ART_FRAMEWORK_IO_SOURCES}
-                        ${ART_FRAMEWORK_PRINCIPAL}
-                        ${ART_FRAMEWORK_SERVICES_REGISTRY}
-                        ${ART_ROOT_IO_TFILE_SUPPORT} ${ROOT_CORE}
-                        ${ART_ROOT_IO_TFILESERVICE_SERVICE}
-                        art_Persistency_Common canvas
-                        art_Persistency_Provenance canvas
-                        art_Utilities canvas
-                        ${MF_MESSAGELOGGER}
+                        PostgreSQL::PostgreSQL
+                        Boost::serialization
+                        art::Framework_Core
+                        art::Framework_IO_Sources
+                        art::Framework_Principal
+                        art::Framework_Services_Registry
+                        art_root_io::tfile_support ROOT::Core
+                        art_root_io::TFileService_service
+                        art::Persistency_Common canvas::canvas
+                        art::Persistency_Provenance canvas::canvas
+                        art::Utilities canvas::canvas
+                        messagefacility::MF_MessageLogger
                         ROOT::Tree
-                        ${FHICLCPP}
-                        cetlib cetlib_except
-                        ${ROOT_GEOM}
-                        ${ROOT_XMLIO}
-                        ${ROOT_GDML}
+                        fhiclcpp::fhiclcpp
+                        cetlib::cetlib cetlib_except
+                        ROOT::Geom
+                        ROOT::XMLIO
+                        ROOT::Gdml
           MODULE_LIBRARIES lardata_Utilities_DatabaseUtil_service
                         larcorealg_Geometry
                         larcore_Geometry_Geometry_service
@@ -88,23 +88,23 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         larcoreobj_SummaryData
                         ubraw_RawData
                         UB_DATA_TYPES
-                        PQ
-                        ${Boost_SERIALIZATION_LIBRARY}
-                        ${ART_FRAMEWORK_CORE}
-                        ${ART_FRAMEWORK_IO_SOURCES}
-                        ${ART_FRAMEWORK_PRINCIPAL}
-                        ${ART_FRAMEWORK_SERVICES_REGISTRY}
-                        ${ART_ROOT_IO_TFILE_SUPPORT} ${ROOT_CORE}
-                        ${ART_ROOT_IO_TFILESERVICE_SERVICE}
-                        art_Persistency_Common canvas
-                        art_Persistency_Provenance canvas
-                        art_Utilities canvas
-                        ${MF_MESSAGELOGGER}
-                        ${FHICLCPP}
-                        cetlib cetlib_except
-                        ${ROOT_GEOM}
-                        ${ROOT_XMLIO}
-                        ${ROOT_GDML}
+                        PostgreSQL::PostgreSQL
+                        Boost::serialization
+                        art::Framework_Core
+                        art::Framework_IO_Sources
+                        art::Framework_Principal
+                        art::Framework_Services_Registry
+                        art_root_io::tfile_support ROOT::Core
+                        art_root_io::TFileService_service
+                        art::Persistency_Common canvas::canvas
+                        art::Persistency_Provenance canvas::canvas
+                        art::Utilities canvas::canvas
+                        messagefacility::MF_MessageLogger
+                        fhiclcpp::fhiclcpp
+                        cetlib::cetlib cetlib_except
+                        ROOT::Geom
+                        ROOT::XMLIO
+                        ROOT::Gdml
         )                                                           
 
 install_headers()
