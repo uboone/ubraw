@@ -46,7 +46,7 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
                         art::Persistency_Common canvas::canvas
                         art::Persistency_Provenance canvas::canvas
                         art::Utilities canvas::canvas
-			ifdh
+			ifdh::ifdh
                         messagefacility::MF_MessageLogger
                         fhiclcpp::fhiclcpp
                         cetlib::cetlib cetlib_except
