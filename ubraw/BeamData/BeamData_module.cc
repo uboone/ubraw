@@ -19,7 +19,7 @@
 #include "art_root_io/TFileService.h"
 #include "art_root_io/TFileDirectory.h"
 
-#include "IFDH_service.h"
+#include "ifdh_art/IFDHService/IFDH_service.h"
 
 #include "fhiclcpp/ParameterSet.h"
 #include "messagefacility/MessageLogger/MessageLogger.h"

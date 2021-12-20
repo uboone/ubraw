@@ -14,7 +14,7 @@
 
 cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 
-project(ubraw VERSION 09.34.00 LANGUAGES CXX)
+project(ubraw VERSION 09.40.00 LANGUAGES CXX)
 
 # cetbuildtools contains our cmake modules
 find_package(cetbuildtools REQUIRED)
@@ -37,7 +37,6 @@ find_ups_product( larcorealg )
 find_ups_product( larcoreobj )
 find_ups_product( lardataobj )
 find_ups_product( lardataalg )
-find_ups_product( postgresql )
 find_ups_boost( )
 find_ups_product( canvas )
 find_ups_product( ubcore )
@@ -53,7 +52,7 @@ find_ups_product( larcore )
 find_ups_product( nutools )
 find_ups_product( nurandom )
 find_ups_root()
-find_ups_product( ubobj )
+find_package(PostgreSQL REQUIRED PUBLIC)
 cet_find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
 
 # macros for dictionary and simple_plugin
