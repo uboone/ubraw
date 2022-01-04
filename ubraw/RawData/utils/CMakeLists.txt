@@ -75,6 +75,8 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art::Persistency_Common canvas::canvas
                         art::Persistency_Provenance canvas::canvas
                         art::Utilities canvas::canvas
+                        wda
+                        SQLITE
                         messagefacility::MF_MessageLogger
                         ROOT::Tree
                         fhiclcpp::fhiclcpp
