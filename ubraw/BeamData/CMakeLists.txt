@@ -53,7 +53,8 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
                         ROOT::Tree
 		LIB_LIBRARIES
 			UB_DATA_TYPES
-			${ROOT_SPECTRUM}
+                        ROOT::Spectrum
+                        ROOT::Hist
         )
 
 
