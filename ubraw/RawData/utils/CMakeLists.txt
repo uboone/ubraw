@@ -8,7 +8,6 @@ simple_plugin( LArRawInputSourceUBooNE
                "source"
                ubraw_RawData
                ubcore::UBOpReadoutMap_service
-               ${ART_FRAMEWORK_PERSISTENCY_COMMON}
                BASENAME_ONLY
              )
 
@@ -76,7 +75,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art::Persistency_Provenance canvas::canvas
                         art::Utilities canvas::canvas
                         wda
-                        SQLITE
+                        SQLite::SQLite3
                         messagefacility::MF_MessageLogger
                         ROOT::Tree
                         fhiclcpp::fhiclcpp

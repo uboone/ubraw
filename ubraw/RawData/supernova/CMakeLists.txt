@@ -80,7 +80,6 @@ simple_plugin( SnFileSource
                "source"
                ubraw_RawData_supernova
                ubcore::UBOpReadoutMap_service
-               ${ART_FRAMEWORK_PERSISTENCY_COMMON}
                BASENAME_ONLY
              )
 

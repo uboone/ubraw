@@ -42,7 +42,6 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
                         art_root_io::tfile_support ROOT::Core
                         art::Framework_Services_Optional_RandomNumberGenerator_service
                         art_root_io::TFileService_service
-                        ${ART_FRAMEWORK_SERVICES_SYSTEM_FILECATALOGMETADATA_SERVICE}
                         art::Persistency_Common canvas::canvas
                         art::Persistency_Provenance canvas::canvas
                         art::Utilities canvas::canvas
