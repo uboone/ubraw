@@ -21,9 +21,10 @@ simple_plugin( RawDigitWriter "module"
                art::Framework_Services_Registry
                art_root_io::tfile_support ROOT::Core
                art_root_io::TFileService_service
-               art::Persistency_Common canvas::canvas
-               art::Persistency_Provenance canvas::canvas
-               art::Utilities canvas::canvas
+               art::Persistency_Common
+               art::Persistency_Provenance
+               art::Utilities
+               canvas::canvas
                messagefacility::MF_MessageLogger
                ROOT::Tree
                BASENAME_ONLY
@@ -38,9 +39,10 @@ simple_plugin( TriggerEnforcement "module"
                    art::Framework_Principal
                    art::Framework_Services_Registry
                    art_root_io::tfile_support ROOT::Core
-                   art::Persistency_Common canvas::canvas
-                   art::Persistency_Provenance canvas::canvas
-                   art::Utilities canvas::canvas
+                   art::Persistency_Common
+                   art::Persistency_Provenance
+                   art::Utilities
+                   canvas::canvas
                    messagefacility::MF_MessageLogger
                    fhiclcpp::fhiclcpp
                    cetlib::cetlib
@@ -72,9 +74,10 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art::Framework_Services_Registry
                         art_root_io::tfile_support ROOT::Core
                         art_root_io::TFileService_service
-                        art::Persistency_Common canvas::canvas
-                        art::Persistency_Provenance canvas::canvas
-                        art::Utilities canvas::canvas
+                        art::Persistency_Common
+                        art::Persistency_Provenance
+                        art::Utilities
+                        canvas::canvas
                         wda
                         SQLite::SQLite3
                         messagefacility::MF_MessageLogger
@@ -104,9 +107,10 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art::Framework_Services_Registry
                         art_root_io::tfile_support ROOT::Core
                         art_root_io::TFileService_service
-                        art::Persistency_Common canvas::canvas
-                        art::Persistency_Provenance canvas::canvas
-                        art::Utilities canvas::canvas
+                        art::Persistency_Common
+                        art::Persistency_Provenance
+                        art::Utilities
+                        canvas::canvas
                         messagefacility::MF_MessageLogger
                         fhiclcpp::fhiclcpp
                         cetlib::cetlib
