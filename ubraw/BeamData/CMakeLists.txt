@@ -48,7 +48,8 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
 			ifdh::ifdh
                         messagefacility::MF_MessageLogger
                         fhiclcpp::fhiclcpp
-                        cetlib::cetlib cetlib_except
+                        cetlib::cetlib
+                        cetlib_except::cetlib_except
                         CLHEP::CLHEP
                         ROOT::Tree
 		LIB_LIBRARIES

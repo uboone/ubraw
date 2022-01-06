@@ -43,7 +43,8 @@ simple_plugin( TriggerEnforcement "module"
                    art::Utilities canvas::canvas
                    messagefacility::MF_MessageLogger
                    fhiclcpp::fhiclcpp
-                   cetlib::cetlib cetlib_except
+                   cetlib::cetlib
+                   cetlib_except::cetlib_except
                    BASENAME_ONLY
              )
 
@@ -79,7 +80,8 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         messagefacility::MF_MessageLogger
                         ROOT::Tree
                         fhiclcpp::fhiclcpp
-                        cetlib::cetlib cetlib_except
+                        cetlib::cetlib
+                        cetlib_except::cetlib_except
                         ROOT::Geom
                         ROOT::XMLIO
                         ROOT::Gdml
@@ -107,7 +109,8 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art::Utilities canvas::canvas
                         messagefacility::MF_MessageLogger
                         fhiclcpp::fhiclcpp
-                        cetlib::cetlib cetlib_except
+                        cetlib::cetlib
+                        cetlib_except::cetlib_except
                         ROOT::Geom
                         ROOT::XMLIO
                         ROOT::Gdml
