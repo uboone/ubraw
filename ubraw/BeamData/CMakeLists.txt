@@ -36,12 +36,10 @@ art_make( EXCLUDE BeamDataQualityFilter_module.cc
 			BeamDAQ
 			UB_DATA_TYPES
 			Boost::serialization
-                        nurandom::RandomUtils_NuRandomService_service
                         art::Framework_Core
                         art::Framework_Principal
                         art::Framework_Services_Registry
                         art_root_io::tfile_support ROOT::Core
-                        art::Framework_Services_Optional_RandomNumberGenerator_service
                         art_root_io::TFileService_service
                         art::Persistency_Common
                         art::Persistency_Provenance

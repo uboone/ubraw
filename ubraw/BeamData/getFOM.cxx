@@ -4,7 +4,6 @@
 #include <math.h>
 
 #include "TF1.h"
-#include "TRandom.h"
 #include "TSpectrum.h"
 
 using namespace gov::fnal::uboone::datatypes;
