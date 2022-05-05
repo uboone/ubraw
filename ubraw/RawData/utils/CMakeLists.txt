@@ -61,7 +61,6 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardata_Utilities
                         ubcore_Geometry
                         ubcore::UBOpReadoutMap_service
-                        lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         UB_DATA_TYPES
@@ -93,7 +92,6 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         lardata_Utilities
                         ubcore_Geometry
                         ubcore::UBOpReadoutMap_service
-                        lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         ubraw_RawData

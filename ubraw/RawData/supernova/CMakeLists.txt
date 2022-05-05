@@ -11,7 +11,6 @@ art_make( NO_PLUGINS
                         lardata_Utilities
                         ubcore_Geometry
                         ubcore::UBOpReadoutMap_service
-                        lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         larcoreobj_SummaryData
                         lardata_ArtDataHelper
@@ -47,7 +46,6 @@ art_make( NO_PLUGINS
                         lardata_Utilities
                         ubcore_Geometry
                         ubcore::UBOpReadoutMap_service
-                        lardataobj_OpticalDetectorData
                         lardataobj_RawData
                         lardataobj_RecoBase
                         lardata_RecoBaseArt
