@@ -14,6 +14,7 @@ simple_plugin( RawDigitWriter "module"
                ubcore::UBOpReadoutMap_service
                lardata_Utilities_DatabaseUtil_service
                lardataobj_RawData
+               PostgreSQL::PostgreSQL
                art::Framework_Core
                art::Framework_IO_Sources
                art::Framework_Principal
