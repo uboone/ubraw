@@ -32,7 +32,7 @@ product                 version
 ubcore                  v09_65_03
 larevt                  v09_07_00
 uboonedaq_datatypes     v6_22_05g
-ifdh_art		v2_13_15
+ifdh_art		v2_13_16
 cetbuildtools	        v8_18_09	-	only_for_build
 end_product_list
 
