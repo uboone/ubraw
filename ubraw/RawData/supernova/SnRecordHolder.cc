@@ -22,7 +22,7 @@
 // uboonecode
 #include "ubcore/Geometry/UBOpChannelTypes.h"
 #include "ubcore/Geometry/UBOpReadoutMap.h"
-#include "larcore/Geometry/Geometry.h"
+#include "larcore/Geometry/WireReadout.h"
 // #include "uboone/RawData/utils/LArRawInputDriverUBooNE.h"
 
 
@@ -231,7 +231,7 @@ namespace snassembler {
          
            recob::WireCreator created_wire(rois, 
                                            ch, 
-                                           art::ServiceHandle<geo::Geometry>()->View(ch)
+                                           art::ServiceHandle<geo::WireReadout>()->Get().View(ch)
                                            );
            wires->push_back(created_wire.move());
         }
