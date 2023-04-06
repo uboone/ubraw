@@ -9,6 +9,7 @@ microboone_beamdata:
   fetch_beam_data: true
   bdaq_fhicl_file: "beamdaq_config.fcl"
 
+  use_autotune: true
   bnb:  {
 	 #0x200  external
 	 #0x1000 gate1

@@ -6,7 +6,7 @@
 
 using namespace gov::fnal::uboone::datatypes;
 
-float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd)
+float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd, const bnb::bnbAutoTune settings, bool useAutoTune)
 {
   double fom=0;
   if (beam=="bnb") {
@@ -17,6 +17,21 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     double vptg1_offset= +0.38914;
     double hptg2_offset= +0.8;
     double vptg2_offset= +1.0;
+    int useHTG = bnb::kTG1;
+    int useVTG = bnb::kTG1;
+    if(useAutoTune){
+      bnb::bnbOffsets data = settings.getData();
+      hp875_offset = data.hp875;
+      vp875_offset = data.vp875;
+      hptg1_offset = data.hptg1;
+      vptg1_offset = data.vptg1;
+      hptg2_offset = data.hptg2;
+      vptg2_offset = data.vptg2;
+
+      useHTG = settings.getHTG();
+      useVTG = settings.getVTG();
+    }
+
     //double hptg2_offset= +0.79;
     //double vptg2_offset= +1.02;
     double hp875_zpos= 202.116104;
@@ -108,28 +123,60 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     if (vp875.size()==0) vp875.push_back(-999);
 
     double horang,horpos;
-    if (hptg1.size()>0 && hp875.size()>0) {
-      horang=((hptg1[0]-hptg1_offset)-(hp875[0]-hp875_offset))/(hptg1_zpos-hp875_zpos);
-      horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
-    } else if (hptg2.size()>0 && hp875.size()>0) {
-      horang=((hptg2[0]-hptg2_offset)-(hp875[0]-hp875_offset))/(hptg2_zpos-hp875_zpos);
-      horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
-    } else {
-      //missing horizontal BPM data
-      return 2;
-    } 
+    
+    if(useHTG == bnb::kTG1){
+      if (hptg1.size()>0 && hp875.size()>0) {
+        horang=((hptg1[0]-hptg1_offset)-(hp875[0]-hp875_offset))/(hptg1_zpos-hp875_zpos);
+        horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
+      } else if (hptg2.size()>0 && hp875.size()>0) {
+        horang=((hptg2[0]-hptg2_offset)-(hp875[0]-hp875_offset))/(hptg2_zpos-hp875_zpos);
+        horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
+      } else {
+        //missing horizontal BPM data
+        return 2;
+      } 
+    }
+    else if(useHTG == bnb::kTG2){
+      if (hptg2.size()>0 && hp875.size()>0) {
+        horang=((hptg2[0]-hptg2_offset)-(hp875[0]-hp875_offset))/(hptg2_zpos-hp875_zpos);
+        horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
+      } else if (hptg1.size()>0 && hp875.size()>0) {
+        horang=((hptg1[0]-hptg1_offset)-(hp875[0]-hp875_offset))/(hptg1_zpos-hp875_zpos);
+        horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
+      } else {
+        //missing horizontal BPM data
+        return 2;
+      } 
+    }
+    else { return 2; }
 
     double verang,verpos;
-    if (vptg1.size()>0 && vp875.size()>0) {
-      verang=((vptg1[0]-vptg1_offset)-(vp875[0]-vp875_offset))/(vptg1_zpos-vp875_zpos);
-      verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
-    } else if (vptg2.size()>0 && vp875.size()>0) {
-      verang=((vptg2[0]-vptg2_offset)-(vp875[0]-vp875_offset))/(vptg2_zpos-vp875_zpos);
-      verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
-    } else {
-      //missing vertical BPM data
-      return 3;
-    } 
+    
+    if(useVTG == bnb::kTG1){
+      if (vptg1.size()>0 && vp875.size()>0) {
+        verang=((vptg1[0]-vptg1_offset)-(vp875[0]-vp875_offset))/(vptg1_zpos-vp875_zpos);
+        verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
+      } else if (vptg2.size()>0 && vp875.size()>0) {
+        verang=((vptg2[0]-vptg2_offset)-(vp875[0]-vp875_offset))/(vptg2_zpos-vp875_zpos);
+        verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
+      } else {
+        //missing vertical BPM data
+        return 3;
+      }
+    }
+    else if(useVTG == bnb::kTG2){
+      if (vptg2.size()>0 && vp875.size()>0) {
+        verang=((vptg2[0]-vptg2_offset)-(vp875[0]-vp875_offset))/(vptg2_zpos-vp875_zpos);
+        verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
+      } else if (vptg1.size()>0 && vp875.size()>0) {
+        verang=((vptg1[0]-vptg1_offset)-(vp875[0]-vp875_offset))/(vptg1_zpos-vp875_zpos);
+        verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
+      } else {
+        //missing vertical BPM data
+        return 3;
+      }
+    }
+    else { return 3; }
     
     horang=atan(horang);
     verang=atan(verang);
@@ -304,6 +351,73 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
       fom=0;
   }
   return fom;
+}
+
+bmd::autoTunes bmd::cacheAutoTuneHistory()
+{
+  bmd::autoTunes history;
+  bnb::bnbAutoTune item;
+  
+  item.setEntry(202435254, 132, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
+  history.push_back(item);
+  item.setEntry(203988466, 174, 315, bnb::bnbOffsets{-3.4, 1.48, 0.46, -1., -1., 1.84}, bnb::kTG1, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(204211306, 174, 316, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 1.84}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(215107286, 410, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
+  history.push_back(item);
+  item.setEntry(232368446, 268, 316, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 1.84}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(232368986, 268, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
+  history.push_back(item);
+  item.setEntry(247063273, 276, 316, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 1.84}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(247501553, 130, 317, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., -3.15}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(247573532, 305, 318, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., -0.03}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(247576952, 304, 319, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -0.03, -1.}, bnb::kTG2, bnb::kTG1);
+  history.push_back(item);
+  item.setEntry(247577492, 304, 320, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -3.15, -1.}, bnb::kTG2, bnb::kTG1);
+  history.push_back(item);
+  item.setEntry(247587752, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 0.}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(248020832, 304, 320, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -3.15, -1.}, bnb::kTG2, bnb::kTG1);
+  history.push_back(item);
+  item.setEntry(248458772, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 0.}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(248792844, 573, 323, bnb::bnbOffsets{-1.20, 1.30, -1., 0.5, -1., 0.1}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(255946478, 652, 324, bnb::bnbOffsets{-1.20, 1.30, -1., -0.4, -1., 0.1}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+
+  return history;
+}
+
+bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const ub_BeamHeader& bh)
+{
+  if(*(history.end()-1) <= bh) return *(history.end()-1); 
+  if(*(history.begin()) >= bh) return *(history.begin());
+  for(auto it = history.begin(); it != history.end()-1; ++it){
+    auto curr = *it;
+    auto following = *(it+1);
+    if((curr <= bh) && (following > bh)) return curr;
+  }
+  bnb::bnbAutoTune ret = bnb::bnbAutoTune();
+  return ret;
+}
+
+bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const raw::BeamInfo& bi)
+{
+  if(*(history.end()-1) <= bi) return *(history.end()-1); 
+  if(*(history.begin()) >= bi) return *(history.begin());
+  for(auto it = history.begin(); it != history.end()-1; ++it){
+    auto curr = *it;
+    auto following = *(it+1);
+    if((curr <= bi) && (following > bi)) return curr;
+  }
+  bnb::bnbAutoTune ret = bnb::bnbAutoTune();
+  return ret;
 }
 
 void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double& chi2) 

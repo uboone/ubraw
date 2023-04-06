@@ -194,11 +194,13 @@ private:
 
   std::map<std::string,bool> fCreateBranches;
   bool fFetchBeamData;
+  bool fUseAutoTune;
   std::string fBDAQfhicl;
 
   boost::posix_time::ptime fSubrunT0;
   boost::posix_time::ptime fSubrunT1;
   std::map<std::string, boost::posix_time::ptime> fTLast;
+  bmd::autoTunes fHistory; 
 };
 
 BeamData::BeamData(fhicl::ParameterSet const & p)
@@ -236,6 +238,10 @@ BeamData::BeamData(fhicl::ParameterSet const & p)
   fFetchBeamData=p.get<bool>("fetch_beam_data");
   if (fFetchBeamData) {
     fBDAQfhicl=p.get<std::string>("bdaq_fhicl_file");
+  }
+  fUseAutoTune=p.get<bool>("use_autotune");
+  if (fUseAutoTune) {
+    fHistory = bmd::cacheAutoTuneHistory();
   }
   for (auto& it_beamline : fBeamConf) {
     if (it_beamline.second.fWriteBeamData) {
@@ -428,10 +434,12 @@ void BeamData::endSubRun(art::SubRun & sr)
           + boost::posix_time::microseconds(static_cast<int>(fBeamConf[it->first].fOffsetT*1000));
 	*/
 	//calculate FOM
+        bnb::bnbAutoTune settings = bnb::bnbAutoTune();
+        if(fUseAutoTune) settings = bmd::getSettings(fHistory, bh);
 	if (fBeamConf[it->first].fFOMversion==1) {
 	  fFOM=bmd::getFOM(it->first,bh,bd);
 	} else if(fBeamConf[it->first].fFOMversion==2) {
-	  fFOM=bmd::getFOM2(it->first,bh,bd);
+	  fFOM=bmd::getFOM2(it->first,bh,bd, settings, fUseAutoTune);
 	} else {
 	  mf::LogError(__FUNCTION__)<<"Unkown FOM version!";
 	}
@@ -621,10 +629,12 @@ void BeamData::produce(art::Event & e)
       }
       */
       //calculate FOM
+      bnb::bnbAutoTune settings = bnb::bnbAutoTune();
+      if(fUseAutoTune) settings = bmd::getSettings(fHistory, bh);
       if (fBeamConf[beam_name].fFOMversion==1) {
 	fFOM=bmd::getFOM(beam_name,bh,bd);
       } else if(fBeamConf[beam_name].fFOMversion==2) {
-	fFOM=bmd::getFOM2(beam_name,bh,bd);
+	fFOM=bmd::getFOM2(beam_name,bh,bd, settings, fUseAutoTune);
       } else {
 	mf::LogError(__FUNCTION__)<<"Unkown FOM version!";
       }
