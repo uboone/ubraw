@@ -138,23 +138,22 @@ bool BeamDataQualityFilter::filter(art::Event & e)
   fMSec=ts.timeLow()/1e6;
   fEvent=e.event();
 
-  art::Handle< std::vector<raw::Trigger> > triggerHandle;
-  std::vector<art::Ptr<raw::Trigger> > trigInfo;
-  if (e.getByLabel("daq", triggerHandle))
-    art::fill_ptr_vector(trigInfo, triggerHandle);
-  else {
+  auto triggerHandle = e.getHandle<std::vector<raw::Trigger>>("daq");
+  if (!triggerHandle) {
     mf::LogWarning(__FUNCTION__) << "Missing trigger info. Skipping event.";
     fTree->Fill();
     return fResult;
   }
-  fTrigger=trigInfo[0]->TriggerBits();
-  std::bitset<16> trigbit(trigInfo[0]->TriggerBits());
-  if (fBeamCutMap.find(trigInfo[0]->TriggerBits())==fBeamCutMap.end()) {
-    mf::LogInfo(__FUNCTION__) << "Trigger not matching any of the beam(s). Skipping beam quality filter. trigger bits= "<<trigInfo[0]->TriggerBits()<<" "<<trigbit;
+
+  raw::Trigger const& triggerInfo = triggerHandle->front();
+  fTrigger=triggerInfo.TriggerBits();
+  std::bitset<16> trigbit(triggerInfo.TriggerBits());
+  if (fBeamCutMap.find(triggerInfo.TriggerBits())==fBeamCutMap.end()) {
+    mf::LogInfo(__FUNCTION__) << "Trigger not matching any of the beam(s). Skipping beam quality filter. trigger bits= "<<triggerInfo.TriggerBits()<<" "<<trigbit;
     fTree->Fill();
     return fResult;
   }
-  beamcuts_t* bc=&fBeamCutMap[trigInfo[0]->TriggerBits()];
+  beamcuts_t* bc=&fBeamCutMap[triggerInfo.TriggerBits()];
   art::Handle< raw::BeamInfo > beam;
   if (e.getByLabel("beamdata",beam)){
     std::map<std::string, std::vector<double>> datamap = beam->GetDataMap();
