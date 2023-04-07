@@ -386,9 +386,7 @@ bmd::autoTunes bmd::cacheAutoTuneHistory()
   history.push_back(item);
   item.setEntry(248458772, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 0.}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
-  item.setEntry(248792844, 573, 323, bnb::bnbOffsets{-1.20, 1.30, -1., 0.5, -1., 0.1}, bnb::kTG2, bnb::kTG2);
-  history.push_back(item);
-  item.setEntry(255946478, 652, 324, bnb::bnbOffsets{-1.20, 1.30, -1., -0.4, -1., 0.1}, bnb::kTG2, bnb::kTG2);
+  item.setEntry(248792844, 573, 323, bnb::bnbOffsets{-1.20, 1.30, -1., -0.4, -1., 0.1}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
 
   return history;
