@@ -20,6 +20,7 @@ namespace bmd
   autoTunes cacheAutoTuneHistory();
   bnb::bnbAutoTune getSettings(const autoTunes& history, const gov::fnal::uboone::datatypes::ub_BeamHeader& bh);
   bnb::bnbAutoTune getSettings(const autoTunes& history, const raw::BeamInfo& bi);
+  bnb::bnbAutoTune getSettings(const autoTunes& history, const uint64_t utctstamp);
 
   double calcFOM2(double horpos,double horang,double verpos,double verang,double tor,double tgtsx,double tgtsy);
   void swimBNB(const double centroid1[6], const double sigma1[6][6], 

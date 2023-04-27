@@ -357,36 +357,50 @@ bmd::autoTunes bmd::cacheAutoTuneHistory()
 {
   bmd::autoTunes history;
   bnb::bnbAutoTune item;
-  
+ 
+  // run1-3 parameters 
   item.setEntry(202435254, 132, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
   history.push_back(item);
+  
+  // run4a (misaligned beam)
   item.setEntry(203988466, 174, 315, bnb::bnbOffsets{-3.4, 1.48, 0.46, -1., -1., 1.84}, bnb::kTG1, bnb::kTG2);
   history.push_back(item);
-  item.setEntry(204211306, 174, 316, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 1.84}, bnb::kTG2, bnb::kTG2);
+  item.setEntry(204211306, 174, 316, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 1.84}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
+  
+  // run4b-4d parameters (same as run1-3)
   item.setEntry(215107286, 410, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
   history.push_back(item);
-  item.setEntry(232368446, 268, 316, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 1.84}, bnb::kTG2, bnb::kTG2);
+  // item.setEntry(232368446, 268, 316, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 1.84}, bnb::kTG2, bnb::kTG2);
+  // history.push_back(item);
+  // item.setEntry(232368986, 268, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
+  // history.push_back(item);
+  
+  // before run 5
+  item.setEntry(247063273, 276, 316, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 1.84}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
-  item.setEntry(232368986, 268, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
+  
+  // run5a parameters used on Nov 4th
+  item.setEntry(247501553, 130, 317, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, -3.15}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
-  item.setEntry(247063273, 276, 316, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 1.84}, bnb::kTG2, bnb::kTG2);
-  history.push_back(item);
-  item.setEntry(247501553, 130, 317, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., -3.15}, bnb::kTG2, bnb::kTG2);
-  history.push_back(item);
-  item.setEntry(247573532, 305, 318, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., -0.03}, bnb::kTG2, bnb::kTG2);
-  history.push_back(item);
-  item.setEntry(247576952, 304, 319, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -0.03, -1.}, bnb::kTG2, bnb::kTG1);
-  history.push_back(item);
-  item.setEntry(247577492, 304, 320, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -3.15, -1.}, bnb::kTG2, bnb::kTG1);
-  history.push_back(item);
-  item.setEntry(247587752, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 0.}, bnb::kTG2, bnb::kTG2);
-  history.push_back(item);
-  item.setEntry(248020832, 304, 320, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -3.15, -1.}, bnb::kTG2, bnb::kTG1);
-  history.push_back(item);
-  item.setEntry(248458772, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., 1.07, -1., 0.}, bnb::kTG2, bnb::kTG2);
-  history.push_back(item);
-  item.setEntry(248792844, 573, 323, bnb::bnbOffsets{-1.20, 1.30, -1., -0.4, -1., 0.1}, bnb::kTG2, bnb::kTG2);
+  
+  // parameters being tested in the autotune from Nov5th - Nov 10th (not used because not parameters not reflected in BPM readings)
+  
+  // item.setEntry(247573532, 305, 318, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, -0.03}, bnb::kTG2, bnb::kTG2);
+  // history.push_back(item);
+  // item.setEntry(247576952, 304, 319, bnb::bnbOffsets{-3.4, 1.48, -1., -0.03, 1.07, -1.}, bnb::kTG2, bnb::kTG1);
+  // history.push_back(item);
+  // item.setEntry(247577492, 304, 320, bnb::bnbOffsets{-3.4, 1.48, -1., -3.15, 1.07, -1.}, bnb::kTG2, bnb::kTG1);
+  // history.push_back(item);
+  // item.setEntry(247587752, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 0.}, bnb::kTG2, bnb::kTG2);
+  // history.push_back(item);
+  // item.setEntry(248020832, 304, 320, bnb::bnbOffsets{-3.4, 1.48, -1., -3.15, 1.07, -1.}, bnb::kTG2, bnb::kTG1);
+  // history.push_back(item);
+  // item.setEntry(248458772, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 0.}, bnb::kTG2, bnb::kTG2);
+  // history.push_back(item);
+  
+  // later run5 data (after target scan)
+  item.setEntry(248792844, 573, 323, bnb::bnbOffsets{-1.20, 1.30, -1., -1., -0.4, 0.1}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
 
   return history;
@@ -418,6 +432,19 @@ bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const raw::Beam
   return ret;
 }
 
+bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const uint64_t utctstamp)
+{
+  if(*(history.end()-1) <= utctstamp) return *(history.end()-1); 
+  if(*(history.begin()) >= utctstamp) return *(history.begin());
+  for(auto it = history.begin(); it != history.end()-1; ++it){
+    auto curr = *it;
+    auto following = *(it+1);
+    if((curr <= utctstamp) && (following > utctstamp)) return curr;
+  }
+  bnb::bnbAutoTune ret = bnb::bnbAutoTune();
+  return ret;
+}
+
 void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double& chi2) 
 {
    /* 
@@ -439,7 +466,8 @@ void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double&
   }
   int first_x=-1;
   int last_x=-1;
-  static TH1D* hProf=new TH1D("hProf","",48,-12,12);
+  static int entry = 1;
+  TH1D* hProf=new TH1D("hProf"+TString(std::to_string(entry)),"",48,-12,12);
   for (unsigned int i=0;i<48;i++) {
     hProf->SetBinContent(i+1,-mwdata[i]-minx);
     if (-mwdata[i]-minx    > (maxx-minx)*0.2 && first_x==-1) first_x=i;
@@ -576,6 +604,8 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
 	       cx, cy, sx, sy, rho);
   double fom_c=bmd::func_intbivar(cx, cy, sx*scalex, sy*scaley, rho);
 
+  // add a guard for double precision
+  if(fom_a <= -10000. || fom_b <= -10000. || fom_c <= -10000) return -10000.;
   double fom2=fom_a*0.6347 +
               fom_b*0.2812 +
               fom_c*0.0841;
@@ -657,7 +687,8 @@ double bmd::func_intbivar(const double cx, const double cy, const double sx, con
     x = x + dx;
   }
   sum = sum*dx*dy/(2.0*3.14159*sx*sy*sqrt(1.0-rho2));
-  //  cout<<"sum = "<<sum<<endl;
+  // add a guard for double precision
+  if(sum >= 1.) return -10000.; 
   return log10(1-sum);
 }
 
