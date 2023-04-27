@@ -484,6 +484,7 @@ void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double&
     sx=99999;
     chi2=99999;
   }
+  entry += 1;
 }
 
 double bmd::calcFOM2(double horpos, double horang, double verpos, double verang, double ppp, double tgtsx, double tgtsy)
