@@ -22,6 +22,8 @@ namespace bnb
     fData = data;
     fHTG = htg;
     fVTG = vtg;
+    fUTCTimeStamp = fSeconds;
+    fUTCTimeStamp = fUTCTimeStamp*1000 + fMilliSeconds + 1325397600000;
   }
 
   bool bnbAutoTune::operator<(ub_BeamHeader const& h) const noexcept 
@@ -62,5 +64,25 @@ namespace bnb
   bool bnbAutoTune::operator>=(raw::BeamInfo const& h) const noexcept 
   {
     return ((fSeconds > h.GetSeconds()) || (fSeconds == h.GetSeconds() && fMilliSeconds>=h.GetMilliSeconds()));
+  }
+  
+  bool bnbAutoTune::operator<(uint64_t const& utc) const noexcept 
+  {
+    return (fUTCTimeStamp < utc);
+  }
+
+  bool bnbAutoTune::operator<=(uint64_t const& utc) const noexcept 
+  {
+    return (fUTCTimeStamp <= utc);
+  }
+  
+  bool bnbAutoTune::operator>(uint64_t const& utc) const noexcept 
+  {
+    return (fUTCTimeStamp > utc);
+  }
+
+  bool bnbAutoTune::operator>=(uint64_t const& utc) const noexcept 
+  {
+    return (fUTCTimeStamp >= utc);
   }
 }

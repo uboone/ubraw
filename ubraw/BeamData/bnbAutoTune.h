@@ -31,6 +31,7 @@ namespace bnb
       bnbOffsets const& getData() const noexcept { return fData; } 
       bnbTG const& getHTG() const noexcept { return fHTG; }
       bnbTG const& getVTG() const noexcept { return fVTG; }
+      uint64_t getUTCTimeStamp() const noexcept { return fUTCTimeStamp; }
 
       void setSeconds(uint32_t const& val) noexcept { fSeconds = val; }
       void setMilliSeconds(uint16_t const& val) noexcept { fMilliSeconds = val; }
@@ -52,9 +53,15 @@ namespace bnb
       bool operator > (raw::BeamInfo const& h) const noexcept;
       bool operator >= (raw::BeamInfo const& h ) const noexcept;
     
+      bool operator < (uint64_t const& utc) const noexcept;
+      bool operator <= (uint64_t const& utc ) const noexcept;
+      bool operator > (uint64_t const& utc ) const noexcept;
+      bool operator >= (uint64_t const& utc ) const noexcept;
+    
     private:
       uint32_t fSeconds;
       uint16_t fMilliSeconds;
+      uint64_t fUTCTimeStamp;
       uint16_t fMBFile;
       bnbOffsets fData;
       bnbTG fHTG;
