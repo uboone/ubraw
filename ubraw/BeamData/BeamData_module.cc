@@ -47,6 +47,7 @@
 #include "boost/date_time/gregorian/gregorian.hpp"
 #include "boost/date_time/posix_time/posix_time.hpp"
 #include <boost/date_time/c_local_time_adjustor.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/format.hpp>
 
 #include <ctime>
@@ -417,7 +418,7 @@ void BeamData::endSubRun(art::SubRun & sr)
       pot->goodspills = it_beamline.second.fGoodSpillCount;
       std::string varname=it_beamline.first+it_dev.first;
       varname.erase(std::remove(varname.begin(), varname.end(), ':'), varname.end());
-      sr.put(std::move(pot),varname);   
+      sr.put(std::move(pot),varname, art::subRunFragment());
     }
   }
 
@@ -499,11 +500,8 @@ void BeamData::produce(art::Event & e)
   // Implementation of required member function here.
   std::unique_ptr<raw::BeamInfo> beam_info(new raw::BeamInfo);
   
-  art::Handle< std::vector<raw::Trigger> > triggerHandle;
-  std::vector<art::Ptr<raw::Trigger> > trigInfo;
-  if (e.getByLabel("daq", triggerHandle))
-    art::fill_ptr_vector(trigInfo, triggerHandle);
-  else {
+  auto triggerHandle = e.getHandle<std::vector<raw::Trigger>>("daq");
+  if (!triggerHandle) {
     mf::LogWarning(__FUNCTION__) << "Missing trigger info. Skipping event.";
     return;
   }
@@ -535,19 +533,20 @@ void BeamData::produce(art::Event & e)
 			    <<trig_union.trig_struct.phase0<<"\n";
   */
 
+  raw::Trigger const& trigInfo = triggerHandle->front();
   std::string beam_name="";
-  std::bitset<16> trigbit(trigInfo[0]->TriggerBits());
+  std::bitset<16> trigbit(trigInfo.TriggerBits());
   for (auto& it : fBeamConf) {
-    if (trigInfo[0]->TriggerBits() & it.second.fTriggerMask) {
+    if (trigInfo.TriggerBits() & it.second.fTriggerMask) {
       beam_name=it.first;
     }
   }
   if (beam_name=="") {
-    mf::LogInfo(__FUNCTION__) << "Trigger not matching any of the beam(s). Skipping beam merging. trigger bits= "<<trigInfo[0]->TriggerBits()<<" "<<trigbit;
+    mf::LogInfo(__FUNCTION__) << "Trigger not matching any of the beam(s). Skipping beam merging. trigger bits= "<<trigInfo.TriggerBits()<<" "<<trigbit;
     fNonBeamCount++;
 
   } else {
-  mf::LogInfo(__FUNCTION__) <<"Looking for "<<beam_name<<" event (trigger bits= "<<trigInfo[0]->TriggerBits()<<" "<<trigbit<<" )";
+  mf::LogInfo(__FUNCTION__) <<"Looking for "<<beam_name<<" event (trigger bits= "<<trigInfo.TriggerBits()<<" "<<trigbit<<" )";
 
   art::Handle< raw::DAQHeader > daqHeaderHandle;
   e.getByLabel("daq", daqHeaderHandle);

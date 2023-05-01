@@ -209,18 +209,17 @@ namespace zmqds {
     }
 
     // Use the handle to get a particular (0th) element of collection.
-    art::Ptr<raw::RawDigit> digitVec0(digitVecHandle, 0);
+    raw::RawDigit const& digit = digitVecHandle->front();
     
     std::cout << "Processing RawDigits..." << std::endl;
 
     // data size
-    unsigned int dataSize = digitVec0->Samples(); //size of raw data vectors
+    unsigned int dataSize = digit.Samples(); //size of raw data vectors
     rawdigits.reserve( dataSize );
     
     // loop over all wires
-    for(size_t rdIter = 0; rdIter < digitVecHandle->size(); ++rdIter){
-      art::Ptr<raw::RawDigit> digitVec(digitVecHandle, rdIter);
-      fWireID = digitVec->Channel();
+    for(raw::RawDigit const& digit : *digitVecHandle) {
+      fWireID = digit.Channel();
       util::UBChannelReverseMap_t::const_iterator it_mapentry = fChannelReverseMap.find( (util::UBLArSoftCh_t)fWireID );
       if ( it_mapentry!=fChannelReverseMap.end() ) {
 	fCrate = it_mapentry->second.crate;
@@ -229,8 +228,8 @@ namespace zmqds {
       }
 
       // uncompress the data, copy
-      //raw::Uncompress(digitVec->ADCs(), rawdigits, digitVec->Compression());
-      rawdigits = digitVec->ADCs();
+      //raw::Uncompress(digit.ADCs(), rawdigits, digit.Compression());
+      rawdigits = digit.ADCs();
 
       fTRawDigits->Fill();
 
