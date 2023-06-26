@@ -2,7 +2,8 @@ BEGIN_PROLOG
 beam_data_quality: {
   module_type: "BeamDataQualityFilter"
   apply_to_events: [ "bnb", "numi" ]
-  
+ 
+  use_autotune: true 
   bnb: {
     beam_name: "bnb"
     trigger_mask: 0x800

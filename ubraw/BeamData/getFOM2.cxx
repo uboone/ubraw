@@ -6,7 +6,7 @@
 
 using namespace gov::fnal::uboone::datatypes;
 
-float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd)
+float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<ub_BeamData>& bd, const bnb::bnbAutoTune settings, bool useAutoTune)
 {
   double fom=0;
   if (beam=="bnb") {
@@ -17,6 +17,21 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     double vptg1_offset= +0.38914;
     double hptg2_offset= +0.8;
     double vptg2_offset= +1.0;
+    int useHTG = bnb::kTG1;
+    int useVTG = bnb::kTG1;
+    if(useAutoTune){
+      bnb::bnbOffsets data = settings.getData();
+      hp875_offset = data.hp875;
+      vp875_offset = data.vp875;
+      hptg1_offset = data.hptg1;
+      vptg1_offset = data.vptg1;
+      hptg2_offset = data.hptg2;
+      vptg2_offset = data.vptg2;
+
+      useHTG = settings.getHTG();
+      useVTG = settings.getVTG();
+    }
+
     //double hptg2_offset= +0.79;
     //double vptg2_offset= +1.02;
     double hp875_zpos= 202.116104;
@@ -108,28 +123,60 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     if (vp875.size()==0) vp875.push_back(-999);
 
     double horang,horpos;
-    if (hptg1.size()>0 && hp875.size()>0) {
-      horang=((hptg1[0]-hptg1_offset)-(hp875[0]-hp875_offset))/(hptg1_zpos-hp875_zpos);
-      horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
-    } else if (hptg2.size()>0 && hp875.size()>0) {
-      horang=((hptg2[0]-hptg2_offset)-(hp875[0]-hp875_offset))/(hptg2_zpos-hp875_zpos);
-      horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
-    } else {
-      //missing horizontal BPM data
-      return 2;
-    } 
+    
+    if(useHTG == bnb::kTG1){
+      if (hptg1.size()>0 && hp875.size()>0) {
+        horang=((hptg1[0]-hptg1_offset)-(hp875[0]-hp875_offset))/(hptg1_zpos-hp875_zpos);
+        horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
+      } else if (hptg2.size()>0 && hp875.size()>0) {
+        horang=((hptg2[0]-hptg2_offset)-(hp875[0]-hp875_offset))/(hptg2_zpos-hp875_zpos);
+        horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
+      } else {
+        //missing horizontal BPM data
+        return 2;
+      } 
+    }
+    else if(useHTG == bnb::kTG2){
+      if (hptg2.size()>0 && hp875.size()>0) {
+        horang=((hptg2[0]-hptg2_offset)-(hp875[0]-hp875_offset))/(hptg2_zpos-hp875_zpos);
+        horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
+      } else if (hptg1.size()>0 && hp875.size()>0) {
+        horang=((hptg1[0]-hptg1_offset)-(hp875[0]-hp875_offset))/(hptg1_zpos-hp875_zpos);
+        horpos=(hp875[0]-hp875_offset)+horang*(target_center_zpos-hp875_zpos);
+      } else {
+        //missing horizontal BPM data
+        return 2;
+      } 
+    }
+    else { return 2; }
 
     double verang,verpos;
-    if (vptg1.size()>0 && vp875.size()>0) {
-      verang=((vptg1[0]-vptg1_offset)-(vp875[0]-vp875_offset))/(vptg1_zpos-vp875_zpos);
-      verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
-    } else if (vptg2.size()>0 && vp875.size()>0) {
-      verang=((vptg2[0]-vptg2_offset)-(vp875[0]-vp875_offset))/(vptg2_zpos-vp875_zpos);
-      verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
-    } else {
-      //missing vertical BPM data
-      return 3;
-    } 
+    
+    if(useVTG == bnb::kTG1){
+      if (vptg1.size()>0 && vp875.size()>0) {
+        verang=((vptg1[0]-vptg1_offset)-(vp875[0]-vp875_offset))/(vptg1_zpos-vp875_zpos);
+        verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
+      } else if (vptg2.size()>0 && vp875.size()>0) {
+        verang=((vptg2[0]-vptg2_offset)-(vp875[0]-vp875_offset))/(vptg2_zpos-vp875_zpos);
+        verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
+      } else {
+        //missing vertical BPM data
+        return 3;
+      }
+    }
+    else if(useVTG == bnb::kTG2){
+      if (vptg2.size()>0 && vp875.size()>0) {
+        verang=((vptg2[0]-vptg2_offset)-(vp875[0]-vp875_offset))/(vptg2_zpos-vp875_zpos);
+        verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
+      } else if (vptg1.size()>0 && vp875.size()>0) {
+        verang=((vptg1[0]-vptg1_offset)-(vp875[0]-vp875_offset))/(vptg1_zpos-vp875_zpos);
+        verpos=(vp875[0]-vp875_offset)+verang*(target_center_zpos-vp875_zpos);
+      } else {
+        //missing vertical BPM data
+        return 3;
+      }
+    }
+    else { return 3; }
     
     horang=atan(horang);
     verang=atan(verang);
@@ -306,6 +353,98 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
   return fom;
 }
 
+bmd::autoTunes bmd::cacheAutoTuneHistory()
+{
+  bmd::autoTunes history;
+  bnb::bnbAutoTune item;
+ 
+  // run1-3 parameters 
+  item.setEntry(202435254, 132, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
+  history.push_back(item);
+  
+  // run4a (misaligned beam)
+  item.setEntry(203988466, 174, 315, bnb::bnbOffsets{-3.4, 1.48, 0.46, -1., -1., 1.84}, bnb::kTG1, bnb::kTG2);
+  history.push_back(item);
+  item.setEntry(204211306, 174, 316, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 1.84}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  
+  // run4b-4d parameters (same as run1-3)
+  item.setEntry(215107286, 410, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
+  history.push_back(item);
+  // item.setEntry(232368446, 268, 316, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 1.84}, bnb::kTG2, bnb::kTG2);
+  // history.push_back(item);
+  // item.setEntry(232368986, 268, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
+  // history.push_back(item);
+  
+  // before run 5
+  item.setEntry(247063273, 276, 316, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 1.84}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  
+  // run5a parameters used on Nov 4th
+  item.setEntry(247501553, 130, 317, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, -3.15}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+  
+  // parameters being tested in the autotune from Nov5th - Nov 10th (not used because not parameters not reflected in BPM readings)
+  
+  // item.setEntry(247573532, 305, 318, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, -0.03}, bnb::kTG2, bnb::kTG2);
+  // history.push_back(item);
+  // item.setEntry(247576952, 304, 319, bnb::bnbOffsets{-3.4, 1.48, -1., -0.03, 1.07, -1.}, bnb::kTG2, bnb::kTG1);
+  // history.push_back(item);
+  // item.setEntry(247577492, 304, 320, bnb::bnbOffsets{-3.4, 1.48, -1., -3.15, 1.07, -1.}, bnb::kTG2, bnb::kTG1);
+  // history.push_back(item);
+  // item.setEntry(247587752, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 0.}, bnb::kTG2, bnb::kTG2);
+  // history.push_back(item);
+  // item.setEntry(248020832, 304, 320, bnb::bnbOffsets{-3.4, 1.48, -1., -3.15, 1.07, -1.}, bnb::kTG2, bnb::kTG1);
+  // history.push_back(item);
+  // item.setEntry(248458772, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 0.}, bnb::kTG2, bnb::kTG2);
+  // history.push_back(item);
+  
+  // later run5 data (after target scan)
+  item.setEntry(248792844, 573, 323, bnb::bnbOffsets{-1.20, 1.30, -1., -1., -0.4, 0.1}, bnb::kTG2, bnb::kTG2);
+  history.push_back(item);
+
+  return history;
+}
+
+bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const ub_BeamHeader& bh)
+{
+  if(*(history.end()-1) <= bh) return *(history.end()-1); 
+  if(*(history.begin()) >= bh) return *(history.begin());
+  for(auto it = history.begin(); it != history.end()-1; ++it){
+    auto curr = *it;
+    auto following = *(it+1);
+    if((curr <= bh) && (following > bh)) return curr;
+  }
+  bnb::bnbAutoTune ret = bnb::bnbAutoTune();
+  return ret;
+}
+
+bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const raw::BeamInfo& bi)
+{
+  if(*(history.end()-1) <= bi) return *(history.end()-1); 
+  if(*(history.begin()) >= bi) return *(history.begin());
+  for(auto it = history.begin(); it != history.end()-1; ++it){
+    auto curr = *it;
+    auto following = *(it+1);
+    if((curr <= bi) && (following > bi)) return curr;
+  }
+  bnb::bnbAutoTune ret = bnb::bnbAutoTune();
+  return ret;
+}
+
+bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const uint64_t utctstamp)
+{
+  if(*(history.end()-1) <= utctstamp) return *(history.end()-1); 
+  if(*(history.begin()) >= utctstamp) return *(history.begin());
+  for(auto it = history.begin(); it != history.end()-1; ++it){
+    auto curr = *it;
+    auto following = *(it+1);
+    if((curr <= utctstamp) && (following > utctstamp)) return curr;
+  }
+  bnb::bnbAutoTune ret = bnb::bnbAutoTune();
+  return ret;
+}
+
 void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double& chi2) 
 {
    /* 
@@ -327,7 +466,8 @@ void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double&
   }
   int first_x=-1;
   int last_x=-1;
-  static TH1D* hProf=new TH1D("hProf","",48,-12,12);
+  static int entry = 1;
+  TH1D* hProf=new TH1D("hProf"+TString(std::to_string(entry)),"",48,-12,12);
   for (unsigned int i=0;i<48;i++) {
     hProf->SetBinContent(i+1,-mwdata[i]-minx);
     if (-mwdata[i]-minx    > (maxx-minx)*0.2 && first_x==-1) first_x=i;
@@ -344,6 +484,7 @@ void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double&
     sx=99999;
     chi2=99999;
   }
+  entry += 1;
 }
 
 double bmd::calcFOM2(double horpos, double horang, double verpos, double verang, double ppp, double tgtsx, double tgtsy)
@@ -464,6 +605,8 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
 	       cx, cy, sx, sy, rho);
   double fom_c=bmd::func_intbivar(cx, cy, sx*scalex, sy*scaley, rho);
 
+  // add a guard for double precision
+  if(fom_a <= -10000. || fom_b <= -10000. || fom_c <= -10000) return -10000.;
   double fom2=fom_a*0.6347 +
               fom_b*0.2812 +
               fom_c*0.0841;
@@ -545,7 +688,8 @@ double bmd::func_intbivar(const double cx, const double cy, const double sx, con
     x = x + dx;
   }
   sum = sum*dx*dy/(2.0*3.14159*sx*sy*sqrt(1.0-rho2));
-  //  cout<<"sum = "<<sum<<endl;
+  // add a guard for double precision
+  if(sum >= 1.) return -10000.; 
   return log10(1-sum);
 }
 

@@ -79,6 +79,8 @@ private:
   double fFOM;
   uint32_t fTrigger;
   bool fResult;
+  bool fUseAutoTune;
+  bmd::autoTunes fHistory; 
 };
 
 
@@ -101,6 +103,10 @@ BeamDataQualityFilter::BeamDataQualityFilter(fhicl::ParameterSet const & p)
     bc.fFOMRange=eps.get<std::vector<double> >("fom_range");
     std::pair<uint32_t, beamcuts_t> bcpair(trigger_mask, bc);
     fBeamCutMap.insert(bcpair);
+  }
+  fUseAutoTune=p.get<bool>("use_autotune");
+  if (fUseAutoTune) {
+    fHistory = bmd::cacheAutoTuneHistory();
   }
   art::ServiceHandle<art::TFileService> tfs;
   fTree = tfs->make<TTree>("bdq","Beam Data Quality Filter Summary");
@@ -174,10 +180,13 @@ bool BeamDataQualityFilter::filter(art::Event & e)
 	ubbd.setData(bdata.second);
 	ubbdvec.push_back(ubbd);
       } 
+      bnb::bnbAutoTune settings = bnb::bnbAutoTune();
+      if(fUseAutoTune) settings = bmd::getSettings(fHistory, *beam);
+      
       if (bc->fFOMversion==1)
 	fFOM=bmd::getFOM(bc->fBeamName,ubbh,ubbdvec);
       else if (bc->fFOMversion==2) 
-	fFOM=bmd::getFOM2(bc->fBeamName,ubbh,ubbdvec);
+	fFOM=bmd::getFOM2(bc->fBeamName,ubbh,ubbdvec, settings, fUseAutoTune);
       else
 	mf::LogError(__FUNCTION__)<<"Invalid FOM version"<<fFOM;
 

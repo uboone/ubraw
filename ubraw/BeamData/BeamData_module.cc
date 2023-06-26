@@ -66,9 +66,47 @@ namespace {
     art::ServiceHandle<ifdh_ns::IFDH> ifdh;
     std::ostringstream dim;
     dim << "isparentof: ( file_name " << filename << ")"
-	<< " and run_number " << run << "." << subrun
-	<< " and availability: anylocation";
+        << " and run_number " << run << "." << subrun
+        << " and availability: anylocation";
     std::vector<std::string> parents = ifdh->translateConstraints(dim.str());
+
+    // If there are exactly two parents, determine if one is the parent of the other.
+
+    if(parents.size() == 2) {
+
+      std::string parent1 = parents[0];
+      std::string parent2 = parents[1];
+
+      //std::cout << "parent1=" << parent1 << std::endl;
+      //std::cout << "parent2=" << parent2 << std::endl;
+
+      // is parent1 a parent of parent2?
+
+      std::ostringstream dim12;
+      dim12 << "isparentof: ( file_name " << parent2 << ")"
+            << " and file_name " << parent1
+            << " and availability: anylocation";
+      std::vector<std::string> parents12 = ifdh->translateConstraints(dim12.str());
+      size_t n12 = parents12.size();
+
+      // is parent2 a parent of parent1?
+
+      std::ostringstream dim21;
+      dim21 << "isparentof: ( file_name " << parent1 << ")"
+            << " and file_name " << parent2
+            << " and availability: anylocation";
+      std::vector<std::string> parents21 = ifdh->translateConstraints(dim21.str());
+      size_t n21 = parents21.size();
+
+      // Maybe filter parents.
+
+      if(n12 == 1 and n21 == 0)
+        parents.pop_back();
+      else if(n12 == 0 and n21 == 1)
+        parents.erase(parents.begin(), parents.begin()+1);
+    }
+
+
     if(parents.size() == 0)
 
       // If there are no parents, return the original file.
@@ -157,11 +195,13 @@ private:
 
   std::map<std::string,bool> fCreateBranches;
   bool fFetchBeamData;
+  bool fUseAutoTune;
   std::string fBDAQfhicl;
 
   boost::posix_time::ptime fSubrunT0;
   boost::posix_time::ptime fSubrunT1;
   std::map<std::string, boost::posix_time::ptime> fTLast;
+  bmd::autoTunes fHistory; 
 };
 
 BeamData::BeamData(fhicl::ParameterSet const & p)
@@ -198,6 +238,10 @@ BeamData::BeamData(fhicl::ParameterSet const & p)
   fFetchBeamData=p.get<bool>("fetch_beam_data");
   if (fFetchBeamData) {
     fBDAQfhicl=p.get<std::string>("bdaq_fhicl_file");
+  }
+  fUseAutoTune=p.get<bool>("use_autotune");
+  if (fUseAutoTune) {
+    fHistory = bmd::cacheAutoTuneHistory();
   }
   for (auto& it_beamline : fBeamConf) {
     if (it_beamline.second.fWriteBeamData) {
@@ -237,6 +281,7 @@ void BeamData::beginSubRun(art::SubRun & sr)
     art::ServiceHandle<ifdh_ns::IFDH> ifdh;
     boost::filesystem::path inputPath(fInputFileName);
     std::string raw_ancestor = get_raw_ancestor(inputPath.filename().string(), fRun, fSubRun);
+    //std::cout << "raw ancestor = " << raw_ancestor << std::endl;
     std::string md = ifdh->getMetadata(raw_ancestor);
     mf::LogInfo(__FUNCTION__)<< "BeamData: metadata" << std::endl<< md;
 
@@ -389,10 +434,12 @@ void BeamData::endSubRun(art::SubRun & sr)
           + boost::posix_time::microseconds(static_cast<int>(fBeamConf[it->first].fOffsetT*1000));
 	*/
 	//calculate FOM
+        bnb::bnbAutoTune settings = bnb::bnbAutoTune();
+        if(fUseAutoTune) settings = bmd::getSettings(fHistory, bh);
 	if (fBeamConf[it->first].fFOMversion==1) {
 	  fFOM=bmd::getFOM(it->first,bh,bd);
 	} else if(fBeamConf[it->first].fFOMversion==2) {
-	  fFOM=bmd::getFOM2(it->first,bh,bd);
+	  fFOM=bmd::getFOM2(it->first,bh,bd, settings, fUseAutoTune);
 	} else {
 	  mf::LogError(__FUNCTION__)<<"Unkown FOM version!";
 	}
@@ -580,10 +627,12 @@ void BeamData::produce(art::Event & e)
       }
       */
       //calculate FOM
+      bnb::bnbAutoTune settings = bnb::bnbAutoTune();
+      if(fUseAutoTune) settings = bmd::getSettings(fHistory, bh);
       if (fBeamConf[beam_name].fFOMversion==1) {
 	fFOM=bmd::getFOM(beam_name,bh,bd);
       } else if(fBeamConf[beam_name].fFOMversion==2) {
-	fFOM=bmd::getFOM2(beam_name,bh,bd);
+	fFOM=bmd::getFOM2(beam_name,bh,bd, settings, fUseAutoTune);
       } else {
 	mf::LogError(__FUNCTION__)<<"Unkown FOM version!";
       }
