@@ -1,46 +1,40 @@
-# project name
-project(beamdaq)
+cet_make_library(
+  SOURCE
+  MWRData.cpp
+  beamDAQConfig.cpp
+  beamIFDBInterface.cpp
+  beamRun.cpp
+  beamRunHeader.cpp
+  httpResponse.cpp
+  LIBRARIES
+  PUBLIC
+  UB_DATA_TYPES
+  fhiclcpp::fhiclcpp
+  messagefacility::MF_MessageLogger
+  Boost::serialization
+  Boost::program_options
+  curl
+)
 
-# ----------------------------------------------------------------------
-# Build this project's executables:
+cet_make_exec(
+  NAME bdaq_get
+  LIBRARIES
+  PRIVATE
+  ubraw::BeamDAQ
+)
 
-include_directories ( $ENV{UBOONEDAQ_DATATYPES_INC} )
-#set(CURLLIB "-lcurl")
-find_library( CURLLIB NAMES curl )
-message(STATUS "found CURLLIB ${CURLLIB}")
-
-cet_make(LIBRARY_NAME BeamDAQ LIBRARIES UB_DATA_TYPES
-                                        messagefacility::MF_MessageLogger  ${CURLLIB} 
-					Boost::program_options Boost::filesystem Boost::date_time Boost::serialization
-
-					fhiclcpp::fhiclcpp
-                                        cetlib::cetlib
-                                        cetlib_except::cetlib_except
-					EXCLUDE bdaq_get.cpp bdaq_get.h bdaq_readraw.cpp)
-
-cet_make_exec( bdaq_get SOURCE bdaq_get.cpp LIBRARIES UB_DATA_TYPES
-                                messagefacility::MF_MessageLogger  ${CURLLIB} 
-				Boost::program_options Boost::filesystem Boost::date_time Boost::serialization
-
-				fhiclcpp::fhiclcpp cetlib::cetlib
-                                cetlib_except::cetlib_except
-                                BeamDAQ)
-cet_make_exec( bdaq_readraw SOURCE bdaq_readraw.cpp LIBRARIES
-               Boost::program_options Boost::filesystem Boost::date_time Boost::serialization
-
-                                    UB_DATA_TYPES BeamDAQ )
-
+cet_make_exec(
+  NAME bdaq_readraw
+  LIBRARIES
+  PRIVATE
+  ubraw::BeamDAQ
+)
 
 # ----------------------------------------------------------------------
 # Install this project's headers, sources, library, and executables:
 
+install_headers()
 install_fhicl()
-
+install_source()
 install_scripts()
-
-install( TARGETS bdaq_get
-         DESTINATION ${flavorqual_dir}/bin )
-
-install( TARGETS bdaq_readraw
-         DESTINATION ${flavorqual_dir}/bin )
 

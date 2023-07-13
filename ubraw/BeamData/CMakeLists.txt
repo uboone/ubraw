@@ -1,64 +1,37 @@
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-cet_add_compiler_flags(CXX -Wno-dynamic-exception-spec -Wno-return-type-c-linkage )
-endif()
+cet_make_library(
+  SOURCE
+  bnbAutoTune.cxx
+  getFOM.cxx
+  getFOM2.cxx
+  LIBRARIES
+  PUBLIC
+  UB_DATA_TYPES
+  lardataobj::RawData
+  ROOT::Spectrum
+  ROOT::Hist
+  ROOT::MathCore
+  ROOT::Tree
+)
 
-include_directories ( $ENV{IFDHC_FQ_DIR}/inc )
+cet_build_plugin(
+  BeamData art::EDProducer
+  LIBRARIES
+  PRIVATE
+  ubraw::BeamDAQ
+  ubraw::BeamData
+  larcoreobj::SummaryData
+  art_root_io::TFileService_service
+  ifdh_art::IFDH_service
+)
 
-cet_make(LIBRARY_NAME BeamUtil
-  LIBRARIES UB_DATA_TYPES
-            ROOT::MathCore ROOT::Hist ROOT::Spectrum
-  EXCLUDE BeamData_module.cc BeamDataQualityFilter_module.cc)
+cet_build_plugin(
+  BeamDataQualityFilter art::EDFilter
+  LIBRARIES
+  PRIVATE
+  ubraw::BeamData
+  art_root_io::TFileService_service
+)
 
-simple_plugin ( BeamDataQualityFilter "module"
-                   lardataobj_RawData
-                   ubraw_RawData
-		   BeamUtil
-                   art::Framework_Core
-                   art::Framework_Principal
-                   art::Framework_Services_Registry
-                   art_root_io::tfile_support ROOT::Core
-                   art::Persistency_Common
-                   art::Persistency_Provenance
-                   art::Utilities
-                   canvas::canvas
-                   messagefacility::MF_MessageLogger
-		   BASENAME_ONLY
-              )
-
-art_make( EXCLUDE BeamDataQualityFilter_module.cc
-          BASENAME_ONLY
-          MODULE_LIBRARIES
-                        lardata_Utilities
-                        larevt_Filters
-                        lardataobj_RawData
-			larcoreobj_SummaryData
-			BeamUtil
-			BeamDAQ
-			UB_DATA_TYPES
-			Boost::serialization
-                        art::Framework_Core
-                        art::Framework_Principal
-                        art::Framework_Services_Registry
-                        art_root_io::tfile_support ROOT::Core
-                        art_root_io::TFileService_service
-                        art::Persistency_Common
-                        art::Persistency_Provenance
-                        art::Utilities
-                        canvas::canvas
-			ifdh::ifdh
-                        messagefacility::MF_MessageLogger
-                        fhiclcpp::fhiclcpp
-                        cetlib::cetlib
-                        cetlib_except::cetlib_except
-                        CLHEP::CLHEP
-                        ROOT::Tree
-		LIB_LIBRARIES
-			UB_DATA_TYPES
-                        ROOT::Spectrum
-                        ROOT::Hist
-        )
-
-
-# install_headers()
+install_headers()
 install_fhicl()
 install_source()

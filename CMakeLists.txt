@@ -1,25 +1,15 @@
 # ======================================================================
-#  larsoft main build file
+#  ubraw main build file
 #
 #  cd .../path/to/build/directory
-#  source .../path/to/larsoft/ups/setup_for_development <-d|-p>
-#  cmake [-DCMAKE_INSTALL_PREFIX=/install/path]
-#        -DCMAKE_BUILD_TYPE=$CETPKG_TYPE
-#        $CETPKG_SOURCE
-#  make
-#  make test
-#  make install
-#  make package (builds distribution tarfile)
+#  source .../path/to/lardataobj/ups/setup_for_development <-d|-p>
+#  buildtool [-I /install/path] -bt[i] -jN
 # ======================================================================
 
-cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
+find_package(cetmodules REQUIRED)
 project(ubraw VERSION 09.75.01 LANGUAGES CXX)
-
-# cetbuildtools contains our cmake modules
-find_package(cetbuildtools REQUIRED)
-
-list(APPEND CMAKE_MODULE_PATH $ENV{CANVAS_ROOT_IO_DIR}/Modules $ENV{ART_DIR}/Modules)
 
 include(CetCMakeEnv)
 cet_cmake_env()
@@ -30,33 +20,16 @@ cet_set_compiler_flags(DIAGS CAUTIOUS
   EXTRA_FLAGS -pedantic -Wno-unused-local-typedefs
 )
 
-cet_report_compiler_flags()
+cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
 
-# these are minimum required versions, not the actual product versions
-find_ups_product( larcorealg )
-find_ups_product( larcoreobj )
-find_ups_product( lardataobj )
-find_ups_product( lardataalg )
-find_ups_boost( )
-find_ups_product( canvas )
-find_ups_product( ubcore )
-find_ups_product( ifdh_art )
-find_ups_product( larevt )
-find_ups_product( lardata )
-find_ups_product( uboonedaq_datatypes )
-find_ups_product( libwda )
-find_ups_product( sqlite )
-find_ups_product( art )
-find_ups_product(art_root_io)
-find_ups_product( larcore )
-find_ups_product( nutools )
-find_ups_root()
-find_package(PostgreSQL REQUIRED PUBLIC)
+find_package( ifdh_art REQUIRED EXPORT )
+find_package( larevt REQUIRED EXPORT )
+find_package( uboonedaq_datatypes REQUIRED EXPORT )
+find_package( libwda REQUIRED EXPORT )
 cet_find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
 
 # macros for dictionary and simple_plugin
-include(ArtDictionary)
-include(ArtMake)
+include(CetMakeLibrary)
 include(BuildPlugins)
 
 # ADD SOURCE CODE SUBDIRECTORIES HERE
@@ -66,7 +39,6 @@ add_subdirectory(ubraw)
 add_subdirectory(test)
 
 # ups - table and config files
-add_subdirectory(ups)
 
 # packaging utility
-include(UseCPack)
+cet_cmake_config()

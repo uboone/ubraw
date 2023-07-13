@@ -1,124 +1,69 @@
-cet_find_library( LIBWDA NAMES wda PATHS ENV LIBWDA_LIB NO_DEFAULT_PATH )
-#
+cet_make_library(
+  SOURCE
+  LArRawInputDriverUBooNE.cxx
+  LIBRARIES
+  PUBLIC
+  ubcore::Geometry_UBOpReadoutMap_service
+  ubobj::RawData
+  ubobj::Trigger
+  UB_DATA_TYPES
+  lardata::Utilities
+  art::Framework_Services_Registry
+  art::Framework_IO_Sources
+  art_root_io::TFileService_service
+  fhiclcpp::fhiclcpp
+  wda::wda
+  ROOT::Tree
+  Boost::serialization
+  SQLite::SQLite3
+)
 
-link_directories( $ENV{SQLITE_LIB} )
+cet_build_plugin(
+  LArRawInputSourceUBooNE art::source
+  LIBRARIES
+  PRIVATE
+  ubraw::RawData_utils
+)
 
-simple_plugin( LArRawInputSourceUBooNE
-               "source"
-               ubraw_RawData
-               ubcore::UBOpReadoutMap_service
-               BASENAME_ONLY
-             )
+cet_build_plugin(
+  TriggerEnforcement art::EDFilter
+  LIBRARIES
+  PRIVATE
+  ubobj::Trigger
+  lardataobj::RawData
+)
 
-simple_plugin( RawDigitWriter "module"
-               ubcore::UBOpReadoutMap_service
-               lardata_Utilities_DatabaseUtil_service
-               lardataobj_RawData
-               PostgreSQL::PostgreSQL
-               art::Framework_Core
-               art::Framework_IO_Sources
-               art::Framework_Principal
-               art::Framework_Services_Registry
-               art_root_io::tfile_support ROOT::Core
-               art_root_io::TFileService_service
-               art::Persistency_Common
-               art::Persistency_Provenance
-               art::Utilities
-               canvas::canvas
-               messagefacility::MF_MessageLogger
-               ROOT::Tree
-               BASENAME_ONLY
-             )
+cet_build_plugin(
+  TriggerDumper art::EDAnalyzer
+  LIBRARIES
+  PRIVATE
+  ubobj::Trigger
+  lardataobj::RawData
+)
 
-# need a special link list because of the explicit link to a specific service inplementation
-simple_plugin( TriggerEnforcement "module"
-                   lardata_DetectorInfoServices_DetectorClocksServiceStandard_service # BUG note that we link to a specific service implementation
-                   lardataobj_RawData
-                   ubraw_RawData
-                   art::Framework_Core
-                   art::Framework_Principal
-                   art::Framework_Services_Registry
-                   art_root_io::tfile_support ROOT::Core
-                   art::Persistency_Common
-                   art::Persistency_Provenance
-                   art::Utilities
-                   canvas::canvas
-                   messagefacility::MF_MessageLogger
-                   fhiclcpp::fhiclcpp
-                   cetlib::cetlib
-                   cetlib_except::cetlib_except
-                   BASENAME_ONLY
-             )
+cet_build_plugin(
+  RawDigitWriter art::EDAnalyzer
+  LIBRARIES
+  PRIVATE
+  ubcore::Geometry_UBOpReadoutMap_service
+  larevt::Filters
+  lardata::Utilities_DatabaseUtil_service
+  lardata::DetectorClocksService
+  larcore::ServiceUtil
+  larcoreobj::SimpleTypesAndConstants
+  art_root_io::TFileService_service
+  ROOT::Tree
+)
 
-
-art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc TriggerEnforcement_module.cc
-          BASENAME_ONLY
-          LIBRARY_NAME ubraw_RawData
-          LIB_LIBRARIES ubobj_RawData
-	  		ubobj_Trigger
-	  		lardata_Utilities_DatabaseUtil_service
-                        larcorealg_Geometry
-                        larcore_Geometry_Geometry_service
-                        lardata_Utilities
-                        ubcore_Geometry
-                        ubcore::UBOpReadoutMap_service
-                        lardataobj_RawData
-                        larcoreobj_SummaryData
-                        UB_DATA_TYPES
-                        PostgreSQL::PostgreSQL
-                        Boost::serialization
-                        art::Framework_Core
-                        art::Framework_IO_Sources
-                        art::Framework_Principal
-                        art::Framework_Services_Registry
-                        art_root_io::tfile_support ROOT::Core
-                        art_root_io::TFileService_service
-                        art::Persistency_Common
-                        art::Persistency_Provenance
-                        art::Utilities
-                        canvas::canvas
-                        wda
-                        SQLite::SQLite3
-                        messagefacility::MF_MessageLogger
-                        ROOT::Tree
-                        fhiclcpp::fhiclcpp
-                        cetlib::cetlib
-                        cetlib_except::cetlib_except
-                        ROOT::Geom
-                        ROOT::XMLIO
-                        ROOT::Gdml
-          MODULE_LIBRARIES lardata_Utilities_DatabaseUtil_service
-                        larcorealg_Geometry
-                        larcore_Geometry_Geometry_service
-                        lardata_Utilities
-                        ubcore_Geometry
-                        ubcore::UBOpReadoutMap_service
-                        lardataobj_RawData
-                        larcoreobj_SummaryData
-                        ubraw_RawData
-                        UB_DATA_TYPES
-                        PostgreSQL::PostgreSQL
-                        Boost::serialization
-                        art::Framework_Core
-                        art::Framework_IO_Sources
-                        art::Framework_Principal
-                        art::Framework_Services_Registry
-                        art_root_io::tfile_support ROOT::Core
-                        art_root_io::TFileService_service
-                        art::Persistency_Common
-                        art::Persistency_Provenance
-                        art::Utilities
-                        canvas::canvas
-                        messagefacility::MF_MessageLogger
-                        fhiclcpp::fhiclcpp
-                        cetlib::cetlib
-                        cetlib_except::cetlib_except
-                        ROOT::Geom
-                        ROOT::XMLIO
-                        ROOT::Gdml
-        )                                                           
+cet_build_plugin(
+  RawDigitSaver art::EDProducer
+  LIBRARIES
+  PRIVATE
+  lardataobj::RawData
+)
 
 install_headers()
+install_fhicl()
 install_source()
 
 add_subdirectory(job)
