@@ -29,7 +29,7 @@ find_package( libwda REQUIRED EXPORT )
 cet_find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
 
 # macros for dictionary and simple_plugin
-include(CetMakeLibrary)
+include(ArtMake)
 include(BuildPlugins)
 
 # ADD SOURCE CODE SUBDIRECTORIES HERE
