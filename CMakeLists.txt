@@ -24,6 +24,7 @@ cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
 
 find_package( ifdh_art REQUIRED EXPORT )
 find_package( larevt REQUIRED EXPORT )
+find_package( ubcore REQUIRED EXPORT )
 find_package( uboonedaq_datatypes REQUIRED EXPORT )
 find_package( libwda REQUIRED EXPORT )
 cet_find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
