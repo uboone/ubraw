@@ -14,7 +14,7 @@ namespace bnb
   }
 
   void bnbAutoTune::setEntry(uint32_t seconds, uint16_t milliseconds, uint16_t mbfile,
-                             bnbOffsets data, bnbTG htg, bnbTG vtg) noexcept 
+                             bnbOffsets data, bnbTG htg, bnbTG vtg) noexcept
   {
     fSeconds = seconds;
     fMilliSeconds = milliseconds;
@@ -22,66 +22,77 @@ namespace bnb
     fData = data;
     fHTG = htg;
     fVTG = vtg;
-    fUTCTimeStamp = fSeconds;
-    fUTCTimeStamp = fUTCTimeStamp*1000 + fMilliSeconds + 1325397600000;
+    fUTCTimeStamp = convertUTC(fSeconds, fMilliSeconds);
+    fLocalTimeStamp = convertTimeStamp(fSeconds, fMilliSeconds);
   }
 
-  bool bnbAutoTune::operator<(ub_BeamHeader const& h) const noexcept 
+  // comparison here is with local time coordinates, same as autotune history so its straightforward
+  bool bnbAutoTune::operator<(ub_BeamHeader const& h) const noexcept
   {
-    return ((fSeconds < h.getSeconds()) || (fSeconds == h.getSeconds() && fMilliSeconds<h.getMilliSeconds()));
+    uint64_t beamltc = convertTimeStamp(h.getSeconds(), h.getMilliSeconds());
+    return (fLocalTimeStamp < beamltc);
   }
 
-  bool bnbAutoTune::operator<=(ub_BeamHeader const& h) const noexcept 
+  bool bnbAutoTune::operator<=(ub_BeamHeader const& h) const noexcept
   {
-    return ((fSeconds < h.getSeconds()) || (fSeconds == h.getSeconds() && fMilliSeconds<=h.getMilliSeconds()));
-  }
-  
-  bool bnbAutoTune::operator>(ub_BeamHeader const& h) const noexcept 
-  {
-    return ((fSeconds > h.getSeconds()) || (fSeconds == h.getSeconds() && fMilliSeconds>h.getMilliSeconds()));
+    uint64_t beamltc = convertTimeStamp(h.getSeconds(), h.getMilliSeconds());
+    return (fLocalTimeStamp <= beamltc);
   }
 
-  bool bnbAutoTune::operator>=(ub_BeamHeader const& h) const noexcept 
+  bool bnbAutoTune::operator>(ub_BeamHeader const& h) const noexcept
   {
-    return ((fSeconds > h.getSeconds()) || (fSeconds == h.getSeconds() && fMilliSeconds>=h.getMilliSeconds()));
-  }
-  
-  bool bnbAutoTune::operator<(raw::BeamInfo const& h) const noexcept 
-  {
-    return ((fSeconds < h.GetSeconds()) || (fSeconds == h.GetSeconds() && fMilliSeconds<h.GetMilliSeconds()));
+    uint64_t beamltc = convertTimeStamp(h.getSeconds(), h.getMilliSeconds());
+    return (fLocalTimeStamp > beamltc);
   }
 
-  bool bnbAutoTune::operator<=(raw::BeamInfo const& h) const noexcept 
+  bool bnbAutoTune::operator>=(ub_BeamHeader const& h) const noexcept
   {
-    return ((fSeconds < h.GetSeconds()) || (fSeconds == h.GetSeconds() && fMilliSeconds<=h.GetMilliSeconds()));
-  }
-  
-  bool bnbAutoTune::operator>(raw::BeamInfo const& h) const noexcept 
-  {
-    return ((fSeconds > h.GetSeconds()) || (fSeconds == h.GetSeconds() && fMilliSeconds>h.GetMilliSeconds()));
+    uint64_t beamltc = convertTimeStamp(h.getSeconds(), h.getMilliSeconds());
+    return (fLocalTimeStamp >= beamltc);
   }
 
-  bool bnbAutoTune::operator>=(raw::BeamInfo const& h) const noexcept 
+  // BeamInfo is in UTC
+  bool bnbAutoTune::operator<(raw::BeamInfo const& h) const noexcept
   {
-    return ((fSeconds > h.GetSeconds()) || (fSeconds == h.GetSeconds() && fMilliSeconds>=h.GetMilliSeconds()));
+    uint64_t beamutc = convertTimeStamp(h.GetSeconds(), h.GetMilliSeconds());
+    return (fUTCTimeStamp < beamutc);
   }
-  
-  bool bnbAutoTune::operator<(uint64_t const& utc) const noexcept 
+
+  bool bnbAutoTune::operator<=(raw::BeamInfo const& h) const noexcept
+  {
+    uint64_t beamutc = convertTimeStamp(h.GetSeconds(), h.GetMilliSeconds());
+    return (fUTCTimeStamp <= beamutc);
+  }
+
+  bool bnbAutoTune::operator>(raw::BeamInfo const& h) const noexcept
+  {
+    uint64_t beamutc = convertTimeStamp(h.GetSeconds(), h.GetMilliSeconds());
+    return (fUTCTimeStamp > beamutc);
+  }
+
+  bool bnbAutoTune::operator>=(raw::BeamInfo const& h) const noexcept
+  {
+    uint64_t beamutc = convertTimeStamp(h.GetSeconds(), h.GetMilliSeconds());
+    return (fUTCTimeStamp >= beamutc);
+  }
+
+  // compare directly to utc timestamps
+  bool bnbAutoTune::operator<(uint64_t const& utc) const noexcept
   {
     return (fUTCTimeStamp < utc);
   }
 
-  bool bnbAutoTune::operator<=(uint64_t const& utc) const noexcept 
+  bool bnbAutoTune::operator<=(uint64_t const& utc) const noexcept
   {
     return (fUTCTimeStamp <= utc);
   }
-  
-  bool bnbAutoTune::operator>(uint64_t const& utc) const noexcept 
+
+  bool bnbAutoTune::operator>(uint64_t const& utc) const noexcept
   {
     return (fUTCTimeStamp > utc);
   }
 
-  bool bnbAutoTune::operator>=(uint64_t const& utc) const noexcept 
+  bool bnbAutoTune::operator>=(uint64_t const& utc) const noexcept
   {
     return (fUTCTimeStamp >= utc);
   }
