@@ -37,8 +37,12 @@ cetbuildtools	        v8_20_00	-	only_for_build
 end_product_list
 
 qualifier      ubcore         larevt         uboonedaq_datatypes	ifdh_art
+c14:debug      c14:debug      c14:debug      c14:debug:offline       	c14:debug
+c14:prof       c14:prof       c14:prof       c14:prof:offline        	c14:prof
 c7:debug       c7:debug       c7:debug       c7:debug:offline       	c7:debug
 c7:prof        c7:prof        c7:prof        c7:prof:offline        	c7:prof
+e26:debug      e26:debug      e26:debug      e26:debug:offline		e26:debug
+e26:prof       e26:prof       e26:prof       e26:prof:offline		e26:prof
 e20:debug      e20:debug      e20:debug      e20:debug:offline		e20:debug
 e20:prof       e20:prof       e20:prof       e20:prof:offline		e20:prof
 end_qualifier_list
