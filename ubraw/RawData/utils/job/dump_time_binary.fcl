@@ -1,0 +1,60 @@
+#include "services_microboone.fcl"
+
+process_name: DumpTime
+
+services:
+{
+  scheduler:    { defaultExceptions: false }    # Make all uncaught exceptions fatal.
+  TFileService: { fileName: "daq_hist.root" }
+  ExptGeoHelperInterface:  @local::microboone_geometry_helper
+  Geometry:                @local::microboone_geo
+  UBOpReadoutMap:          @local::microboone_opreadoutmap
+  DetectorClocksService:   @local::microboone_detectorclocks
+  message:                 @local::standard_info
+}
+
+services.DetectorClocksService.InheritClockConfig: false
+
+source:
+{
+  fileNames:       []
+  module_type:	   LArRawInputSourceUBooNE
+  maxEvents:       -1
+  huffmanDecode:   true
+  swizzleTPC:      true
+  swizzlePMT:      true
+  swizzleTrigger:  true
+
+  swizzleTriggerType: ALL ## This is the only option that works currently!
+#  swizzleTriggerType: BNB
+#  swizzleTriggerType: EXT
+#  swizzleTriggerType: NuMI
+#  swizzleTriggerType: CALIB
+  UseSQLite:       true
+  beam_histograms: [ "E:TOR101, 100, 0, 50",
+                     "E:TORTGT, 100, 0, 50",
+                     "E:TOR860, 100, 0, 5",
+                     "E:TOR875, 100, 0, 5" ]
+  enforceFrameMatching: false ## quit if TPC, PMT, and TRIG stream frames don't match - should be true by default
+}
+
+physics:
+{
+
+ analyzers: {
+  dump: {
+    module_type: "TimeDumper"
+    DAQHeaderProducer: "daq"
+    DAQHeaderTimeUBooNEProducer: "daq"
+    NumDump: 1000
+    NumProcess: 1000000
+  }
+ }
+
+ ana:  [ dump ]
+
+ #end_paths is a keyword and contains the paths that do not modify the art::Event, 
+ #ie analyzers and output streams.  these all run simultaneously
+ end_paths:     [ ana ]
+}
+
