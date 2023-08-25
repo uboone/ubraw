@@ -1,20 +1,29 @@
 #include "services_microboone.fcl"
 
-process_name: DumpTime
+process_name: GPSOffset
 
 services:
 {
   scheduler:    { defaultExceptions: false }    # Make all uncaught exceptions fatal.
-  TFileService: { fileName: "daq_hist.root" }
+  TFileService: { fileName: "gps_offset.root" }
   ExptGeoHelperInterface:  @local::microboone_geometry_helper
   Geometry:                @local::microboone_geo
   UBOpReadoutMap:          @local::microboone_opreadoutmap
   DetectorClocksService:   @local::microboone_detectorclocks
   IFDH:                    {}
+  FileCatalogMetadata:     @local::art_file_catalog_data
   message:                 @local::standard_info
 }
 
 services.DetectorClocksService.InheritClockConfig: false
+
+microboone_tfile_metadata:
+{
+  JSONFileName:          "gps_offset.root.json"
+  GenerateTFileMetadata: true
+  dataTier:              "root-tuple"
+  fileFormat:            "root"
+}
 
 source:
 {
@@ -43,17 +52,17 @@ physics:
 {
 
  analyzers: {
-  dump: {
-    module_type: "TimeDumper"
+  gps: {
+    module_type: "GPSOffsetAna"
     DAQHeaderProducer: "daq"
     DAQHeaderTimeUBooNEProducer: "daq"
-    NumDump: 1000
-    NumProcess: 1000000
+    NumDump: 100
     UpdateMetadata: true
+    MakeTree: true
   }
  }
 
- ana:  [ dump ]
+ ana:  [ gps ]
 
  #end_paths is a keyword and contains the paths that do not modify the art::Event, 
  #ie analyzers and output streams.  these all run simultaneously
