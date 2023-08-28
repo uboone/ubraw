@@ -129,7 +129,6 @@ GPSOffsetAna::GPSOffsetAna(fhicl::ParameterSet const & p)
 
 void GPSOffsetAna::analyze(art::Event const & e)
 {
-  ++fNumEvents;
   fRun = e.run();
   fSubRun = e.subRun();
   fEvent = e.event();
@@ -171,11 +170,6 @@ void GPSOffsetAna::analyze(art::Event const & e)
     fGPSOffset = gps_ts_fltsec - ntp_ts_fltsec;
   }
 
-  // Update statistics.
-
-  fTotalDiff += fGPSOffset;
-  fTotalDiff2 += fGPSOffset * fGPSOffset;
-
   // Maybe do dump.
 
   if(fNumEvents <= fNumDump || fNumDump == 0) {
@@ -188,10 +182,23 @@ void GPSOffsetAna::analyze(art::Event const & e)
       << "GPS-host time difference: " << std::fixed << std::setprecision(6) << fGPSOffset;
   }
 
-  // Maybe fill tree.
+  // Skip statistics and tree filling of gps time is zero.
 
-  if(fMakeTree)
-    fTree->Fill();
+  if(gps_ts_fltsec == 0.)
+    mf::LogInfo("GPSOffsetAna") << "Skipping time analysis because gps time is zero.";
+  else {
+
+    // Update statistics.
+
+    ++fNumEvents;
+    fTotalDiff += fGPSOffset;
+    fTotalDiff2 += fGPSOffset * fGPSOffset;
+
+    // Maybe fill tree.
+
+    if(fMakeTree)
+      fTree->Fill();
+  }
 }
 
 void GPSOffsetAna::respondToOpenInputFile(art::FileBlock const& fb)
