@@ -106,6 +106,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art_Persistency_Common canvas
                         art_Persistency_Provenance canvas
                         art_Utilities canvas
+                        ifdh
                         ${MF_MESSAGELOGGER}
                         
                         ${FHICLCPP}
