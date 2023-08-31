@@ -22,12 +22,14 @@ cet_set_compiler_flags(DIAGS CAUTIOUS
 
 cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
 
+cet_cmake_module_directories(Modules)
+
 find_package( ifdh_art REQUIRED EXPORT )
 find_package( larevt REQUIRED EXPORT )
 find_package( ubcore REQUIRED EXPORT )
 find_package( uboonedaq_datatypes REQUIRED EXPORT )
 find_package( libwda REQUIRED EXPORT )
-cet_find_library( UB_DATA_TYPES NAMES ubdata_types PATHS ENV UBOONEDAQ_DATATYPES_LIB NO_DEFAULT_PATH )
+find_package( uboonedaq REQUIRED EXPORT )
 
 # macros for dictionary and simple_plugin
 include(ArtMake)
@@ -35,6 +37,9 @@ include(BuildPlugins)
 
 # ADD SOURCE CODE SUBDIRECTORIES HERE
 add_subdirectory(ubraw)
+
+# Cmake modules.
+add_subdirectory(Modules)
 
 # Unit tests.
 add_subdirectory(test)
