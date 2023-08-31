@@ -24,14 +24,27 @@ namespace bnb
   class bnbAutoTune{
     public:
       bnbAutoTune();
-      
+
       uint32_t getSeconds() const noexcept { return fSeconds; }
-      uint16_t getMilliSeconds() const noexcept { return fMilliSeconds; } 
+      uint16_t getMilliSeconds() const noexcept { return fMilliSeconds; }
       uint16_t getMBFile() const noexcept { return fMBFile; }
-      bnbOffsets const& getData() const noexcept { return fData; } 
+      bnbOffsets const& getData() const noexcept { return fData; }
       bnbTG const& getHTG() const noexcept { return fHTG; }
       bnbTG const& getVTG() const noexcept { return fVTG; }
+
+      inline uint64_t convertUTC(uint32_t seconds, uint16_t milliseconds) const {
+        uint64_t utctimestamp = seconds;
+        utctimestamp = utctimestamp*1000 + milliseconds + 1325397600000;
+        return utctimestamp;
+      }
       uint64_t getUTCTimeStamp() const noexcept { return fUTCTimeStamp; }
+
+      inline uint64_t convertTimeStamp(uint32_t seconds, uint16_t milliseconds) const{
+        uint64_t timestamp = seconds;
+        timestamp = timestamp*1000 + milliseconds;
+        return timestamp;
+      }
+      uint64_t getLocalTimeStamp() const noexcept { return fLocalTimeStamp; }
 
       void setSeconds(uint32_t const& val) noexcept { fSeconds = val; }
       void setMilliSeconds(uint16_t const& val) noexcept { fMilliSeconds = val; }
@@ -39,34 +52,35 @@ namespace bnb
       void setData(bnbOffsets const& val) noexcept { fData = val; }
       void setHTG(bnbTG const& val) noexcept { fHTG = val; }
       void setVTG(bnbTG const& val) noexcept { fVTG = val; }
-      void setEntry(uint32_t seconds, uint16_t milliseconds, 
+      void setEntry(uint32_t seconds, uint16_t milliseconds,
                     uint16_t mbfile, bnbOffsets data, bnbTG htg, bnbTG vtg) noexcept;
-    
+
 
       bool operator < (gov::fnal::uboone::datatypes::ub_BeamHeader const& h) const noexcept;
       bool operator <= (gov::fnal::uboone::datatypes::ub_BeamHeader const& h ) const noexcept;
       bool operator > (gov::fnal::uboone::datatypes::ub_BeamHeader const& h) const noexcept;
       bool operator >= (gov::fnal::uboone::datatypes::ub_BeamHeader const& h ) const noexcept;
-    
+
       bool operator < (raw::BeamInfo const& h) const noexcept;
       bool operator <= (raw::BeamInfo const& h ) const noexcept;
       bool operator > (raw::BeamInfo const& h) const noexcept;
       bool operator >= (raw::BeamInfo const& h ) const noexcept;
-    
+
       bool operator < (uint64_t const& utc) const noexcept;
       bool operator <= (uint64_t const& utc ) const noexcept;
       bool operator > (uint64_t const& utc ) const noexcept;
       bool operator >= (uint64_t const& utc ) const noexcept;
-    
+
     private:
       uint32_t fSeconds;
       uint16_t fMilliSeconds;
       uint64_t fUTCTimeStamp;
+      uint64_t fLocalTimeStamp;
       uint16_t fMBFile;
       bnbOffsets fData;
       bnbTG fHTG;
       bnbTG fVTG;
   };
-}     
+}
 
 #endif

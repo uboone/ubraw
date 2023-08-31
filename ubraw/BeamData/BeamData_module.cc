@@ -61,8 +61,10 @@ namespace {
   // Local function to return the name of the raw ancestor of a file
   // with the specified run and subrun.
 
-  std::string get_raw_ancestor(const std::string& filename, uint32_t run, uint32_t subrun)
+  std::string get_raw_ancestor(const std::string& filename, uint32_t run, uint32_t subrun,
+                               const std::string& child, std::string& swizzler_version)
   {
+    swizzler_version = std::string();
     art::ServiceHandle<ifdh_ns::IFDH> ifdh;
     std::ostringstream dim;
     dim << "isparentof: ( file_name " << filename << ")"
@@ -107,17 +109,42 @@ namespace {
     }
 
 
-    if(parents.size() == 0)
+    if(parents.size() == 0) {
 
-      // If there are no parents, return the original file.
+      // If there are no parents, assume this is the raw ancestor.
+      // Child file, if known, is the first generation swizzled file.
+
+      if(child.size() > 0) {
+        mf::LogInfo log(__FUNCTION__);
+        log << "Found raw ancestor file = " << filename << "\n"
+            << "Swizzled file = " << child << "\n";
+        art::ServiceHandle<ifdh_ns::IFDH> ifdh;
+        std::string md = ifdh->getMetadata(child);
+        log << "Swizzled file metadata:\n";
+        log << md;
+
+        // Get application version of child file.
+        
+        size_t n1 = md.find("Application:");
+        if(n1 < std::string::npos) {
+          n1 += 12;
+          size_t n2 = md.find("\n", n1);
+          std::string app = md.substr(n1, n2-n1);
+          size_t n3 = app.rfind(" ");
+          std::string app_version = app.substr(n3+1);
+          log << "\nApplication version = " << "\"" << app_version << "\"";
+          swizzler_version = app_version;
+        }
+      }
 
       return filename;
+    }
 
     else if(parents.size() == 1)
 
       // If there is a single parent, return its raw ancestor.
 
-      return get_raw_ancestor(parents.front(), run, subrun);
+      return get_raw_ancestor(parents.front(), run, subrun, filename, swizzler_version);
 
     else
 
@@ -192,6 +219,7 @@ private:
   uint32_t fMilliSeconds;
   float fFOM;
   std::string fInputFileName;
+  float fGPSOffset;
 
   std::map<std::string,bool> fCreateBranches;
   bool fFetchBeamData;
@@ -280,7 +308,9 @@ void BeamData::beginSubRun(art::SubRun & sr)
     // Get sam metadata for input file.
     art::ServiceHandle<ifdh_ns::IFDH> ifdh;
     boost::filesystem::path inputPath(fInputFileName);
-    std::string raw_ancestor = get_raw_ancestor(inputPath.filename().string(), fRun, fSubRun);
+    std::string swizzler_version;
+    std::string raw_ancestor = get_raw_ancestor(inputPath.filename().string(), fRun, fSubRun,
+                                                std::string(), swizzler_version);
     //std::cout << "raw ancestor = " << raw_ancestor << std::endl;
     std::string md = ifdh->getMetadata(raw_ancestor);
     mf::LogInfo(__FUNCTION__)<< "BeamData: metadata" << std::endl<< md;
@@ -359,6 +389,29 @@ void BeamData::beginSubRun(art::SubRun & sr)
     //sure first and last event are not discarded in if (tevent<fSubrunT0 || tevent>fSubrunT1) statement
     fSubrunT0=fSubrunT0- boost::posix_time::microseconds(20000);
     fSubrunT1=fSubrunT1+ boost::posix_time::microseconds(20000);
+
+    // Maybe extract gps offset from raw ancestor metadata.
+
+    fGPSOffset = 0.;
+    mf::LogInfo log(__FUNCTION__);
+    log << "Checking for GPS offset" << "\n";
+    log << "Swizzler version = " << swizzler_version << "\n";
+    if(swizzler_version == "v04_26_04_07" || swizzler_version == "v04_26_04_06") {
+      n1 = md.find("gps.offset:");
+      if(n1 < std::string::npos) {
+        n1 += 11;
+        n2 = md.find("\n", n1);
+        std::string gps_offset_s = md.substr(n1, n2-n1);
+        log << "Found GPS offset = " << gps_offset_s;
+        fGPSOffset = std::stof(gps_offset_s);
+      }
+      else {
+        log << "No GPS offset in metadata.";
+      }
+    }
+    else {
+      log << "Skipping GPS offset check because swizzler version is not v04_26_04_06 or v04_26_04_07";
+    }
   }
   
   mf::LogInfo(__FUNCTION__)<<"Open beam files for run "<<sr.run()
@@ -775,7 +828,7 @@ int BeamData::compareTime(ub_BeamHeader& bh, art::Event& e, float dt, float offs
   uint32_t detsec = uint32_t(dettime64>>32);
   uint32_t detmsec =uint32_t((dettime64 & 0xFFFFFFFF)/1000000);
     
-  time_t dettime  = time_t(detsec)*1000.+time_t(detmsec);
+  time_t dettime  = time_t(detsec)*1000.+time_t(detmsec)-time_t(1000.*fGPSOffset);
   time_t beamtime = time_t(bh.getSeconds())*1000 + time_t(bh.getMilliSeconds())+time_t(offsetT);
 
   mf::LogInfo(__FUNCTION__)<<"Detector vs beam time "<<detsec<<"\t"<<detmsec<<"\t"<<bh.getSeconds()<<"\t"<<bh.getMilliSeconds()<<"\t"<<dettime-beamtime;

@@ -10,7 +10,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 {
   double fom=0;
   if (beam=="bnb") {
-    
+
     double hp875_offset= -3.40271;
     double vp875_offset= +1.47511;
     double hptg1_offset= +0.457014;
@@ -46,7 +46,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     double p875y[]={0.279128, 0.337048, 0};
     double p876x[]={0.166172, 0.30999, -0.00630299};
     double p876y[]={0.13425, 0.580862, 0};
-    
+
     std::vector<double> tor860;
     std::vector<double> tor875;
     std::vector<double> hp875;
@@ -60,8 +60,8 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     std::vector<double> mwtgt;
 
     for(auto& bdata : bd) {	// get toroid, BPM, and multiwire data
-     
-      if(bdata.getDeviceName().find("E:TOR860") != std::string::npos) {	// get E:TOR860 reading	
+
+      if(bdata.getDeviceName().find("E:TOR860") != std::string::npos) {	// get E:TOR860 reading
 	tor860 = bdata.getData();
 	continue;
       } else if(bdata.getDeviceName().find("E:TOR875") != std::string::npos) {	// get E:TOR875 reading
@@ -87,32 +87,32 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 	continue;
       } else if(bdata.getDeviceName().find("E:M875BB") != std::string::npos) {	// get horizontal and vertical target multiwire reading
 	mw875.resize(96);
-	for (int ii=0;ii<96;ii++) 
+	for (int ii=0;ii<96;ii++)
 	  mw875[ii]=bdata.getData()[ii];
 	continue;
       } else if(bdata.getDeviceName().find("E:M876BB") != std::string::npos) {	// get horizontal and vertical target multiwire reading
 	mw876.resize(96);
-	for (int ii=0;ii<96;ii++) 
+	for (int ii=0;ii<96;ii++)
 	  mw876[ii]=bdata.getData()[ii];
 	continue;
       } else if(bdata.getDeviceName().find("E:MMBTBB") != std::string::npos) {	// get horizontal and vertical target multiwire reading
 	mwtgt.resize(96);
-	for (int ii=0;ii<96;ii++) 
+	for (int ii=0;ii<96;ii++)
 	  mwtgt[ii]=bdata.getData()[ii];
-	continue;    
+	continue;
       }
     }
 
     double tor;
-    if (tor860.size()>0) 
+    if (tor860.size()>0)
       tor=tor860[0];
-    else if (tor875.size()>0) 
+    else if (tor875.size()>0)
       tor=tor875[0];
     else
       return -1;
 
     //when creating ntuples for pot counting script the variables are filled with -999
-    //this could create a difference when passing events with FOM>1 since 
+    //this could create a difference when passing events with FOM>1 since
     //events with missing BPM data would get FOM=2, while events with BPM set to -999 will get FOM=0
     //bad or missing MWR data gets FOM 4 in either case
     if (hptg2.size()==0) hptg2.push_back(-999);
@@ -123,7 +123,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     if (vp875.size()==0) vp875.push_back(-999);
 
     double horang,horpos;
-    
+
     if(useHTG == bnb::kTG1){
       if (hptg1.size()>0 && hp875.size()>0) {
         horang=((hptg1[0]-hptg1_offset)-(hp875[0]-hp875_offset))/(hptg1_zpos-hp875_zpos);
@@ -134,7 +134,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
       } else {
         //missing horizontal BPM data
         return 2;
-      } 
+      }
     }
     else if(useHTG == bnb::kTG2){
       if (hptg2.size()>0 && hp875.size()>0) {
@@ -146,12 +146,12 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
       } else {
         //missing horizontal BPM data
         return 2;
-      } 
+      }
     }
     else { return 2; }
 
     double verang,verpos;
-    
+
     if(useVTG == bnb::kTG1){
       if (vptg1.size()>0 && vp875.size()>0) {
         verang=((vptg1[0]-vptg1_offset)-(vp875[0]-vp875_offset))/(vptg1_zpos-vp875_zpos);
@@ -177,7 +177,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
       }
     }
     else { return 3; }
-    
+
     horang=atan(horang);
     verang=atan(verang);
 
@@ -196,7 +196,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 	tgtsx=sx;
 	tgtsy=sy;
 	good_tgt=true;
-      } 
+      }
     }
     if (!good_tgt && mw876.size()>0) {
       bmd::processBNBprofile(&mw876[0], xx,sx,chi2x);
@@ -207,7 +207,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 	tgtsx=tgtsx876;
 	tgtsy=tgtsy876;
 	good_876=true;
-      } 
+      }
     }
     if (!good_tgt && !good_876 && mw875.size()>0){
       bmd::processBNBprofile(&mw875[0], xx,sx,chi2x);
@@ -218,15 +218,15 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 	tgtsx=tgtsx875;
 	tgtsy=tgtsy875;
 	good_875=true;
-      } 
-    }  
+      }
+    }
     if (!good_tgt && !good_876 && !good_875) {
       //failed getting  multiwire data
       return 4;
-    }  
+    }
 
     fom=1-pow(10,bmd::calcFOM2(horpos,horang,verpos,verang,tor,tgtsx,tgtsy));
-    
+
   } else if (beam=="numi") {
     //cuts copied from https://cdcvs.fnal.gov/redmine/projects/novaart/repository/entry/trunk/IFDBSpillInfo/IFDBSpillInfo.fcl
     double fMinPosXCut   = -2.00; //   #mm
@@ -249,7 +249,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     std::vector<double> mwtgt;
 
     for(auto& bdata : bd) {	// get toroid, BPM, and multiwire data
-      if(bdata.getDeviceName().find("E:TR101D") != std::string::npos) {	
+      if(bdata.getDeviceName().find("E:TR101D") != std::string::npos) {
 	tor101 = bdata.getData();
 	continue;
       } else if(bdata.getDeviceName().find("E:TRTGTD") != std::string::npos) {
@@ -275,9 +275,9 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 	continue;
       } else if(bdata.getDeviceName().find("E:MTGTDS") != std::string::npos) {
 	mwtgt.resize(bdata.getData().size());
-	for (unsigned int ii=0;ii<mwtgt.size();ii++) 
+	for (unsigned int ii=0;ii<mwtgt.size();ii++)
 	  mwtgt[ii]=bdata.getData()[ii];
-	continue;    
+	continue;
       }
     }
 
@@ -291,12 +291,12 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
       //missing multiwire
       return 3;
     }
-    
+
     double temppot=0;
     if (tortgt.size()>0) temppot=tortgt[0];
     else if (tor101.size()>0) temppot=tor101[0];
-    
-    if (temppot<=0) 
+
+    if (temppot<=0)
       return 0; //no pot info or no beam, so no need to check beam position
 
     std::vector<std::vector<double>> BPMS;
@@ -306,7 +306,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     BPMS.push_back(hptgt);
     BPMS.push_back(vitgt);
     BPMS.push_back(hitgt);
- 
+
     std::vector<double> xp, yp, xi, yi;
     std::vector<double> xpmm, ypmm;
     double totxi=0;
@@ -315,7 +315,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
     double convy=1;
 
     // Use Beam Position Monitors to estimate x and y position of
-    // beam (xp,yp) and intensities (xi,yi) at target.	
+    // beam (xp,yp) and intensities (xi,yi) at target.
     // Do this for all six readings of positions monitors
     NuMIBpmProjection(xp,yp,xi,yi,BPMS);
     for(int i=0;i<6;i++){
@@ -340,7 +340,7 @@ float bmd::getFOM2(std::string beam, const ub_BeamHeader& bh, const std::vector<
 
     if ((xpmean > fMinPosXCut) &&
 	(xpmean < fMaxPosXCut) &&     // x position
-	(ypmean > fMinPosYCut) &&	
+	(ypmean > fMinPosYCut) &&
 	(ypmean < fMaxPosYCut) &&    // y position
 	(xstdev > fMinWidthXCut) &&
 	(xstdev < fMaxWidthXCut) && // x width
@@ -357,17 +357,17 @@ bmd::autoTunes bmd::cacheAutoTuneHistory()
 {
   bmd::autoTunes history;
   bnb::bnbAutoTune item;
- 
-  // run1-3 parameters 
+
+  // run1-3 parameters
   item.setEntry(202435254, 132, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
   history.push_back(item);
-  
+
   // run4a (misaligned beam)
   item.setEntry(203988466, 174, 315, bnb::bnbOffsets{-3.4, 1.48, 0.46, -1., -1., 1.84}, bnb::kTG1, bnb::kTG2);
   history.push_back(item);
   item.setEntry(204211306, 174, 316, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 1.84}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
-  
+
   // run4b-4d parameters (same as run1-3)
   item.setEntry(215107286, 410, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
   history.push_back(item);
@@ -375,17 +375,17 @@ bmd::autoTunes bmd::cacheAutoTuneHistory()
   // history.push_back(item);
   // item.setEntry(232368986, 268, 313, bnb::bnbOffsets{-3.4, 1.48, 0.46, 0.39, -1., -1.}, bnb::kTG1, bnb::kTG1);
   // history.push_back(item);
-  
+
   // before run 5
   item.setEntry(247063273, 276, 316, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 1.84}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
-  
+
   // run5a parameters used on Nov 4th
   item.setEntry(247501553, 130, 317, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, -3.15}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
-  
+
   // parameters being tested in the autotune from Nov5th - Nov 10th (not used because not parameters not reflected in BPM readings)
-  
+
   // item.setEntry(247573532, 305, 318, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, -0.03}, bnb::kTG2, bnb::kTG2);
   // history.push_back(item);
   // item.setEntry(247576952, 304, 319, bnb::bnbOffsets{-3.4, 1.48, -1., -0.03, 1.07, -1.}, bnb::kTG2, bnb::kTG1);
@@ -398,7 +398,7 @@ bmd::autoTunes bmd::cacheAutoTuneHistory()
   // history.push_back(item);
   // item.setEntry(248458772, 304, 322, bnb::bnbOffsets{-3.4, 1.48, -1., -1., 1.07, 0.}, bnb::kTG2, bnb::kTG2);
   // history.push_back(item);
-  
+
   // later run5 data (after target scan)
   item.setEntry(248792844, 573, 323, bnb::bnbOffsets{-1.20, 1.30, -1., -1., -0.4, 0.1}, bnb::kTG2, bnb::kTG2);
   history.push_back(item);
@@ -408,7 +408,7 @@ bmd::autoTunes bmd::cacheAutoTuneHistory()
 
 bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const ub_BeamHeader& bh)
 {
-  if(*(history.end()-1) <= bh) return *(history.end()-1); 
+  if(*(history.end()-1) <= bh) return *(history.end()-1);
   if(*(history.begin()) >= bh) return *(history.begin());
   for(auto it = history.begin(); it != history.end()-1; ++it){
     auto curr = *it;
@@ -421,7 +421,7 @@ bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const ub_BeamHe
 
 bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const raw::BeamInfo& bi)
 {
-  if(*(history.end()-1) <= bi) return *(history.end()-1); 
+  if(*(history.end()-1) <= bi) return *(history.end()-1);
   if(*(history.begin()) >= bi) return *(history.begin());
   for(auto it = history.begin(); it != history.end()-1; ++it){
     auto curr = *it;
@@ -434,7 +434,7 @@ bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const raw::Beam
 
 bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const uint64_t utctstamp)
 {
-  if(*(history.end()-1) <= utctstamp) return *(history.end()-1); 
+  if(*(history.end()-1) <= utctstamp) return *(history.end()-1);
   if(*(history.begin()) >= utctstamp) return *(history.begin());
   for(auto it = history.begin(); it != history.end()-1; ++it){
     auto curr = *it;
@@ -445,18 +445,18 @@ bnb::bnbAutoTune bmd::getSettings(const bmd::autoTunes& history, const uint64_t 
   return ret;
 }
 
-void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double& chi2) 
+void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double& chi2)
 {
-   /* 
-      function takes multiwire data as input (48 channels horizontal or vertical, 
-      finds the min and max 
+   /*
+      function takes multiwire data as input (48 channels horizontal or vertical,
+      finds the min and max
       finds the first and last bin where amplitude is greater than 20%
       fits the peak between first and last bin with gaussian (assuming 2% relative errors)
       returns:
       x  - mean position from the fit
       sx - sigma x from the fit
       chi2 - chi2/NDF for the gaussian fit
-   */ 
+   */
 
   double minx=0;
   double maxx=0;
@@ -489,7 +489,7 @@ void bmd::processBNBprofile(const double* mwdata, double &x, double& sx, double&
 
 double bmd::calcFOM2(double horpos, double horang, double verpos, double verang, double ppp, double tgtsx, double tgtsy)
 {
-  //code from MiniBooNE AnalysisFramework with the addition of scaling the beam profile to match tgtsx, tgtsy 
+  //code from MiniBooNE AnalysisFramework with the addition of scaling the beam profile to match tgtsx, tgtsy
   //form DQ_BeamLine_twiss_init.F
   double bx  =  4.68;
   double ax  =  0.0389;
@@ -506,7 +506,7 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
   double ex = 0.1775E-06 + 0.1827E-07*ppp;
   double ey = 0.1382E-06 + 0.2608E-08*ppp;
   double dp = 0.4485E-03 + 0.6100E-04*ppp;
-    
+
   double tex = ex;
   double tey = ey;
   double tdp = dp;
@@ -540,7 +540,7 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
   sigma1[3][2] =  sigma1[2][3];
   sigma1[5][2] =  sigma1[2][5];
   sigma1[5][3] =  sigma1[3][5];
-  
+
   double begtocnt[6][6]={
     { 0.65954,  0.43311,  0.00321,  0.10786, 0.00000,  1.97230},
     { 0.13047,  1.60192,  0.00034,  0.00512, 0.00000,  1.96723},
@@ -566,7 +566,7 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
 	cnttodns[i][j] = 0.0;
 	identity[i][j] = 0.0;
       }
-    }  
+    }
   }
 
   cnttoups[0][1] = -0.35710;
@@ -598,7 +598,7 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
 	       identity, begtocnt,
 	       cx, cy, sx, sy, rho);
   double fom_b=bmd::func_intbivar(cx, cy, sx*scalex, sy*scaley, rho);
-  
+
   //swim to downstream of target
   bmd::swimBNB(centroid1,sigma1,
 	       cnttodns, begtodns,
@@ -610,11 +610,11 @@ double bmd::calcFOM2(double horpos, double horang, double verpos, double verang,
   double fom2=fom_a*0.6347 +
               fom_b*0.2812 +
               fom_c*0.0841;
-  
-  return fom2;
-} 
 
-void bmd::swimBNB(const double centroid1[6], const double sigma1[6][6], 
+  return fom2;
+}
+
+void bmd::swimBNB(const double centroid1[6], const double sigma1[6][6],
 		  const double xferc[6][6], const double xfers[6][6],
 		  double &cx, double& cy, double &sx, double &sy, double &rho)
 {
@@ -625,13 +625,13 @@ void bmd::swimBNB(const double centroid1[6], const double sigma1[6][6],
       centroid2[i] = centroid2[i] + xferc[i][j]*centroid1[j];
     }
   }
-  
+
   cx = centroid2[0];
   cy = centroid2[2];
-  
+
   //sigma
   double sigma2[6][6]={{0}};
-  
+
   for (int i = 0; i<6;i++) {
     for (int j = 0;j<6;j++) {
       for (int k = 0;k<6;k++) {
@@ -639,24 +639,24 @@ void bmd::swimBNB(const double centroid1[6], const double sigma1[6][6],
 	  sigma2[i][m] = sigma2[i][m] +
 	    xfers[i][j]*sigma1[j][k]*xfers[m][k];
 	}
-      }    
+      }
     }
   }
   //get beam sigma
-  
+
   sx  = sqrt(sigma2[0][0])*1000.0;
   sy  = sqrt(sigma2[2][2])*1000.0;
   rho = sigma2[0][2]/sqrt(sigma2[0][0]*sigma2[2][2]);
 
   //  cout<<"Swim "<<sx<<"\t"<<sy<<"\t"<<rho<<endl;
 }
- 
+
 double bmd::func_intbivar(const double cx, const double cy, const double sx, const double sy, const double rho )
 {
   //integrate beam overlap with target cylinder
   double x0  =  cx;
   double y0  =  cy;
-  
+
   double dbin = 0.1;
   double dx = dbin;
   double dy = dbin;
@@ -681,7 +681,7 @@ double bmd::func_intbivar(const double cx, const double cy, const double sx, con
 	double z = tx*tx - 2.0*rho*tx*ty + ty*ty;
 	double t = exp(-z/(2.0*(1.0-rho2)));
 	sum = sum + t;
-      } 
+      }
       //      cout << i<<"\t"<<j<<"\t"<<x<<"\t"<<y<<"\t"<<sum<<endl;
       y = y + dy;
     }
@@ -689,7 +689,7 @@ double bmd::func_intbivar(const double cx, const double cy, const double sx, con
   }
   sum = sum*dx*dy/(2.0*3.14159*sx*sy*sqrt(1.0-rho2));
   // add a guard for double precision
-  if(sum >= 1.) return -10000.; 
+  if(sum >= 1.) return -10000.;
   return log10(1-sum);
 }
 
@@ -699,7 +699,7 @@ double bmd::NuMIExtrapolatePosition(double t1, double z1, double t2, double z2, 
   return t1+(t2-t1)*(z3-z1)/(z2-z1);
 }
 
-void bmd::NuMIBpmProjection(std::vector<double> &xp, std::vector<double> &yp, 
+void bmd::NuMIBpmProjection(std::vector<double> &xp, std::vector<double> &yp,
 			    std::vector<double> &xi, std::vector<double> &yi,
 			     std::vector<std::vector<double>> BPMS)
 {
@@ -707,11 +707,11 @@ void bmd::NuMIBpmProjection(std::vector<double> &xp, std::vector<double> &yp,
   yp.clear();
   xi.clear();
   yi.clear();
-  
+
   // In NOvA era (for now) we will assume the following
   // In MINOS era, target location was 3937 after time period 1155564632
   double z_targ = 0;
-  
+
   // Return shortest array length of all BPM positions and intensities used
   int size = BPMS.size();
   int n    = BPMS[0].size();
@@ -719,29 +719,29 @@ void bmd::NuMIBpmProjection(std::vector<double> &xp, std::vector<double> &yp,
     int n2 = BPMS[ind].size();
     if(n2 < n) n = n2;
   }
-  
+
   int start = 0;
-  // Skip first BPMS value (average used in auto-tune) but only if 
+  // Skip first BPMS value (average used in auto-tune) but only if
   // there are multiple batches
-  
-  if(n > 1) ++start; 
+
+  if(n > 1) ++start;
   // Check to see if elements of BPMS[4] and BPMS[5] (BPM intensities) are 0.
   // If they are, set position values to 0.  Otherwise, use corresponding values of
-  // vertical and horizontal position monitors to extrapolate vertical and 
+  // vertical and horizontal position monitors to extrapolate vertical and
   // horizontal position at target.  Simply transfer intensities over.
-  
+
   for(int ind = start; ind < n; ++ind) {
-    
+
     if(BPMS[4][ind] == 0.0 || BPMS[5][ind]== 0.0) {
       yp.push_back(0.0);
       xp.push_back(0.0);
       yi.push_back(0.0);
       xi.push_back(0.0);
-      
+
       continue;
     }
-    
-    // Returns transverse position (x or y) at z_targ assuming a linear 
+
+    // Returns transverse position (x or y) at z_targ assuming a linear
     // extrapolation from z_vp121 to z_vptgt
     double ft_to_m=0.3048;
     double z_hp121     = -68.04458*ft_to_m;//-72.2309*Munits::foot,  // HP121
@@ -752,91 +752,91 @@ void bmd::NuMIBpmProjection(std::vector<double> &xp, std::vector<double> &yp,
       (NuMIExtrapolatePosition(BPMS[0][ind],z_vp121,BPMS[2][ind],z_vptgt,z_targ));
     xp.push_back
       (NuMIExtrapolatePosition(BPMS[1][ind],z_hp121,BPMS[3][ind],z_hptgt,z_targ));
-    
-    // Returns the horizontal or vertical intensity of beam        
+
+    // Returns the horizontal or vertical intensity of beam
     yi.push_back(BPMS[4][ind]);
     xi.push_back(BPMS[5][ind]);
-    
+
   }
   return;
 } // BpmProjection
 
-double bmd::NuMIBpmAtTarget(double &xpmean, double &ypmean, 
+double bmd::NuMIBpmAtTarget(double &xpmean, double &ypmean,
 			    double &xpstdev, double &ypstdev,
 			    std::vector<double>TargBpmX,
 			    std::vector<double>TargBpmY,
-			    std::vector<double>BpmIntX, 
+			    std::vector<double>BpmIntX,
 			    std::vector<double>BpmIntY)
 {
- 
+
   //xpmean = ypmean = xpstdev = ypstdev = 0.0;
   double IXtot = 0.0, IYtot = 0.0;
   double ix = 0.0, iy = 0.0, ix2 = 0.0, iy2 = 0.0;
-  
+
   // For intensity-weighted position values...
   // Remember, TargBpmX, TargBpmY, BpmIntX and BpmIntY have one fewer element than
   // the devices because first device value was an average used for beam tuning
   for(size_t ind = 0; ind < BpmIntX.size(); ++ind) {
-    
+
     // If average intensity is 0, skip to next value
     if(BpmIntX[ind] == 0.0 || BpmIntY[ind] == 0.0) continue;
-    
+
     double X  = TargBpmX[ind]; //xp[ind]
     double Y  = TargBpmY[ind]; //yp[ind]
     double IX = BpmIntX[ind];  //xi[ind]
     double IY = BpmIntY[ind];  //yi[ind]
-    
-    // if I>0, set I=I, else set I=0  
+
+    // if I>0, set I=I, else set I=0
     IX = IX > 0 ? IX : 0;
     IY = IY > 0 ? IY : 0;
-                   
+
     // sum intensities
     IXtot += IX;
     IYtot += IY;
-         
+
     // intensity-weighted position value
     ix += IX*X;
     iy += IY*Y;
-    
+
     ix2 += IX*X*X;
     iy2 += IY*Y*Y;
-        
+
   } // end for-loop over elements of xp, yp, xi and yi
-       
+
   if(IXtot <= 0.0) return 0.0;
   if(IYtot <= 0.0) return 0.0;
-      
+
   // intensity-weighted average positions
   xpmean = ix/IXtot;
   ypmean = iy/IYtot;
-  
+
   // standard deviation
   double xvar = ix2/IXtot-xpmean*xpmean;
   if(xvar > 0.0) xpstdev = sqrt(xvar);
   double yvar = iy2/IYtot-ypmean*ypmean;
   if(yvar > 0.0) ypstdev = sqrt(yvar);
-  
+
   return xpmean;
-  
+
 }
-int bmd::NuMIProfileProjection(double &x, double &y, 
+int bmd::NuMIProfileProjection(double &x, double &y,
 			       double &xstdev, double &ystdev,
 			       std::vector<double> PMTGT)
 {
   double xtgt = 0., ytgt = 0., xstdevtgt = 0., ystdevtgt = 0.;
-  
+
   std::vector<double> hchannelstgt, vchannelstgt;
-  // Need to add line here to return 0 if no data from devices 
+  // Need to add line here to return 0 if no data from devices
   // Get relevant channels from the device
   for(int ind = 0; ind <= 47; ++ind) {
     hchannelstgt.push_back(PMTGT[103+ind]);
     vchannelstgt.push_back(PMTGT[103+48+ind]);
   }
-  
+
   NuMIGetGaussFit(xtgt,xstdevtgt,hchannelstgt);
   NuMIGetGaussFit(ytgt,ystdevtgt,vchannelstgt);
-  
-  // If values at MTGTDS are reasonable, set them to values at target 
+
+  // If values at MTGTDS are reasonable, set them to values at target
   if(std::abs(xtgt) < 11 && std::abs(ytgt) < 11) {
     x = xtgt;
     y = ytgt;
@@ -847,11 +847,11 @@ int bmd::NuMIProfileProjection(double &x, double &y,
   return 1;
 }// ProfileProjection
 
-double bmd::NuMIGetGaussFit(double &mean, double &sigma, 
+double bmd::NuMIGetGaussFit(double &mean, double &sigma,
 			    std::vector<double> profile)
-{              
+{
   double  wirespacing = 0.5;
-  TGraph Prof;        
+  TGraph Prof;
   Prof.Set(0);
   //Prof.Clear("");
   int npoints = 0;
@@ -865,17 +865,17 @@ double bmd::NuMIGetGaussFit(double &mean, double &sigma,
     // NOTE: FOR NOW DON'T DO THIS - INSTEAD FIT TO AN OFFSET
     // Qx = Qx > 0 ? Qx : 0;
     // Set values of points in TGraph, x=X/Munits::mm and y=-1*Qx/Munits::millivolt
-    // Invert voltage to make it positive in Gaussian peak - may lead to 
+    // Invert voltage to make it positive in Gaussian peak - may lead to
     // better fitting
     Prof.SetPoint(npoints,X,-1*Qx);
     ++npoints;
   } // for channels 1 to 48
-  
+
     // Now that all of channel information has been loaded...
     // Remove dead and hot channels from profiles being fitted.
     // I DON'T DO THIS BUT I WILL REMOVE DEAD CHANNELS (IE THOSE WITH ZERO READING)
     // SuppressDeadHot(&xProf);
-  
+
   for(int i = 0; i < Prof.GetN(); ++i) {
     if (Prof.GetY()[i] == 0.0){
       Prof.RemovePoint(i);
@@ -886,25 +886,25 @@ double bmd::NuMIGetGaussFit(double &mean, double &sigma,
   // For some reason this is faster than if I use a TMath::Gaus:
   TF1 gausF("gausF","[3]+([0]*exp((-1*(x-[1])*(x-[1]))/(2*[2]*[2]))/(sqrt(2*3.142)*[2]))");
   //TF1 gausF("gausF","[3]+[0]*TMath::Gaus(x,[1],[2],1)");
-  
+
   gausF.SetParName(0,"Area");
   gausF.SetParName(1,"Mean");
   gausF.SetParName(2,"Sigma");
   gausF.SetParName(3,"Offset");
-  
+
   // NOT SURE WE NEED THIS
   //gausF.SetParLimits(0,0.00,100000000);
   //gausF.SetParLimits(2,0,1000);
-  
+
   // Gaussian fit parameters
   double area = -9.;
   double offset = -9.;
   mean  = -9., sigma = -9.;
-  
+
   // Get statistical mean and standard deviation of profile distribution
   double StatMean = 0.0, stdev = 0.0;
   area = NuMIGetStats(&Prof,StatMean,stdev);
-  // Check we have enough points and enough charge for a reasonable fit 
+  // Check we have enough points and enough charge for a reasonable fit
   if(Prof.GetN() > 5 && std::abs(area) > 1.0 &&
      std::abs(StatMean) < 20*wirespacing &&
      std::abs(stdev) < 12*wirespacing) {
@@ -920,7 +920,7 @@ double bmd::NuMIGetGaussFit(double &mean, double &sigma,
 	nbneg++;
       }
     }
-    
+
     if(nbneg!=0){
       offset=avgneg/nbneg;
     }else{
@@ -934,11 +934,11 @@ double bmd::NuMIGetGaussFit(double &mean, double &sigma,
       if(gausF.GetParameter(0) < 0.1){
 	goodfit = false;
       }
-      
+
       if(std::abs(gausF.GetParameter(1)) > 24*wirespacing){
 	goodfit = false;
       }
-      
+
       if(gausF.GetParameter(2) > 24*wirespacing || gausF.GetParameter(2) < 0.0){
 	goodfit = false;
       }
@@ -947,33 +947,33 @@ double bmd::NuMIGetGaussFit(double &mean, double &sigma,
 	area   = gausF.GetParameter(0)/wirespacing;
 	mean   = gausF.GetParameter(1);
 	sigma  = gausF.GetParameter(2);
-	offset = gausF.GetParameter(3);                                        
+	offset = gausF.GetParameter(3);
       } // if goodfit
     }
   } // if we can make a reasonable fit
     //    else{
     //      //mf::LogInfo("IFDBSpillInfo") << "POINTS DID NOT PASS BASIC CUTS in profile fit to Gaussian" << std::endl;
     //    }
-    
+
   return area;
 } // GetGaussFit
-  
 
-// Calculate mean and standard deviation for points in TGraph to use as 
+
+// Calculate mean and standard deviation for points in TGraph to use as
 // starting parameters values in Fit
 double bmd::NuMIGetStats(TGraph *prof, double &mean, double &stdev)
 {
   double qx = 0, qtot = 0;
-  double X = 0.0;                
-  double Qx = 0.0;                
-  
+  double X = 0.0;
+  double Qx = 0.0;
+
   double minprof = 1E6;
   double maxprof = -1E6;
-  
-  // Find min and max values of profile.  Profile is upside down Gaussian 
-  // with offset.  All profile values have already been inverted to make 
+
+  // Find min and max values of profile.  Profile is upside down Gaussian
+  // with offset.  All profile values have already been inverted to make
   // Gaussian right-side up - offset is now negative.
-  // To get good starting param values, shift all profile values up by the 
+  // To get good starting param values, shift all profile values up by the
   // most negative of all profile values, ie minprof, as found above.
   for(int i = 0; i < prof->GetN(); ++i) {
     Qx = prof->GetY()[i];
@@ -998,7 +998,7 @@ double bmd::NuMIGetStats(TGraph *prof, double &mean, double &stdev)
     mean = 0.0;
     stdev = 0.0;
   }
-  
+
   // Otherwise, mean position is charge-weighted mean
   else{
     mean = qx/qtot;
@@ -1009,7 +1009,7 @@ double bmd::NuMIGetStats(TGraph *prof, double &mean, double &stdev)
       Qx = prof->GetY()[i];
       var +=  Qx*(X-mean)*(X-mean);
     }
-    
+
     var = var/qtot;
     if(var > 0.0){
       stdev = std::sqrt(var);
@@ -1017,5 +1017,5 @@ double bmd::NuMIGetStats(TGraph *prof, double &mean, double &stdev)
       stdev = 0.0;
     }
   }
-  return qtot;        
+  return qtot;
 } // GetStats
