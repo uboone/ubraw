@@ -109,6 +109,7 @@ art_make( EXCLUDE LArRawInputSourceUBooNE_source.cc RawDigitWriter_module.cc Tri
                         art::Persistency_Provenance
                         art::Utilities
                         canvas::canvas
+                        ifdh_art::IFDH_service
                         messagefacility::MF_MessageLogger
                         fhiclcpp::fhiclcpp
                         cetlib::cetlib
