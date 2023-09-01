@@ -1662,10 +1662,12 @@ namespace lris {
               				adc_last_but_one = adc_last;
               				adc_last = rd.back();
             			}
-                        double wfFrameAndy = rd.TimeStamp() / 1.6e3;
-                        double tmp;
-                        double wfSampleAndy = modf(wfFrameAndy,&tmp);
-                        wfSampleAndy *= 64e6 * 1.6e-3;
+                         /* unused
+                         double wfFrameAndy = rd.TimeStamp() / 1.6e3;
+                         double tmp;
+                         double wfSampleAndy = modf(wfFrameAndy,&tmp);
+                         wfSampleAndy *= 64e6 * 1.6e-3;
+                         */
                         //if (rd.size() > 1000){std::cout<< std::setprecision(20) << "rd.ChannelNumber = " << rd.ChannelNumber() << ", TimeStamp =  " << rd.TimeStamp() << " wfSampleAndy = " << wfSampleAndy << std::endl;}
 
             			// fill OpDetWaveform time
@@ -1875,11 +1877,13 @@ namespace lris {
       		if (not kazuTestSwizzleTrigger){return;}
       		trigInfo.emplace_back( swiz_trig );
 
+            /* unused
             double triggerFrameAndy = swiz_trig.TriggerTime() / 1.6e3;
             //std::cout << std::setprecision(20) << "triggerFrame as I calculate = " << triggerFrameAndy << std::endl;
             double tmp;
             double triggerSampleAndy = modf(triggerFrameAndy,&tmp);
             triggerSampleAndy *= 64e6 * 1.6e-3;
+            */
 
             //std::cout << "triggerTime in raw::Trigger = " << std::setprecision(20) << swiz_trig.TriggerTime() << std::endl;
             //std::cout << "trigger_time filled with = " <<std::setprecision(20) << trigger_time << std::endl;
