@@ -62,6 +62,17 @@ cet_build_plugin(
   lardataobj::RawData
 )
 
+cet_build_plugin(
+  GPSOffsetAna art::EDAnalyzer
+  LIBRARIES
+  PRIVATE
+  ubobj::RawData
+  lardataobj::RawData
+  ifdh_art::IFDH_service
+  art_root_io::TFileService_service
+  ROOT::Tree
+)
+
 install_headers()
 install_fhicl()
 install_source()
