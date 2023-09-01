@@ -27,8 +27,7 @@ cet_cmake_env()
 cet_set_compiler_flags(DIAGS CAUTIOUS
   WERROR
   NO_UNDEFINED
-  EXTRA_FLAGS -pedantic -Wno-unused-local-typedefs -Wno-nonnull
-              $<$<CXX_COMPILER_ID:GNU>:-Wno-maybe-uninitialized>
+  EXTRA_FLAGS -pedantic -Wno-unused-local-typedefs
 )
 
 cet_report_compiler_flags()

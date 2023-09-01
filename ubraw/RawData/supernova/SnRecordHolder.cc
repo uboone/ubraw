@@ -124,7 +124,7 @@ namespace snassembler {
     // Quick scan.
     if(!fEvaluated)  evaluateSupernovaTpcData(); // Quick scan
     
-    std::unique_ptr< std::vector<recob::Wire> > wires;
+    std::unique_ptr< std::vector<recob::Wire> > wires(std::make_unique<std::vector<recob::Wire>>());
     wires->clear();
   
     util::UBChannelMap_t  fChannelMap = art::ServiceHandle<util::DatabaseUtil>()->GetUBChannelMap(fEvent->LocalHostTime().seb_time_sec); // Fixme: database rollback
