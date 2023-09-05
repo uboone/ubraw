@@ -57,11 +57,11 @@ int main(int argc, char** argv)
 
   string devname="";
 
-  uint32_t seconds; // GPS clock. Since Jan 1, 2012.
-  uint16_t milli_seconds;
+  uint32_t seconds = 0; // GPS clock. Since Jan 1, 2012.
+  uint16_t milli_seconds = 0;
 
-  uint32_t first_sec; // GPS clock. Since Jan 1, 2012.
-  uint16_t first_msec;
+  uint32_t first_sec = 0; // GPS clock. Since Jan 1, 2012.
+  uint16_t first_msec = 0;
 
   /*
   uint32_t last_sec; // GPS clock. Since Jan 1, 2012.
@@ -146,7 +146,7 @@ int main(int argc, char** argv)
       n++;
       endtime=*itr;
     }
-  }
+   }
 
   cout <<"First event timestamp (sec msec) "<<first_sec<<" "<<first_msec<<endl;
   cout <<"Last event timestamp (sec msec)  "<<seconds<<" "<<milli_seconds<<endl;
