@@ -5,7 +5,7 @@ cet_make_library(
   getFOM2.cxx
   LIBRARIES
   PUBLIC
-  uboonedaq::data_types
+  uboonedaq_datatypes::datatypes
   lardataobj::RawData
   ROOT::Spectrum
   ROOT::Hist

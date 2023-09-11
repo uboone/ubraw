@@ -9,9 +9,10 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 find_package(cetmodules REQUIRED)
-project(ubraw VERSION 09.78.01 LANGUAGES CXX)
+project(ubraw LANGUAGES CXX)
 
 include(CetCMakeEnv)
+set(${PROJECT_NAME}_CMAKE_PROJECT_VERSION_STRING 09.78.03-cm1)
 cet_cmake_env()
 
 cet_set_compiler_flags(DIAGS CAUTIOUS
@@ -22,14 +23,12 @@ cet_set_compiler_flags(DIAGS CAUTIOUS
 
 cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
 
-cet_cmake_module_directories(Modules)
-
 find_package( ifdh_art REQUIRED EXPORT )
 find_package( larevt REQUIRED EXPORT )
 find_package( ubcore REQUIRED EXPORT )
 find_package( uboonedaq_datatypes REQUIRED EXPORT )
 find_package( libwda REQUIRED EXPORT )
-find_package( uboonedaq REQUIRED EXPORT )
+find_package( uboonedaq_datatypes REQUIRED EXPORT )
 
 # macros for dictionary and simple_plugin
 include(ArtMake)
@@ -37,9 +36,6 @@ include(BuildPlugins)
 
 # ADD SOURCE CODE SUBDIRECTORIES HERE
 add_subdirectory(ubraw)
-
-# Cmake modules.
-add_subdirectory(Modules)
 
 # Unit tests.
 add_subdirectory(test)

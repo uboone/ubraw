@@ -6,7 +6,7 @@ cet_make_library(
   ubcore::Geometry_UBOpReadoutMap_service
   ubobj::RawData
   ubobj::Trigger
-  uboonedaq::data_types
+  uboonedaq_datatypes::datatypes
   lardata::Utilities
   art::Framework_Services_Registry
   art::Framework_IO_Sources

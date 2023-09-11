@@ -8,7 +8,7 @@ cet_make_library(
   httpResponse.cpp
   LIBRARIES
   PUBLIC
-  uboonedaq::data_types
+  uboonedaq_datatypes::datatypes
   fhiclcpp::fhiclcpp
   messagefacility::MF_MessageLogger
   Boost::serialization

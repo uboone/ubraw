@@ -6,7 +6,7 @@ cet_make_library(
   LIBRARIES
   PUBLIC
   ubcore::Geometry_UBOpReadoutMap_service
-  uboonedaq::data_types
+  uboonedaq_datatypes::datatypes
   lardata::DetectorClocksService
   lardata::ArtDataHelper
   lardata::Utilities_DatabaseUtil_service
