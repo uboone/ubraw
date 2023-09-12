@@ -15,6 +15,7 @@ cet_make_library(
   art::Framework_IO_Sources
   fhiclcpp::fhiclcpp
   Boost::serialization
+  PostgreSQL::PostgreSQL
 )
 
 cet_build_plugin(

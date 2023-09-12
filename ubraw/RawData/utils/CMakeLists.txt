@@ -16,6 +16,7 @@ cet_make_library(
   ROOT::Tree
   Boost::serialization
   SQLite::SQLite3
+  PostgreSQL::PostgreSQL
 )
 
 cet_build_plugin(
@@ -53,6 +54,7 @@ cet_build_plugin(
   larcoreobj::SimpleTypesAndConstants
   art_root_io::TFileService_service
   ROOT::Tree
+  PostgreSQL::PostgreSQL
 )
 
 cet_build_plugin(
