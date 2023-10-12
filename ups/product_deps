@@ -41,7 +41,6 @@
 #
 #>  chains <chain>...
 
-<<<<<<< HEAD
 ##################
 # defaultqual
 ##################
@@ -250,17 +249,10 @@ fwdir	product_dir	scripts
 ####################################
 product			version		qual	flags		<table_format=2>
 ifdh_art		v2_15_06	-
-larevt			v09_09_04	-
+larevt			v09_09_05	-
 ubcore			v09_78_05	-
 uboonedaq_datatypes	v6_22_06	-
 cetmodules		v3_21_01	-	only_for_build
-=======
-product                 version
-ubcore                  v08_00_00_74
-larevt                  v08_01_00_16
-uboonedaq_datatypes     v6_22_05a
-cetbuildtools	        v7_11_00	-	only_for_build
->>>>>>> origin/v08_00_00_br
 end_product_list
 ####################################
 
