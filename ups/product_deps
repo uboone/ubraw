@@ -249,8 +249,8 @@ fwdir	product_dir	scripts
 ####################################
 product			version		qual	flags		<table_format=2>
 ifdh_art		v2_15_06	-
-larevt			v09_09_08	-
-ubcore			v09_82_00	-
+larevt			v09_09_09	-
+ubcore			v09_82_02	-
 uboonedaq_datatypes	v6_22_06	-
 cetmodules		v3_21_01	-	only_for_build
 end_product_list
