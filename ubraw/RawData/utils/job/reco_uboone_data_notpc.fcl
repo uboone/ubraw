@@ -17,7 +17,7 @@ BEGIN_PROLOG
 
 microboone_reco_notpc_services:
 {
-  ExptGeoHelperInterface: @local::microboone_geometry_helper
+  WireReadout: @local::microboone_wire_readout
   GeometryConfigurationWriter: {}
   Geometry:               @local::microboone_geo
   UBOpReadoutMap:           @local::microboone_opreadoutmap

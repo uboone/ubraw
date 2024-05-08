@@ -25,7 +25,7 @@
 #include "lardata/Utilities/DatabaseUtil.h" // lardata
 #include "lardataobj/RecoBase/Wire.h"
 #include "lardata/ArtDataHelper/WireCreator.h"
-#include "larcore/Geometry/Geometry.h"
+#include "larcore/Geometry/WireReadout.h"
 #include "lardata/DetectorInfoServices/DetectorClocksService.h"
 
 
@@ -298,7 +298,7 @@ bool SnFileSourceDriver::readNext(
     auto rois = item.second;
     recob::WireCreator created_wire(rois, 
                                          ch, 
-                                         art::ServiceHandle<geo::Geometry>()->View(ch)
+                                    art::ServiceHandle<geo::WireReadout>()->Get().View(ch)
                                          );
     
     wires->push_back(created_wire.move());
