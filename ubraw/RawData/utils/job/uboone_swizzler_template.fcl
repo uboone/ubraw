@@ -10,7 +10,7 @@ services:
   TimeTracker:            @local::microboone_time_tracker
   MemoryTracker:          @local::microboone_memory_tracker
   RandomNumberGenerator: {} 
-  ExptGeoHelperInterface: @local::microboone_geometry_helper
+  WireReadout: @local::microboone_wire_readout
   GeometryConfigurationWriter: {}
   Geometry:               @local::microboone_geo
   UBOpReadoutMap:           @local::microboone_opreadoutmap
