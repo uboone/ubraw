@@ -9,7 +9,7 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 find_package(cetmodules REQUIRED)
-project(ubraw VERSION 09.92.00 LANGUAGES CXX)
+project(ubraw VERSION 10.00.00 LANGUAGES CXX)
 
 include(CetCMakeEnv)
 cet_cmake_env()
