@@ -251,7 +251,7 @@ product			version		qual	flags		<table_format=2>
 ifdh_art		v2_17_09	-
 larevt			v10_00_22	-
 ubcore			v10_24_00	-
-uboonedaq_datatypes	v6_22_07	-
+uboonedaq_datatypes	v6_22_08	-
 cetmodules		v3_24_01	-	only_for_build
 end_product_list
 ####################################
