@@ -87,7 +87,7 @@
 #>  define_pythonpath
 ####################################
 parent		ubraw
-defaultqual	e20
+defaultqual	e26
 ####################################
 
 ####################################
@@ -310,12 +310,10 @@ end_product_list
 qualifier	ubcore		larevt		uboonedaq_datatypes	ifdh_art
 c14:debug       c14:debug       c14:debug       c14:debug:offline       c14:debug
 c14:prof        c14:prof        c14:prof        c14:prof:offline        c14:prof
-c7:debug	c7:debug	c7:debug	c7:offline:debug	c7:debug
-c7:prof		c7:prof		c7:prof		c7:offline:prof		c7:prof
 e26:debug       e26:debug       e26:debug       e26:debug:offline	e26:debug
 e26:prof        e26:prof        e26:prof        e26:prof:offline	e26:prof
-e20:debug	e20:debug	e20:debug	e20:offline:debug	e20:debug
-e20:prof	e20:prof	e20:prof	e20:offline:prof	e20:prof
+e28:debug       e28:debug       e28:debug       e28:debug:offline	e28:debug
+e28:prof        e28:prof        e28:prof        e28:prof:offline	e28:prof
 end_qualifier_list
 ####################################
 
