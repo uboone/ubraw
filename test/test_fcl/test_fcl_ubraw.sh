@@ -2,6 +2,10 @@
 
 # Loop over all installed fcl files.
 
+# Spack / mpd
+
+source /cvmfs/uboone.opensciencegrid.org/bin/mpdsetenv.sh
+
 find $MRB_BUILDDIR/ubraw/job -name \*.fcl -print | while read fcl
 do
   echo "Testing fcl file $fcl"
