@@ -7,6 +7,7 @@ cet_make_library(
   PUBLIC
   uboonedaq_datatypes::datatypes
   lardataobj::RawData
+  Boost::filesystem
   ROOT::Spectrum
   ROOT::Hist
   ROOT::MathCore

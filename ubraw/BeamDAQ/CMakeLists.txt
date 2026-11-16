@@ -12,6 +12,7 @@ cet_make_library(
   fhiclcpp::fhiclcpp
   messagefacility::MF_MessageLogger
   Boost::serialization
+  Boost::filesystem
   Boost::program_options
   curl
 )

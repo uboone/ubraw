@@ -72,6 +72,7 @@ cet_build_plugin(
   lardataobj::RawData
   ifdh_art::IFDH_service
   art_root_io::TFileService_service
+  Boost::filesystem
   ROOT::Tree
 )
 
